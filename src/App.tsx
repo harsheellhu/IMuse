@@ -13,32 +13,16 @@ import { Books } from './pages/Books';
 import { Films } from './pages/Films';
 import { Collections } from './pages/Collections';
 import { Library } from './pages/Library';
-import { useStore } from './store/useStore';
-
-function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { theme, colorMode } = useStore();
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark', 'theme-neutral', 'theme-warm', 'theme-cool');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
-    
-    root.classList.add(`theme-${colorMode}`);
-  }, [theme, colorMode]);
-
-  return <>{children}</>;
-}
+import { ThemeProvider } from './components/ThemeProvider';
+import { SettingsOverlay } from './components/settings/SettingsOverlay';
+import { ImportProgress } from './components/settings/ImportProgress';
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <SettingsOverlay />
+        <ImportProgress />
         <Routes>
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />

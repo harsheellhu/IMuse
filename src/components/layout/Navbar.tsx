@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film } from 'lucide-react';
 import { useStore, Theme, ColorMode } from '../../store/useStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -124,125 +125,18 @@ export function Navbar() {
           </AnimatePresence>
         </div>
 
-        {/* Palette (Themes & Backgrounds) */}
+        {/* Settings (Customization) */}
         <div className="relative hidden md:block">
           <button 
             onClick={() => {
-              setGradientMenuOpen(!gradientMenuOpen);
-              setCreateMenuOpen(false);
-              setCustomizationMenuOpen(false);
-              setProfileMenuOpen(false);
-            }}
-            className="flex items-center justify-center w-10 h-10 rounded-full text-text-primary hover:bg-bg-secondary transition-colors duration-300"
-          >
-            <Palette className="w-4 h-4" />
-          </button>
-          
-          <AnimatePresence>
-            {gradientMenuOpen && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-12 right-0 w-64 bg-bg-elevated border border-border-subtle rounded-xl shadow-lg p-3 z-50 overflow-hidden flex flex-col gap-4"
-              >
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-text-muted mb-2 block px-1">Atmosphere</span>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { name: 'None', value: null },
-                      { name: 'Sunset', value: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)' },
-                      { name: 'Ocean', value: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)' },
-                      { name: 'Twilight', value: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)' },
-                      { name: 'Midnight', value: 'linear-gradient(135deg, #09203f 0%, #537895 100%)' },
-                      { name: 'Forest', value: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }
-                    ].map((g) => (
-                      <button
-                        key={g.name}
-                        onClick={() => setBgGradient(g.value)}
-                        className={clsx(
-                          "w-full h-10 rounded-md border flex items-center justify-center text-[11px] font-medium transition-all",
-                          bgGradient === g.value ? "border-text-primary scale-[0.98]" : "border-border-subtle hover:scale-[1.02]"
-                        )}
-                        style={{ background: g.value || 'var(--bg-base)', color: g.value && g.name !== 'None' ? '#fff' : 'var(--text-primary)' }}
-                      >
-                        {g.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-text-muted mb-2 block px-1">Color Mode</span>
-                  <div className="flex gap-2">
-                    {(['neutral', 'warm', 'cool'] as ColorMode[]).map((c) => (
-                      <button
-                        key={c}
-                        onClick={() => setColorMode(c)}
-                        className={clsx(
-                          "flex-1 py-1.5 rounded-md border flex justify-center transition-all",
-                          colorMode === c ? "border-text-primary bg-text-primary" : "border-border-subtle hover:border-text-secondary"
-                        )}
-                      >
-                        <div className={clsx(
-                          "w-3 h-3 rounded-full border border-border-subtle",
-                          c === 'neutral' ? "bg-[#FDFCFB] dark:bg-[#0A0A0A]" :
-                          c === 'warm' ? "bg-[#FAF6F0] dark:bg-[#14110E]" :
-                          "bg-[#F5F7FA] dark:bg-[#0A0E17]"
-                        )} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Brush (Customization) */}
-        <div className="relative hidden md:block">
-          <button 
-            onClick={() => {
-              setCustomizationMenuOpen(!customizationMenuOpen);
-              setGradientMenuOpen(false);
+              useSettingsStore.getState().setSettingsOpen(true);
               setCreateMenuOpen(false);
               setProfileMenuOpen(false);
             }}
             className="flex items-center justify-center w-10 h-10 rounded-full text-text-primary hover:bg-bg-secondary transition-colors duration-300"
           >
-            <Paintbrush className="w-4 h-4" />
+            <SlidersHorizontal className="w-4 h-4" />
           </button>
-          
-          <AnimatePresence>
-            {customizationMenuOpen && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-12 right-0 w-48 bg-bg-elevated border border-border-subtle rounded-xl shadow-lg p-4 flex flex-col gap-4 z-50 overflow-hidden"
-              >
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-text-muted mb-2 block">Visual Density</span>
-                  <div className="flex flex-col gap-1">
-                    {(['compact', 'comfortable', 'spacious'] as const).map(d => (
-                      <button 
-                        key={d}
-                        onClick={() => setPreferences({ visualDensity: d })}
-                        className={clsx(
-                          "text-left px-2 py-1.5 text-xs rounded transition-colors",
-                          preferences.visualDensity === d ? "bg-bg-secondary text-text-primary font-medium" : "text-text-secondary hover:text-text-primary"
-                        )}
-                      >
-                        <span className="capitalize">{d}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {/* Laptop (Library) */}
@@ -288,7 +182,7 @@ export function Navbar() {
               >
                 <div className="px-4 py-2 border-b border-border-subtle/50 mb-1">
                   <p className="text-sm font-medium text-text-primary truncate">{currentUser.name}</p>
-                  <p className="text-xs text-text-muted truncate">{currentUser.email || '@username'}</p>
+                  <p className="text-xs text-text-muted truncate">@{currentUser.id || 'user'}</p>
                 </div>
                 <Link to="/profile/me" onClick={() => setProfileMenuOpen(false)} className="px-4 py-2 text-[13px] text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors">Your Profile</Link>
                 <Link to="/library" onClick={() => setProfileMenuOpen(false)} className="px-4 py-2 text-[13px] text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors">Library</Link>
