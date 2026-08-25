@@ -112,18 +112,28 @@ export function Navbar() {
       <div className="flex items-center gap-12">
         <Link to="/" className="text-xl font-serif font-medium tracking-tight text-text-primary">IMuse</Link>
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={clsx(
-                'text-[13px] tracking-wide transition-colors duration-300',
-                location.pathname === item.path ? 'text-text-primary font-medium' : 'text-text-secondary hover:text-text-primary'
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={clsx(
+                  'relative text-[13px] tracking-wide transition-colors duration-300 py-2',
+                  isActive ? 'text-text-primary font-medium' : 'text-text-secondary hover:text-text-primary'
+                )}
+              >
+                {item.label}
+                {isActive && (
+                  <motion.div
+                    layoutId="navbar-active-indicator"
+                    className="absolute -bottom-0.5 left-0 right-0 h-[1.5px] bg-text-primary rounded-full"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
