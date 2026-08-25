@@ -22,24 +22,25 @@ export function Collections() {
           categories[cat].push(item);
         });
 
-        const virtualCollections = Object.entries(categories)
-          .filter(([_, items]) => items.length >= 3)
-          .map(([cat, items]) => ({
-            id: `virtual-${cat}`,
-            title: cat === 'TV' ? 'TV Shows Collection' 
-              : cat === 'Travel' ? 'Favorite Destinations'
-              : cat === 'Lifestyle' ? 'Design Shops & Markets'
-              : `${cat} Picks`,
-            description: `A curated selection of ${items.length} ${cat.toLowerCase()} items.`,
-            coverImage: items[0]?.imageUrl || 'https://picsum.photos/id/1015/800/600',
-            creatorId: 'system',
-            itemCount: items.length,
-            followers: Math.floor(Math.random() * 500) + 50,
-            isPrivate: false,
-            tags: [cat.toLowerCase()],
-          }));
+          const virtualCollections = Object.entries(categories)
+            .filter(([_, items]) => items.length >= 3)
+            .map(([cat, items]) => ({
+              id: `virtual-${cat}`,
+              title: cat === 'TV' ? 'TV Shows Collection' 
+                : cat === 'Travel' ? 'Favorite Destinations'
+                : cat === 'Lifestyle' ? 'Design Shops & Markets'
+                : `${cat} Picks`,
+              description: `A curated selection of ${items.length} ${cat.toLowerCase()} items.`,
+              coverImage: items[0]?.imageUrl || 'https://picsum.photos/id/1015/800/600',
+              creatorId: 'system',
+              itemCount: items.length,
+              followers: Math.floor(Math.random() * 500) + 50,
+              isPrivate: false,
+              tags: [cat.toLowerCase()],
+              items: items // Store actual items for the virtual collection
+            }));
 
-        setPublicCollections(virtualCollections);
+          setPublicCollections(virtualCollections);
       }).catch(console.error);
     }
   }, [collections.length]);
@@ -103,7 +104,8 @@ export function Collections() {
             >
               {displayCollections.map((collection, i) => (
                 <motion.div 
-                  key={collection.id} 
+                  key={collection.id}
+                  layoutId={`collection-card-${collection.id}`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
@@ -111,7 +113,10 @@ export function Collections() {
                   className="group cursor-pointer flex flex-col"
                   onClick={() => openViewer({ id: collection.id, type: 'collection', data: collection })}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden mb-6 bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] rounded-sm">
+                  <motion.div 
+                    layoutId={`collection-image-${collection.id}`}
+                    className="relative aspect-[4/3] overflow-hidden mb-6 bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] rounded-sm"
+                  >
                     <img 
                       src={collection.coverImage} 
                       alt={collection.title}
@@ -124,11 +129,11 @@ export function Collections() {
                         <Lock className="w-3 h-3 text-text-primary" />
                       </div>
                     )}
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div layoutId={`collection-meta-${collection.id}`}>
                     <h3 className="font-serif text-2xl mb-2 text-text-primary">{collection.title}</h3>
                     <p className="text-[10px] tracking-widest uppercase text-text-secondary">{collection.itemCount} Items</p>
-                  </div>
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>

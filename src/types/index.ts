@@ -84,3 +84,20 @@ export interface Place {
   category: string;
   tags: string[];
 }
+
+export interface Song {
+  id: string;
+  title: string;
+  artist: string;
+  album?: string;
+  albumArtist?: string;
+  genre?: string;
+  year?: number;
+  duration: number;
+  artworkUrl?: string;
+  addedAt: string;
+  playCount: number;
+  lastPlayed?: string;
+  isFavorite: boolean;
+  blobId?: string; // Reference to the actual audio blob in IndexedDB
+}

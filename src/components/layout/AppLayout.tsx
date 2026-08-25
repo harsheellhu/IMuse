@@ -5,11 +5,17 @@ import { SearchOverlay } from './SearchOverlay';
 import { PostDetailViewer } from '../viewer/PostDetailViewer';
 import { AuthModal } from '../auth/AuthModal';
 import { useStore } from '../../store/useStore';
+import { useMusicStore } from '../../store/useMusicStore';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLocation } from 'react-router-dom';
+import { AudioEngine } from '../music/AudioEngine';
+import { MiniPlayer } from '../music/MiniPlayer';
+import { FullPlayer } from '../music/FullPlayer';
+import { CollectionCarouselViewer } from '../viewer/CollectionCarouselViewer';
 
 export function AppLayout() {
   const { bgGradient } = useStore();
+  const { isMiniPlayerVisible } = useMusicStore();
   const location = useLocation();
 
   return (
@@ -35,7 +41,13 @@ export function AppLayout() {
       <MobileNav />
       <SearchOverlay />
       <PostDetailViewer />
+      <CollectionCarouselViewer />
       <AuthModal />
+      
+      {/* Global Music Components */}
+      <AudioEngine />
+      {isMiniPlayerVisible && <MiniPlayer />}
+      <FullPlayer />
     </div>
   );
 }

@@ -32,7 +32,7 @@ export function PostDetailViewer() {
     };
   }, [activeViewerItem, closeViewer]);
 
-  if (!activeViewerItem) return null;
+  if (!activeViewerItem || activeViewerItem.type === 'collection') return null;
 
   return (
     <AnimatePresence>

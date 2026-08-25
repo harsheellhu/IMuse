@@ -23,6 +23,7 @@ const Library = React.lazy(() => import('./pages/Library').then(module => ({ def
 const TvShows = React.lazy(() => import('./pages/TvShows').then(module => ({ default: module.TvShows })));
 const Places = React.lazy(() => import('./pages/Places').then(module => ({ default: module.Places })));
 const Shops = React.lazy(() => import('./pages/Shops').then(module => ({ default: module.Shops })));
+const Music = React.lazy(() => import('./pages/Music').then(module => ({ default: module.Music })));
 
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="shops" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Shops /></React.Suspense>} />
             <Route path="collections" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Collections /></React.Suspense>} />
             <Route path="library" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Library /></React.Suspense>} />
+            <Route path="music" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Music /></React.Suspense>} />
             <Route path="profile/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
             {/* Fallback for unbuilt pages */}
             <Route path="*" element={<div className="p-8 text-center text-text-secondary">Page coming soon.</div>} />

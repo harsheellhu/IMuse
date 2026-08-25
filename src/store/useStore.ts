@@ -9,7 +9,7 @@ export type ColorMode = 'neutral' | 'warm' | 'cool';
 export interface ActiveViewerItem {
   id: string;
   type: 'post' | 'book' | 'film' | 'collection' | 'tv_show' | 'place';
-  data: Post | Book | Film | Collection | TvShow | Place;
+  data: Post | Book | Film | Collection | TvShow | Place | any;
 }
 
 export interface Preferences {

@@ -74,4 +74,40 @@ router.post('/:id/items/:contentId', requireAuth, (req, res) => {
   }
 });
 
+// Get items in a collection
+router.get('/:id/items', requireAuth, (req, res) => {
+  try {
+    // Basic verification of access (if public, anyone can see; if private, only owner)
+    const collection = db.prepare('SELECT user_id, is_private FROM collections WHERE id = ?').get(req.params.id);
+    if (!collection) {
+      return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Collection not found' } });
+    }
+    
+    if (collection.is_private && collection.user_id !== req.user.id) {
+      return res.status(403).json({ error: { code: 'FORBIDDEN', message: 'Unauthorized' } });
+    }
+
+    // Join with content table to get the actual items
+    const items = db.prepare(`
+      SELECT c.* 
+      FROM content c
+      JOIN collection_items ci ON c.id = ci.content_id
+      WHERE ci.collection_id = ?
+      ORDER BY ci.added_at DESC
+    `).all(req.params.id);
+
+    // Parse JSON arrays
+    const formattedItems = items.map(item => ({
+      ...item,
+      tags: item.tags ? JSON.parse(item.tags) : [],
+      metadata: item.metadata ? JSON.parse(item.metadata) : null,
+      categories: item.categories ? JSON.parse(item.categories) : []
+    }));
+
+    res.json(formattedItems);
+  } catch (err) {
+    res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } });
+  }
+});
+
 export default router;

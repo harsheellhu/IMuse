@@ -4,7 +4,8 @@ import { Search, X, Loader2 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import { Post, Book, Film, Collection } from '../../types';
+import { Post, Book, Film, Collection, Song } from '../../types';
+import { musicDB } from '../../utils/musicDB';
 
 export function SearchOverlay() {
   const { isSearchOpen, setSearchOpen, searchQuery, setSearchQuery, posts, books, films, collections, tvShows, places, openViewer } = useStore();
@@ -14,6 +15,11 @@ export function SearchOverlay() {
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<{id: string, type: string, title: string, subtitle: string, image: string, data: any}[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [localSongs, setLocalSongs] = useState<Song[]>([]);
+
+  useEffect(() => {
+    musicDB.getAllSongs().then(setLocalSongs).catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (isSearchOpen && inputRef.current) {
@@ -39,7 +45,11 @@ export function SearchOverlay() {
         const selected = results[selectedIndex];
         if (selected) {
           setSearchOpen(false);
-          openViewer({ id: selected.id, type: selected.type as any, data: selected.data });
+          if (selected.type === 'song') {
+            navigate('/music'); // or we could trigger playSong directly here if we wanted
+          } else {
+            openViewer({ id: selected.id, type: selected.type as any, data: selected.data });
+          }
         }
       }
     };
@@ -98,7 +108,13 @@ export function SearchOverlay() {
         id: p.id, type: 'place', title: p.name || (p as any).title, subtitle: `Place${p.location ? ` in ${p.location}` : ''}`, image: p.coverImage || (p as any).imageUrl || '', data: p
       }));
 
-      const allMatches = [...matchedPosts, ...matchedBooks, ...matchedFilms, ...matchedTvShows, ...matchedPlaces, ...matchedCollections].slice(0, 6);
+      const matchedSongs = localSongs.filter(s =>
+        s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query) || s.album?.toLowerCase().includes(query)
+      ).map(s => ({
+        id: s.id, type: 'song', title: s.title, subtitle: `Song by ${s.artist}`, image: s.artworkUrl || '', data: s
+      }));
+
+      const allMatches = [...matchedPosts, ...matchedBooks, ...matchedFilms, ...matchedTvShows, ...matchedPlaces, ...matchedCollections, ...matchedSongs].slice(0, 6);
       setResults(allMatches);
       setSelectedIndex(0);
       setIsSearching(false);
@@ -159,14 +175,24 @@ export function SearchOverlay() {
                       onMouseEnter={() => setSelectedIndex(i)}
                       onClick={() => {
                         setSearchOpen(false);
-                        openViewer({ id: result.id, type: result.type as any, data: result.data });
+                        if (result.type === 'song') {
+                          navigate('/music');
+                        } else {
+                          openViewer({ id: result.id, type: result.type as any, data: result.data });
+                        }
                       }}
                       className={clsx(
                         "flex items-center gap-4 p-4 transition-colors text-left border-b border-border-subtle/50 last:border-b-0",
                         selectedIndex === i ? "bg-bg-secondary" : "hover:bg-bg-secondary"
                       )}
                     >
-                      <img src={result.image} alt="" className="w-12 h-16 object-cover rounded-sm" />
+                      {result.image ? (
+                        <img src={result.image} alt="" className="w-12 h-16 object-cover rounded-sm" />
+                      ) : (
+                        <div className="w-12 h-16 bg-bg-secondary border border-border-subtle rounded-sm flex items-center justify-center">
+                          <span className="text-xs text-text-muted">{result.title.charAt(0)}</span>
+                        </div>
+                      )}
                       <div>
                         <p className="text-text-primary font-medium">{result.title}</p>
                         <p className="text-xs text-text-secondary capitalize">{result.subtitle}</p>

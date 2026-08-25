@@ -14,6 +14,7 @@ export type ShapeLanguage = 'sharp' | 'subtle' | 'rounded' | 'soft' | 'editorial
 export type BackgroundTexture = 'none' | 'fine-grain' | 'paper' | 'dust' | 'grid' | 'technical-grid' | 'noise' | 'fabric' | 'film-grain';
 export type NavStyle = 'minimal' | 'floating' | 'integrated' | 'editorial' | 'cinematic' | 'tron';
 export type HomeLayout = 'masonry' | 'editorial' | 'magazine' | 'gallery' | 'grid' | 'staggered' | 'minimal';
+export type InterfaceSounds = 'off' | 'subtle' | 'balanced';
 
 export interface SettingsState {
   // Options
@@ -29,6 +30,7 @@ export interface SettingsState {
   texture: BackgroundTexture;
   navStyle: NavStyle;
   homeLayout: HomeLayout;
+  interfaceSounds: InterfaceSounds;
 
   // Presets
   presets: Record<string, Partial<SettingsState>>;
@@ -73,6 +75,7 @@ const defaultSettings = {
   texture: 'none' as BackgroundTexture,
   navStyle: 'floating' as NavStyle,
   homeLayout: 'masonry' as HomeLayout,
+  interfaceSounds: 'balanced' as InterfaceSounds,
 };
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -113,6 +116,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       texture: state.texture,
       navStyle: state.navStyle,
       homeLayout: state.homeLayout,
+      interfaceSounds: state.interfaceSounds,
     };
     set((s) => ({
       presets: { ...s.presets, [name]: presetData }
@@ -178,6 +182,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       imageStyle: 'original',
       navStyle: theme === 'tron' ? 'tron' : 'floating',
       homeLayout: 'masonry',
+      interfaceSounds: 'balanced',
     });
   },
 

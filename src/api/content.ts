@@ -12,6 +12,8 @@ export const contentApi = {
   
   getDiscoveryWorlds: () => apiClient<any[]>('/api/discovery/worlds'),
   
+  getCollectionItems: (id: string) => apiClient<any[]>(`/api/collections/${id}/items`),
+  
   getDiscoveryWorldContent: (slug: string, limit = 50, offset = 0) => 
     apiClient<(Post | Book | Film)[]>(`/api/discovery/worlds/${slug}/content?limit=${limit}&offset=${offset}`),
     

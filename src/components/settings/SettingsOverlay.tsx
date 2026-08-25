@@ -245,6 +245,28 @@ export function SettingsOverlay() {
             ))}
           </SettingCarousel>
 
+          <SettingCarousel title="Interface Sounds" description="Subtle UI audio feedback.">
+            {(['off', 'subtle', 'balanced'] as any[]).map(snd => (
+              <SettingCard 
+                key={snd} id={snd} title={snd.charAt(0).toUpperCase() + snd.slice(1)} 
+                isSelected={settings.interfaceSounds === snd}
+                onClick={() => settings.setSettings({ interfaceSounds: snd })}
+                previewNode={<div className="w-full h-full bg-gradient-to-tr from-text-muted/10 to-transparent" />}
+              />
+            ))}
+          </SettingCarousel>
+
+          <SettingCarousel title="Authentication" description="Your connected sign-in method.">
+             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4">
+                <span className="text-sm text-text-primary font-medium">Google Account</span>
+                <span className="text-xs text-text-muted mt-1">Available for sign-in</span>
+             </div>
+             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4">
+                <span className="text-sm text-text-primary font-medium">Email Account</span>
+                <span className="text-xs text-text-muted mt-1">Available for sign-in</span>
+             </div>
+          </SettingCarousel>
+
           <DiscoveryPackCarousel />
 
         </div>

@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin } from 'lucide-react';
+import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin, Music } from 'lucide-react';
 import { useStore, Theme, ColorMode } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
+import * as mm from 'music-metadata-browser';
+import { musicDB } from '../../utils/musicDB';
+import { Song } from '../../types';
 
 export function Navbar() {
   const location = useLocation();
@@ -40,7 +43,61 @@ export function Navbar() {
     { label: 'TV Shows', path: '/tv-shows' },
     { label: 'Places', path: '/places' },
     { label: 'Collections', path: '/collections' },
+    { label: 'Music', path: '/music' },
   ];
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      let metadata;
+      let artworkUrl = undefined;
+      
+      try {
+        metadata = await mm.parseBlob(file);
+        if (metadata.common.picture && metadata.common.picture.length > 0) {
+          const picture = metadata.common.picture[0];
+          const base64String = btoa(
+            new Uint8Array(picture.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          );
+          artworkUrl = `data:${picture.format};base64,${base64String}`;
+        }
+      } catch (metaErr) {
+        console.warn('Metadata parsing failed, using fallback', metaErr);
+      }
+
+      const newSong: Song = {
+        id: `song-${Date.now()}`,
+        title: metadata?.common.title || file.name.replace(/\.[^/.]+$/, ""),
+        artist: metadata?.common.artist || 'Unknown Artist',
+        album: metadata?.common.album,
+        albumArtist: metadata?.common.albumartist,
+        genre: metadata?.common.genre?.[0],
+        year: metadata?.common.year,
+        duration: metadata?.format?.duration || 0,
+        artworkUrl,
+        addedAt: new Date().toISOString(),
+        playCount: 0,
+        isFavorite: false,
+      };
+
+      await musicDB.saveSong(newSong, file);
+      
+      // Navigate to music library so user can see it
+      navigate('/music');
+    } catch (err) {
+      console.error('Error importing song:', err);
+      alert('Failed to import song.');
+    }
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <motion.nav 
@@ -108,6 +165,7 @@ export function Navbar() {
                   { icon: Tv, label: 'Add TV show' },
                   { icon: MapPin, label: 'Add place' },
                   { icon: Link2, label: 'Add link' },
+                  { icon: Music, label: 'Add song' },
                   { icon: Plus, label: 'Create collection', divider: true }
                 ].map((item, i) => (
                   <React.Fragment key={item.label}>
@@ -119,6 +177,8 @@ export function Navbar() {
                           useStore.getState().interceptAction(() => {
                             useStore.getState().setCreateCollectionOpen(true);
                           });
+                        } else if (item.label === 'Add song') {
+                          fileInputRef.current?.click();
                         } else {
                           useStore.getState().interceptAction(() => {});
                         }
@@ -212,6 +272,13 @@ export function Navbar() {
           </AnimatePresence>
         </div>
       </div>
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        style={{ display: 'none' }} 
+        accept="audio/*" 
+        onChange={handleFileUpload} 
+      />
     </motion.nav>
   );
 }
