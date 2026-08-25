@@ -30,7 +30,7 @@ export function Carousel({ items, title }: CarouselProps) {
         style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
       >
         {items.map((item, index) => {
-          const isSaved = savedPostIds.has(item.id);
+          const isSaved = savedPostIds.includes(item.id);
           return (
             <CarouselItem 
               key={`${item.id}-${index}`} 

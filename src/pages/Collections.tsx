@@ -1,12 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lock, LayoutGrid, Layout } from 'lucide-react';
 import clsx from 'clsx';
+import { contentApi } from '../api/content';
 
 export function Collections() {
-  const { collections, openViewer } = useStore();
+  const { collections, openViewer, isAuthenticated } = useStore();
   const [viewMode, setViewMode] = useState<'grid' | 'moodboard'>('grid');
+  const [publicCollections, setPublicCollections] = useState<any[]>([]);
+
+  // For unauthenticated users, show some demo collections built from API content
+  useEffect(() => {
+    if (collections.length === 0) {
+      contentApi.getAll(undefined, 100).then((data: any[]) => {
+        // Create virtual collections from content categories
+        const categories: Record<string, any[]> = {};
+        data.forEach(item => {
+          const cat = item.category || 'Visual';
+          if (!categories[cat]) categories[cat] = [];
+          categories[cat].push(item);
+        });
+
+        const virtualCollections = Object.entries(categories)
+          .filter(([_, items]) => items.length >= 3)
+          .map(([cat, items]) => ({
+            id: `virtual-${cat}`,
+            title: cat === 'TV' ? 'TV Shows Collection' 
+              : cat === 'Travel' ? 'Favorite Destinations'
+              : cat === 'Lifestyle' ? 'Design Shops & Markets'
+              : `${cat} Picks`,
+            description: `A curated selection of ${items.length} ${cat.toLowerCase()} items.`,
+            coverImage: items[0]?.imageUrl || 'https://picsum.photos/id/1015/800/600',
+            creatorId: 'system',
+            itemCount: items.length,
+            followers: Math.floor(Math.random() * 500) + 50,
+            isPrivate: false,
+            tags: [cat.toLowerCase()],
+          }));
+
+        setPublicCollections(virtualCollections);
+      }).catch(console.error);
+    }
+  }, [collections.length]);
+
+  const displayCollections = collections.length > 0 ? collections : publicCollections;
 
   return (
     <div className="w-full">
@@ -63,7 +101,7 @@ export function Collections() {
               transition={{ duration: 0.6 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-24"
             >
-              {collections.map((collection, i) => (
+              {displayCollections.map((collection, i) => (
                 <motion.div 
                   key={collection.id} 
                   initial={{ opacity: 0, y: 20 }}

@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Bookmark, Share2, Star } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
-import { Post, Book, Film, Collection } from '../../types';
+import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
+import clsx from 'clsx';
 
 export function PostDetailViewer() {
   const { activeViewerItem, closeViewer, toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen } = useStore();
@@ -50,7 +51,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
   let creatorInfo = '';
   let categoryOrMeta = '';
   let rating = 0;
-  const isSaved = type === 'post' ? savedPostIds.has(data.id) : false;
+  const isSaved = type === 'post' ? savedPostIds.includes(data.id) : false;
 
   if (type === 'post') {
     const post = data as Post;
@@ -82,16 +83,37 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
     description = col.description || '';
     creatorInfo = `${col.itemCount} curated items`;
     categoryOrMeta = col.isPrivate ? 'Private Collection' : 'Curated Collection';
+  } else if (type === 'tv_show') {
+    // Note: The backend returns standard content fields + metadata for tv_shows
+    const show = data as any;
+    imageUrl = show.imageUrl || show.posterImage || '';
+    title = show.title;
+    description = show.description || show.synopsis || '';
+    creatorInfo = show.creator ? `Created by ${show.creator}` : '';
+    categoryOrMeta = show.tags ? show.tags.join(', ') : 'TV Show';
+    rating = show.averageRating || 0;
+  } else if (type === 'place') {
+    const place = data as any;
+    imageUrl = place.imageUrl || place.coverImage || '';
+    title = place.title || place.name;
+    description = place.description || '';
+    const loc = place.metadata?.location || place.location;
+    const country = place.metadata?.country || place.country;
+    creatorInfo = (loc && country) ? `${loc}, ${country}` : (loc || country || '');
+    categoryOrMeta = place.tags ? place.tags.join(', ') : 'Place';
   }
 
   let aspectRatio = '4/5';
   if (type === 'book') aspectRatio = '2/3';
   if (type === 'film') aspectRatio = '2/3';
+  if (type === 'tv_show') aspectRatio = '4/5';
+  if (type === 'place') aspectRatio = '16/10';
   if (type === 'collection') aspectRatio = '4/3';
 
   const { palette } = useImagePalette(imageUrl);
   const isDark = document.documentElement.classList.contains('dark');
-  const baseBg = isDark ? '#080808' : '#FAF9F6';
+  const isTron = document.documentElement.classList.contains('theme-tron');
+  const baseBg = isTron ? '#010409' : (isDark ? '#080808' : '#FAF9F6');
 
   return (
     <motion.div
@@ -99,7 +121,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-0 z-[9999] flex flex-col justify-between select-none"
+      className="fixed inset-0 z-[10000] flex flex-col justify-between select-none"
     >
       {/* Layer 1: Solid Theme Base */}
       <div
@@ -107,6 +129,11 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
         style={{ backgroundColor: baseBg }}
         onClick={onClose}
       />
+
+      {/* Layer 1.5: TRON Grid if applicable */}
+      {isTron && (
+        <div className="absolute inset-0 texture-technical-grid pointer-events-none" />
+      )}
 
       {/* Layer 2: Ambient Blur Bloom of Image */}
       <motion.div
@@ -134,7 +161,11 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
             transition={{ duration: 0.9, ease: 'easeInOut' }}
             className="absolute inset-0 mix-blend-multiply dark:mix-blend-screen pointer-events-none"
             style={{
-              background: `
+              background: isTron ? `
+                radial-gradient(circle at 20% 25%, ${palette.primary}25, transparent 65%),
+                radial-gradient(circle at 80% 75%, rgba(0, 255, 255, 0.15), transparent 75%),
+                radial-gradient(circle at 50% 50%, ${palette.accent}20, transparent 70%)
+              ` : `
                 radial-gradient(circle at 20% 25%, ${palette.primary}50, transparent 55%),
                 radial-gradient(circle at 80% 75%, ${palette.secondary}40, transparent 55%),
                 radial-gradient(circle at 50% 50%, ${palette.accent}25, transparent 65%)
@@ -146,7 +177,10 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
 
       {/* Layer 4: Ambient Tone & Vignette */}
       <div
-        className="absolute inset-0 bg-black/5 dark:bg-black/40 pointer-events-none"
+        className={clsx(
+          "absolute inset-0 pointer-events-none",
+          isTron ? "bg-black/40" : "bg-black/5 dark:bg-black/40"
+        )}
         onClick={onClose}
       />
 

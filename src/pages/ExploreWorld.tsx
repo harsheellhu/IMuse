@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useStore, ActiveViewerItem } from '../store/useStore';
 import clsx from 'clsx';
-import { Post, Book, Film, Collection } from '../types';
+import { Post, Book, Film, Collection, TvShow, Place } from '../types';
 
-type WorldItemType = 'post' | 'book' | 'film' | 'collection';
+type WorldItemType = 'post' | 'book' | 'film' | 'collection' | 'tv_show' | 'place';
 
 interface WorldItem {
   id: string;
@@ -12,13 +12,26 @@ interface WorldItem {
   x: number;
   y: number;
   scale: number;
-  data: Post | Book | Film | Collection;
+  data: Post | Book | Film | Collection | TvShow | Place;
 }
 
 export function ExploreWorld() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { posts, books, films, collections, activeViewerItem, openViewer } = useStore();
   const [worldItems, setWorldItems] = useState<WorldItem[]>([]);
+
+  useEffect(() => {
+    import('../api/content').then(({ contentApi }) => {
+      if (posts.length === 0) contentApi.getAll('post').then(d => useStore.setState({ posts: d as any })).catch(console.error);
+      if (books.length === 0) contentApi.getAll('book').then(d => useStore.setState({ books: d as any })).catch(console.error);
+      if (films.length === 0) contentApi.getAll('film').then(d => useStore.setState({ films: d as any })).catch(console.error);
+      if (useStore.getState().tvShows.length === 0) contentApi.getAll('tv_show').then(d => useStore.setState({ tvShows: d as any })).catch(console.error);
+      if (useStore.getState().places.length === 0) contentApi.getAll('place').then(d => useStore.setState({ places: d as any })).catch(console.error);
+    });
+    import('../api/collections').then(({ collectionsApi }) => {
+      if (collections.length === 0) collectionsApi.getAll().then(d => useStore.setState({ collections: d as any })).catch(console.error);
+    });
+  }, []);
 
   // Generate organic spatial coordinates
   useEffect(() => {
@@ -36,29 +49,40 @@ export function ExploreWorld() {
       };
     };
 
-    const totalItems = 150; // Use subset for performance in canvas
+    const totalItems = 200; // Use subset for performance in canvas
     
     // Mix items
     for(let i=0; i<totalItems; i++) {
       const typeChance = Math.random();
       let type: WorldItemType = 'post';
-      let data: Post | Book | Film | Collection = posts[i % posts.length];
+      let data: Post | Book | Film | Collection | TvShow | Place = posts[i % (posts.length || 1)];
       let scale = 1;
+      const { tvShows, places } = useStore.getState();
 
-      if(typeChance > 0.8 && books.length > 0) {
-        type = 'book';
-        data = books[i % books.length];
-        scale = 0.8;
-      } else if (typeChance > 0.6 && films.length > 0) {
-        type = 'film';
-        data = films[i % films.length];
-        scale = 0.9;
-      } else if (typeChance > 0.9 && collections.length > 0) {
+      if (typeChance > 0.85 && collections.length > 0) {
         type = 'collection';
         data = collections[i % collections.length];
         scale = 1.2;
-      } else {
+      } else if (typeChance > 0.7 && tvShows.length > 0) {
+        type = 'tv_show';
+        data = tvShows[i % tvShows.length];
+        scale = 0.9;
+      } else if (typeChance > 0.55 && places.length > 0) {
+        type = 'place';
+        data = places[i % places.length];
+        scale = 1.1;
+      } else if (typeChance > 0.4 && books.length > 0) {
+        type = 'book';
+        data = books[i % books.length];
+        scale = 0.8;
+      } else if (typeChance > 0.25 && films.length > 0) {
+        type = 'film';
+        data = films[i % films.length];
+        scale = 0.9;
+      } else if (posts.length > 0) {
         // Post scales vary
+        type = 'post';
+        data = posts[i % posts.length];
         scale = 0.7 + Math.random() * 0.8;
       }
 
@@ -128,6 +152,12 @@ function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Ke
   } else if (type === 'collection') {
     imageUrl = (data as Collection).coverImage || '';
     title = (data as Collection).title || '';
+  } else if (type === 'tv_show') {
+    imageUrl = (data as any).imageUrl || (data as any).posterImage || '';
+    title = (data as any).title || '';
+  } else if (type === 'place') {
+    imageUrl = (data as any).imageUrl || (data as any).coverImage || '';
+    title = (data as any).title || '';
   }
 
   // Base dimensions before scale
@@ -136,8 +166,9 @@ function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Ke
 
   // Render differently based on aspect ratio clues
   if (type === 'book') { width = 250; height = 380; }
-  if (type === 'film') { width = 280; height = 420; }
+  if (type === 'film' || type === 'tv_show') { width = 280; height = 420; }
   if (type === 'collection') { width = 400; height = 300; }
+  if (type === 'place') { width = 480; height = 300; }
 
   return (
     <motion.div

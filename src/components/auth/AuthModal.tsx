@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Mail, Key } from 'lucide-react';
+import { X, Mail, Key, Zap } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { authApi } from '../../api/auth';
 import clsx from 'clsx';
 
 export function AuthModal() {
@@ -10,6 +11,8 @@ export function AuthModal() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -21,16 +24,28 @@ export function AuthModal() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isAuthModalOpen, setAuthModalOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return;
     
     setIsLoading(true);
-    // Simulate network delay
-    setTimeout(() => {
+    setError(null);
+    try {
+      if (mode === 'signin') {
+        const user = await authApi.login({ email, password });
+        useStore.setState({ currentUser: user });
+        login();
+      } else {
+        const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
+        const user = await authApi.register({ username, email, password });
+        useStore.setState({ currentUser: user as any });
+        login();
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred');
+    } finally {
       setIsLoading(false);
-      login(); // Calls our mock login which persists to localStorage and sets isAuthenticated=true
-    }, 800);
+    }
   };
 
   return (
@@ -76,6 +91,7 @@ export function AuthModal() {
               </div>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                {error && <div className="text-red-500 text-sm text-center">{error}</div>}
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                   <input
@@ -109,7 +125,36 @@ export function AuthModal() {
                 </button>
               </form>
 
-              <div className="mt-8 text-center">
+              {/* Separator */}
+              <div className="flex items-center gap-4 my-6">
+                <div className="flex-1 h-px bg-border-subtle" />
+                <span className="text-[10px] tracking-widest uppercase text-text-muted">or</span>
+                <div className="flex-1 h-px bg-border-subtle" />
+              </div>
+
+              {/* Demo Login */}
+              <button
+                onClick={async () => {
+                  setIsLoading(true);
+                  setError(null);
+                  try {
+                    const user = await authApi.login({ email: 'demo@imuse.app', password: 'demo' });
+                    useStore.setState({ currentUser: user });
+                    login();
+                  } catch (err: any) {
+                    setError(err.message || 'Demo login failed');
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={isLoading}
+                className="w-full h-12 border border-border-subtle text-text-primary flex items-center justify-center text-xs uppercase tracking-[0.2em] hover:bg-bg-secondary transition-all disabled:opacity-50 gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                Try Demo — No Sign Up Needed
+              </button>
+
+              <div className="mt-6 text-center">
                 <button
                   onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
                   className="text-xs text-text-secondary hover:text-text-primary transition-colors tracking-wide underline-offset-4 hover:underline"

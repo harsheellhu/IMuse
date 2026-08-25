@@ -27,7 +27,7 @@ export function Library() {
     );
   }
 
-  const savedPosts = posts.filter(p => savedPostIds.has(p.id));
+  const savedPosts = posts.filter(p => savedPostIds.includes(p.id));
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">

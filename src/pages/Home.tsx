@@ -5,12 +5,23 @@ import { useStore } from '../store/useStore';
 import { useSettingsStore } from '../store/useSettingsStore';
 import clsx from 'clsx';
 import { Post } from '../types';
+import { PostCard } from '../components/feed/PostCard';
 
 export function Home() {
   const { posts } = useStore();
   const { homeLayout, feedDensity, landingStyle, appearance } = useSettingsStore();
 
-  const displayPosts = posts.slice(0, 12); // Show first 12 for the feed
+  React.useEffect(() => {
+    if (posts.length === 0) {
+      import('../api/content').then(({ contentApi }) => {
+        contentApi.getAll('post', 50).then((data) => {
+          useStore.setState({ posts: data as any });
+        }).catch(console.error);
+      });
+    }
+  }, [posts.length]);
+
+  const displayPosts = posts.slice(0, 50); // Show up to 50 for the feed
 
   // If landing style is very minimal or specific (like original) we might render a hero first
   const showHero = landingStyle === 'minimal' || landingStyle === 'observatory' || landingStyle === 'cosmic';
@@ -54,43 +65,23 @@ export function Home() {
         homeLayout === 'minimal' && "flex flex-col items-center gap-[var(--grid-gap)] max-w-2xl mx-auto"
       )}>
         {displayPosts.map((post, i) => {
-          
           // Custom spans for editorial layout
           const colSpan = homeLayout === 'editorial' 
             ? (i % 5 === 0 ? 'md:col-span-8' : i % 5 === 1 ? 'md:col-span-4' : 'md:col-span-4')
             : '';
 
           return (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
+            <PostCard 
+              key={post.id} 
+              post={post as any} 
               className={clsx(
-                "group cursor-pointer flex flex-col",
-                homeLayout === 'masonry' ? "inline-block w-full break-inside-avoid" : "",
+                homeLayout === 'masonry' ? "!mb-[var(--grid-gap)]" : "!mb-0",
                 homeLayout === 'gallery' ? "w-64 flex-grow" : "",
                 homeLayout === 'editorial' ? colSpan : "",
                 homeLayout === 'staggered' && i % 2 !== 0 ? "mt-12" : "",
                 homeLayout === 'minimal' ? "w-full" : ""
               )}
-            >
-              <div className="relative w-full overflow-hidden bg-bg-secondary" style={{ borderRadius: 'var(--radius-base)' }}>
-                {appearance === 'tron' && <div className="absolute inset-0 border border-cyan-400 opacity-50 z-10 pointer-events-none" />}
-                <img 
-                  src={(post as any).image || post.imageUrl || 'https://images.unsplash.com/photo-1600697395543-ef3ee6e9af7b'} 
-                  alt={post.title}
-                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                  style={{ maxHeight: homeLayout === 'minimal' ? '600px' : '800px', filter: 'var(--img-filter, none)' }}
-                  loading="lazy"
-                />
-              </div>
-              
-              <div className="pt-4 pb-2 px-1">
-                <h3 className="text-text-primary font-medium text-sm md:text-base tracking-tight truncate">{post.title}</h3>
-                <p className="text-text-muted text-xs mt-1">{(post as any).author || 'Curator'}</p>
-              </div>
-            </motion.div>
+            />
           );
         })}
       </div>

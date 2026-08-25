@@ -12,6 +12,12 @@
   --color-text-muted: var(--text-muted);
   --color-border-subtle: var(--border-subtle);
   --color-accent-primary: var(--accent-primary);
+
+  --radius-sm: calc(var(--radius-base) * 0.5);
+  --radius-md: var(--radius-base);
+  --radius-lg: calc(var(--radius-base) * 1.5);
+  --radius-xl: calc(var(--radius-base) * 2);
+  --radius-2xl: calc(var(--radius-base) * 3);
 }
 
 @layer base {
@@ -20,9 +26,10 @@
     --grid-gap: 1.5rem;
     --card-padding: 1rem;
     
-    /* Default Fonts */
+    /* Default Fonts & Shapes */
     --font-primary: "Inter";
     --font-secondary: "Playfair Display";
+    --radius-base: 8px;
     
     /* Default Colors (Neutral Light) */
     --bg-base: #FDFCFB;
@@ -80,14 +87,16 @@
   }
   
   .theme-tron {
-    --bg-base: #000000;
-    --bg-secondary: #020808;
-    --bg-elevated: #031012;
-    --text-primary: #E0FFFF;
-    --text-secondary: #008888;
-    --border-subtle: rgba(0, 255, 255, 0.15);
+    --bg-base: #010409;
+    --bg-secondary: #020810;
+    --bg-elevated: #051324;
+    --text-primary: #E2F1F8;
+    --text-secondary: #6A9DB2;
+    --text-muted: #3D6678;
+    --border-subtle: rgba(0, 255, 255, 0.08);
     --accent-primary: #00FFFF;
     --glow-color: #00FFFF;
+    --grid-opacity: calc(0.02 * var(--glow-intensity, 1));
   }
   
   .theme-electric {
@@ -266,11 +275,13 @@ body::after {
 }
 
 .texture-technical-grid::after {
-  background-size: 40px 40px;
+  background-size: 60px 60px;
   background-image: 
     linear-gradient(to right, var(--accent-primary) 1px, transparent 1px), 
     linear-gradient(to bottom, var(--accent-primary) 1px, transparent 1px);
-  opacity: calc(0.05 * var(--glow-intensity, 1));
+  opacity: var(--grid-opacity, 0.05);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
 /* Motion Preferences */
@@ -287,8 +298,10 @@ body::after {
 
 /* Global Glow Utility for TRON mode */
 .theme-tron .glow-element {
-  box-shadow: 0 0 calc(10px * var(--glow-intensity)) var(--glow-color);
-  border: 1px solid var(--accent-primary);
+  box-shadow: 0 0 calc(15px * var(--glow-intensity)) rgba(0, 255, 255, calc(0.15 * var(--glow-intensity)));
+  border: 1px solid rgba(0, 255, 255, calc(0.2 * var(--glow-intensity)));
+  will-change: transform, box-shadow;
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 .scrollbar-hide::-webkit-scrollbar {

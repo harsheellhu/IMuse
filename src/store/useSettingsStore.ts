@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { preferencesApi } from '../api/preferences';
 
 export type AppearanceMode = 'default' | 'obsidian' | 'paper' | 'midnight' | 'graphite' | 'ash' | 'ivory' | 'monochrome' | 'aurora' | 'sunset' | 'ocean' | 'forest' | 'twilight' | 'electric' | 'tron';
 export type LandingStyle = 'minimal' | 'editorial' | 'observatory' | 'archive' | 'gallery' | 'cosmic' | 'tron' | 'monolith' | 'paper' | 'terminal';
@@ -74,130 +75,111 @@ const defaultSettings = {
   homeLayout: 'masonry' as HomeLayout,
 };
 
-export const useSettingsStore = create<SettingsState>()(
-  persist(
-    (set, get) => ({
-      ...defaultSettings,
-      presets: {},
-      isSettingsOpen: false,
-      discoveryTask: {
-        isActive: false,
-        packName: null,
-        stage: null,
-        progress: 0,
-        itemsProcessed: 0,
-        totalItems: 0,
-        elapsedTime: 0,
-        isPaused: false,
-        error: null,
-      },
+export const useSettingsStore = create<SettingsState>((set, get) => ({
+  ...defaultSettings,
+  presets: {},
+  isSettingsOpen: false,
+  discoveryTask: {
+    isActive: false,
+    packName: null,
+    stage: null,
+    progress: 0,
+    itemsProcessed: 0,
+    totalItems: 0,
+    elapsedTime: 0,
+    isPaused: false,
+    error: null,
+  },
 
-      setSettings: (newSettings) => set((state) => ({ ...state, ...newSettings })),
-      setSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
-      updateDiscoveryTask: (taskUpdate) => set((state) => ({ discoveryTask: { ...state.discoveryTask, ...taskUpdate } })),
-      
-      savePreset: (name) => {
-        const state = get();
-        const presetData = {
-          appearance: state.appearance,
-          landingStyle: state.landingStyle,
-          tronIntensity: state.tronIntensity,
-          motion: state.motion,
-          ambientMode: state.ambientMode,
-          feedDensity: state.feedDensity,
-          imageStyle: state.imageStyle,
-          typography: state.typography,
-          shapeLanguage: state.shapeLanguage,
-          texture: state.texture,
-          navStyle: state.navStyle,
-          homeLayout: state.homeLayout,
-        };
-        set((s) => ({
-          presets: { ...s.presets, [name]: presetData }
-        }));
-      },
+  setSettings: (newSettings) => {
+    set((state) => ({ ...state, ...newSettings }));
+    preferencesApi.update(newSettings).catch(console.error);
+  },
+  setSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
+  updateDiscoveryTask: (taskUpdate) => set((state) => ({ discoveryTask: { ...state.discoveryTask, ...taskUpdate } })),
+  
+  savePreset: (name) => {
+    const state = get();
+    const presetData = {
+      appearance: state.appearance,
+      landingStyle: state.landingStyle,
+      tronIntensity: state.tronIntensity,
+      motion: state.motion,
+      ambientMode: state.ambientMode,
+      feedDensity: state.feedDensity,
+      imageStyle: state.imageStyle,
+      typography: state.typography,
+      shapeLanguage: state.shapeLanguage,
+      texture: state.texture,
+      navStyle: state.navStyle,
+      homeLayout: state.homeLayout,
+    };
+    set((s) => ({
+      presets: { ...s.presets, [name]: presetData }
+    }));
+  },
 
-      applyPreset: (name) => {
-        const state = get();
-        if (state.presets[name]) {
-          set({ ...state.presets[name] });
-        }
-      },
-
-      deletePreset: (name) => {
-        set((state) => {
-          const newPresets = { ...state.presets };
-          delete newPresets[name];
-          return { presets: newPresets };
-        });
-      },
-
-      randomize: () => {
-        const themes: AppearanceMode[] = ['default', 'obsidian', 'paper', 'midnight', 'electric', 'tron'];
-        const layouts: LandingStyle[] = ['minimal', 'editorial', 'gallery', 'tron', 'paper'];
-        const dens: FeedDensity[] = ['spacious', 'relaxed', 'balanced', 'dense'];
-        const typo: TypographyStyle[] = ['neutral', 'editorial', 'technical', 'futuristic'];
-        const shapes: ShapeLanguage[] = ['sharp', 'subtle', 'rounded', 'editorial'];
-        const textures: BackgroundTexture[] = ['none', 'fine-grain', 'dust', 'noise'];
-        
-        // Pick a theme and align related settings for coherence
-        const theme = themes[Math.floor(Math.random() * themes.length)];
-        let layout: LandingStyle = 'minimal';
-        let t: TypographyStyle = 'neutral';
-        let shape: ShapeLanguage = 'rounded';
-        
-        if (theme === 'tron' || theme === 'electric') {
-          layout = 'tron';
-          t = 'futuristic';
-          shape = 'sharp';
-        } else if (theme === 'paper') {
-          layout = 'paper';
-          t = 'editorial';
-          shape = 'editorial';
-        } else if (theme === 'obsidian' || theme === 'midnight') {
-          layout = 'observatory';
-          t = 'modern';
-          shape = 'subtle';
-        } else {
-          layout = layouts[Math.floor(Math.random() * layouts.length)];
-          t = typo[Math.floor(Math.random() * typo.length)];
-          shape = shapes[Math.floor(Math.random() * shapes.length)];
-        }
-
-        set({
-          appearance: theme,
-          landingStyle: layout,
-          typography: t,
-          shapeLanguage: shape,
-          feedDensity: dens[Math.floor(Math.random() * dens.length)],
-          texture: textures[Math.floor(Math.random() * textures.length)],
-          motion: 'smooth',
-          ambientMode: 'balanced',
-          imageStyle: 'original',
-          navStyle: theme === 'tron' ? 'tron' : 'floating',
-          homeLayout: 'masonry',
-        });
-      },
-
-      resetToDefault: () => set(defaultSettings),
-    }),
-    {
-      name: 'imuse-settings-storage',
-      partialize: (state) => ({
-        appearance: state.appearance,
-        landingStyle: state.landingStyle,
-        tronIntensity: state.tronIntensity,
-        motion: state.motion,
-        ambientMode: state.ambientMode,
-        feedDensity: state.feedDensity,
-        imageStyle: state.imageStyle,
-        typography: state.typography,
-        shapeLanguage: state.shapeLanguage,
-        texture: state.texture,
-        navStyle: state.navStyle,
-        homeLayout: state.homeLayout,
-        presets: state.presets,
-      }),
+  applyPreset: (name) => {
+    const state = get();
+    if (state.presets[name]) {
+      set({ ...state.presets[name] });
     }
-  )
-);
+  },
+
+  deletePreset: (name) => {
+    set((state) => {
+      const newPresets = { ...state.presets };
+      delete newPresets[name];
+      return { presets: newPresets };
+    });
+  },
+
+  randomize: () => {
+    const themes: AppearanceMode[] = ['default', 'obsidian', 'paper', 'midnight', 'electric', 'tron'];
+    const layouts: LandingStyle[] = ['minimal', 'editorial', 'gallery', 'tron', 'paper'];
+    const dens: FeedDensity[] = ['spacious', 'relaxed', 'balanced', 'dense'];
+    const typo: TypographyStyle[] = ['neutral', 'editorial', 'technical', 'futuristic'];
+    const shapes: ShapeLanguage[] = ['sharp', 'subtle', 'rounded', 'editorial'];
+    const textures: BackgroundTexture[] = ['none', 'fine-grain', 'dust', 'noise'];
+    
+    // Pick a theme and align related settings for coherence
+    const theme = themes[Math.floor(Math.random() * themes.length)];
+    let layout: LandingStyle = 'minimal';
+    let t: TypographyStyle = 'neutral';
+    let shape: ShapeLanguage = 'rounded';
+    
+    if (theme === 'tron' || theme === 'electric') {
+      layout = 'tron';
+      t = 'futuristic';
+      shape = 'sharp';
+    } else if (theme === 'paper') {
+      layout = 'paper';
+      t = 'editorial';
+      shape = 'editorial';
+    } else if (theme === 'obsidian' || theme === 'midnight') {
+      layout = 'observatory';
+      t = 'modern';
+      shape = 'subtle';
+    } else {
+      layout = layouts[Math.floor(Math.random() * layouts.length)];
+      t = typo[Math.floor(Math.random() * typo.length)];
+      shape = shapes[Math.floor(Math.random() * shapes.length)];
+    }
+
+    set({
+      appearance: theme,
+      landingStyle: layout,
+      typography: t,
+      shapeLanguage: shape,
+      feedDensity: dens[Math.floor(Math.random() * dens.length)],
+      texture: textures[Math.floor(Math.random() * textures.length)],
+      motion: 'smooth',
+      ambientMode: 'balanced',
+      imageStyle: 'original',
+      navStyle: theme === 'tron' ? 'tron' : 'floating',
+      homeLayout: 'masonry',
+    });
+  },
+
+  resetToDefault: () => set(defaultSettings),
+}));

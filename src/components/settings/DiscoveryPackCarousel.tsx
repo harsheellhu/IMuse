@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { useStore } from '../../store/useStore';
 import { SettingCarousel } from './SettingCarousel';
 import { motion } from 'motion/react';
 import { Download } from 'lucide-react';
@@ -17,7 +18,9 @@ export function DiscoveryPackCarousel() {
   const { discoveryTask } = useSettingsStore();
 
   const handleImport = (packId: string) => {
-    startDiscoveryImport(packId);
+    useStore.getState().interceptAction(() => {
+      startDiscoveryImport(packId);
+    });
   };
 
   return (

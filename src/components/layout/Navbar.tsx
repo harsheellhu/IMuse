@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film } from 'lucide-react';
+import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin } from 'lucide-react';
 import { useStore, Theme, ColorMode } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
@@ -37,6 +37,8 @@ export function Navbar() {
     { label: 'Explore World', path: '/explore' },
     { label: 'Books', path: '/books' },
     { label: 'Films', path: '/films' },
+    { label: 'TV Shows', path: '/tv-shows' },
+    { label: 'Places', path: '/places' },
     { label: 'Collections', path: '/collections' },
   ];
 
@@ -103,6 +105,8 @@ export function Navbar() {
                   { icon: Image, label: 'Add inspiration' },
                   { icon: Book, label: 'Add book' },
                   { icon: Film, label: 'Add film' },
+                  { icon: Tv, label: 'Add TV show' },
+                  { icon: MapPin, label: 'Add place' },
                   { icon: Link2, label: 'Add link' },
                   { icon: Plus, label: 'Create collection', divider: true }
                 ].map((item, i) => (
@@ -111,7 +115,13 @@ export function Navbar() {
                     <button
                       onClick={() => {
                         setCreateMenuOpen(false);
-                        if (!isAuthenticated) setAuthModalOpen(true);
+                        if (item.label === 'Create collection') {
+                          useStore.getState().interceptAction(() => {
+                            useStore.getState().setCreateCollectionOpen(true);
+                          });
+                        } else {
+                          useStore.getState().interceptAction(() => {});
+                        }
                       }}
                       className="px-4 py-2.5 text-[13px] text-left flex items-center gap-3 text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors"
                     >

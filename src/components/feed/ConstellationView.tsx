@@ -60,8 +60,8 @@ export function ConstellationView() {
             <div className={clsx(
               "px-6 py-3 rounded-full border text-xs tracking-widest uppercase transition-all duration-500 backdrop-blur-sm",
               node.id === 'center' 
-                ? "bg-black text-white border-black" 
-                : "bg-white/50 text-gray-600 border-gray-200 hover:bg-white hover:text-black hover:border-black shadow-sm"
+                ? "bg-text-primary text-bg-base border-text-primary" 
+                : "bg-bg-elevated/50 text-text-secondary border-border-subtle hover:bg-bg-elevated hover:text-text-primary hover:border-text-primary shadow-sm"
             )}>
               {node.label}
             </div>

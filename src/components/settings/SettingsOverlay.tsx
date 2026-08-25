@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Sliders, Wand2, RotateCcw, Palette, Moon, FileText, Star, Hexagon, Cloud, Sun, Contrast, Sparkles, Sunset, Droplets, TreePine, CloudMoon, Zap, Cpu } from 'lucide-react';
+import { X, Sliders, Wand2, RotateCcw, Palette, Moon, FileText, Star, Hexagon, Cloud, Sun, Contrast, Sparkles, Sunset, Droplets, TreePine, CloudMoon, Zap, Cpu, Plus } from 'lucide-react';
 import { useSettingsStore, AppearanceMode, LandingStyle, MotionMode, AmbientMode, FeedDensity, ImageStyle, TypographyStyle, ShapeLanguage, BackgroundTexture, NavStyle, HomeLayout, TronIntensity } from '../../store/useSettingsStore';
 import { SettingCarousel } from './SettingCarousel';
 import { SettingCard } from './SettingCard';
@@ -75,6 +75,33 @@ export function SettingsOverlay() {
 
         <div className="py-12 max-w-[1600px] mx-auto space-y-4">
           
+          <SettingCarousel title="Your Presets" description="Save and load your favorite configurations.">
+            <div className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-bg-elevated transition-colors"
+                 onClick={() => {
+                   const name = prompt('Name your new preset:');
+                   if (name) settings.savePreset(name);
+                 }}>
+              <Plus className="w-6 h-6 text-text-muted mb-2" />
+              <span className="text-sm text-text-secondary font-medium">Save Current</span>
+            </div>
+            
+            {Object.entries(settings.presets).map(([name, preset]) => (
+              <div key={name} className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle overflow-hidden flex flex-col group cursor-pointer"
+                   onClick={() => settings.applyPreset(name)}>
+                <div className="flex-1 bg-bg-secondary flex items-center justify-center relative p-4">
+                  <span className="text-sm font-medium text-text-primary z-10">{name}</span>
+                  <div className={`absolute inset-0 opacity-20 theme-${preset.appearance} img-style-${preset.imageStyle} bg-accent-primary`} />
+                </div>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); settings.deletePreset(name); }}
+                  className="absolute top-2 right-2 w-6 h-6 bg-bg-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="w-3 h-3 text-text-secondary hover:text-text-primary" />
+                </button>
+              </div>
+            ))}
+          </SettingCarousel>
+
           <SettingCarousel title="Appearance" description="The foundational color atmosphere of the application.">
             {(['default', 'obsidian', 'paper', 'midnight', 'graphite', 'ash', 'ivory', 'monochrome', 'aurora', 'sunset', 'ocean', 'forest', 'twilight', 'electric', 'tron'] as AppearanceMode[]).map(mode => (
               <SettingCard 
@@ -119,7 +146,7 @@ export function SettingsOverlay() {
                   key={intensity} id={intensity} title={intensity.charAt(0).toUpperCase() + intensity.slice(1)} 
                   isSelected={settings.tronIntensity === intensity}
                   onClick={() => settings.setSettings({ tronIntensity: intensity })}
-                  previewNode={<div className={`w-8 h-8 rounded-full border border-cyan-400 theme-tron tron-intensity-${intensity} glow-element`} />}
+                  previewNode={<div className={`w-8 h-8 rounded-full theme-tron tron-intensity-${intensity} glow-element`} />}
                 />
               ))}
             </SettingCarousel>

@@ -36,10 +36,10 @@ export function Profile() {
         <h1 className="text-4xl md:text-5xl font-serif tracking-tight mb-4">{user.name}</h1>
         <p className="text-sm text-gray-500 mb-8 max-w-md font-serif italic">{user.bio}</p>
         
-        <div className="flex gap-8 text-xs tracking-widest uppercase mb-8">
-          <div className="flex flex-col gap-1"><span className="font-medium text-black">{user.followers}</span> <span className="text-gray-400">followers</span></div>
-          <div className="flex flex-col gap-1"><span className="font-medium text-black">{user.following}</span> <span className="text-gray-400">following</span></div>
-          <div className="flex flex-col gap-1"><span className="font-medium text-black">{userPosts.length}</span> <span className="text-gray-400">items</span></div>
+        <div className="flex gap-8 text-[11px] uppercase tracking-widest mt-6">
+          <div className="flex flex-col gap-1"><span className="font-medium text-text-primary">{user.followers}</span> <span className="text-text-secondary">followers</span></div>
+          <div className="flex flex-col gap-1"><span className="font-medium text-text-primary">{user.following}</span> <span className="text-text-secondary">following</span></div>
+          <div className="flex flex-col gap-1"><span className="font-medium text-text-primary">{userPosts.length}</span> <span className="text-text-secondary">items</span></div>
         </div>
         
         <div className="flex gap-4">
@@ -64,8 +64,8 @@ export function Profile() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={clsx(
-              "text-xs tracking-widest uppercase transition-all duration-300 pb-2",
-              activeTab === tab.id ? "text-black border-b border-black" : "text-gray-400 hover:text-black"
+              "pb-2 text-[10px] uppercase tracking-widest transition-colors",
+              activeTab === tab.id ? "text-text-primary border-b border-text-primary" : "text-text-secondary hover:text-text-primary"
             )}
           >
             {tab.label}
