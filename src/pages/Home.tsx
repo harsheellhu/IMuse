@@ -6,6 +6,7 @@ import { useSettingsStore } from '../store/useSettingsStore';
 import clsx from 'clsx';
 import { Post } from '../types';
 import { PostCard } from '../components/feed/PostCard';
+import { SlideshowLanding } from '../components/landing/SlideshowLanding';
 
 export function Home() {
   const { posts } = useStore();
@@ -25,6 +26,10 @@ export function Home() {
 
   // If landing style is very minimal or specific (like original) we might render a hero first
   const showHero = landingStyle === 'minimal' || landingStyle === 'observatory' || landingStyle === 'cosmic';
+
+  if (landingStyle === 'slideshow') {
+    return <SlideshowLanding posts={posts} />;
+  }
 
   return (
     <div className={clsx(

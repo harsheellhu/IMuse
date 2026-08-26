@@ -88,16 +88,34 @@ export function SettingsOverlay() {
             {Object.entries(settings.presets).map(([name, preset]) => (
               <div key={name} className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle overflow-hidden flex flex-col group cursor-pointer"
                    onClick={() => settings.applyPreset(name)}>
-                <div className="flex-1 bg-bg-secondary flex items-center justify-center relative p-4">
-                  <span className="text-sm font-medium text-text-primary z-10">{name}</span>
-                  <div className={`absolute inset-0 opacity-20 theme-${preset.appearance} img-style-${preset.imageStyle} bg-accent-primary`} />
+                <div className={`flex-1 flex flex-col justify-end relative p-4 typo-${preset.typography || 'neutral'}`}>
+                  <span className="text-display text-text-primary z-10 leading-none">{name}</span>
+                  <span className="text-meta text-text-muted z-10 mt-1">{preset.landingStyle}</span>
+                  <div className={`absolute inset-0 opacity-10 theme-${preset.appearance} img-style-${preset.imageStyle} bg-accent-primary pointer-events-none`} />
                 </div>
                 <button 
                   onClick={(e) => { e.stopPropagation(); settings.deletePreset(name); }}
-                  className="absolute top-2 right-2 w-6 h-6 bg-bg-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 w-6 h-6 bg-bg-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
                 >
                   <X className="w-3 h-3 text-text-secondary hover:text-text-primary" />
                 </button>
+              </div>
+            ))}
+            
+            {/* Built-in Slideshow Combo Presets */}
+            {[
+              { name: 'ART BOOK', preset: { landingStyle: 'slideshow', typography: 'art-book', slideshowConfig: { autoplay: 'slow', transition: 'fade' } } },
+              { name: 'CINEMA', preset: { landingStyle: 'slideshow', typography: 'cinema', slideshowConfig: { autoplay: 'cinematic', transition: 'dissolve' } } },
+              { name: 'LUXURY', preset: { landingStyle: 'slideshow', typography: 'luxury', slideshowConfig: { autoplay: 'slow', transition: 'crossfade' } } },
+              { name: 'ARCHIVE', preset: { landingStyle: 'slideshow', typography: 'archive', motion: 'minimal', slideshowConfig: { autoplay: 'slow', transition: 'fade' } } },
+              { name: 'PURE', preset: { landingStyle: 'slideshow', typography: 'minimal', slideshowConfig: { autoplay: 'off', transition: 'fade' } } },
+            ].map(combo => (
+              <div key={combo.name} className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle overflow-hidden flex flex-col group cursor-pointer bg-bg-secondary hover:bg-bg-elevated transition-colors"
+                   onClick={() => settings.setSettings(combo.preset as any)}>
+                <div className={`flex-1 flex flex-col justify-end relative p-4 typo-${combo.preset.typography}`}>
+                  <span className="text-display text-text-primary z-10 leading-none tracking-tight">{combo.name}</span>
+                  <span className="text-meta text-text-muted z-10 mt-2">Built-in Preset</span>
+                </div>
               </div>
             ))}
           </SettingCarousel>
@@ -118,15 +136,66 @@ export function SettingsOverlay() {
           </SettingCarousel>
 
           <SettingCarousel title="Landing Experience" description="How the main entry point is presented.">
-            {(['minimal', 'editorial', 'observatory', 'archive', 'gallery', 'cosmic', 'tron', 'monolith', 'paper', 'terminal'] as LandingStyle[]).map(style => (
+            {(['minimal', 'editorial', 'observatory', 'archive', 'gallery', 'cosmic', 'tron', 'monolith', 'paper', 'terminal', 'slideshow'] as LandingStyle[]).map(style => (
               <SettingCard 
                 key={style} id={style} title={style.charAt(0).toUpperCase() + style.slice(1)} 
                 isSelected={settings.landingStyle === style}
                 onClick={() => settings.setSettings({ landingStyle: style })}
-                previewNode={<div className="text-text-muted font-serif text-xs">{style} layout preview</div>}
+                previewNode={<div className="text-meta text-text-muted">{style}</div>}
               />
             ))}
           </SettingCarousel>
+          
+          {/* Slideshow Settings (Expandable if slideshow is active) */}
+          {settings.landingStyle === 'slideshow' && (
+            <div className="bg-bg-secondary/50 rounded-2xl p-6 md:p-8 space-y-8 border border-border-subtle">
+              <h3 className="text-heading text-xl text-text-primary mb-2">Slideshow Configuration</h3>
+              
+              <SettingCarousel title="Slideshow Mode" description="Content selection strategy.">
+                {(['curated', 'shuffle'] as const).map(mode => (
+                  <SettingCard 
+                    key={mode} id={mode} title={mode.charAt(0).toUpperCase() + mode.slice(1)} 
+                    isSelected={settings.slideshowConfig.mode === mode}
+                    onClick={() => settings.updateDiscoveryTask({} /* hack to trigger */) || settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, mode } })}
+                    previewNode={<div className="text-meta text-text-muted">{mode}</div>}
+                  />
+                ))}
+              </SettingCarousel>
+
+              <SettingCarousel title="Autoplay Speed" description="How fast the slides advance automatically.">
+                {(['off', 'slow', 'cinematic', 'fast'] as const).map(speed => (
+                  <SettingCard 
+                    key={speed} id={speed} title={speed.charAt(0).toUpperCase() + speed.slice(1)} 
+                    isSelected={settings.slideshowConfig.autoplay === speed}
+                    onClick={() => settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, autoplay: speed } })}
+                    previewNode={<div className="text-meta text-text-muted">{speed}</div>}
+                  />
+                ))}
+              </SettingCarousel>
+
+              <SettingCarousel title="Transition Effect" description="How slides animate between each other.">
+                {(['fade', 'crossfade', 'slide', 'depth', 'dissolve'] as const).map(trans => (
+                  <SettingCard 
+                    key={trans} id={trans} title={trans.charAt(0).toUpperCase() + trans.slice(1)} 
+                    isSelected={settings.slideshowConfig.transition === trans}
+                    onClick={() => settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, transition: trans } })}
+                    previewNode={<div className="text-meta text-text-muted">{trans}</div>}
+                  />
+                ))}
+              </SettingCarousel>
+              
+              <SettingCarousel title="Caption Position" description="Where metadata is displayed over the image.">
+                {(['bottom-left', 'bottom-right', 'top-left'] as const).map(pos => (
+                  <SettingCard 
+                    key={pos} id={pos} title={pos.replace('-', ' ')} 
+                    isSelected={settings.slideshowConfig.captionPosition === pos}
+                    onClick={() => settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, captionPosition: pos } })}
+                    previewNode={<div className="text-meta text-text-muted">{pos}</div>}
+                  />
+                ))}
+              </SettingCarousel>
+            </div>
+          )}
 
           <SettingCarousel title="Home Layout" description="The structural arrangement of the feed.">
             {(['masonry', 'editorial', 'magazine', 'gallery', 'grid', 'staggered', 'minimal'] as HomeLayout[]).map(layout => (
@@ -180,12 +249,17 @@ export function SettingsOverlay() {
           </SettingCarousel>
 
           <SettingCarousel title="Typography" description="The font system used throughout the app.">
-            {(['neutral', 'editorial', 'modern', 'classical', 'technical', 'brutalist', 'futuristic'] as TypographyStyle[]).map(typo => (
+            {(['neutral', 'editorial', 'modern', 'neo-grotesk', 'humanist', 'classical', 'literary', 'newspaper', 'fashion', 'art-book', 'brutalist', 'technical', 'mono', 'futuristic', 'cinema', 'archive', 'contemporary', 'minimal', 'luxury'] as TypographyStyle[]).map(typo => (
               <SettingCard 
-                key={typo} id={typo} title={typo.charAt(0).toUpperCase() + typo.slice(1)} 
+                key={typo} id={typo} title={typo.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} 
                 isSelected={settings.typography === typo}
                 onClick={() => settings.setSettings({ typography: typo })}
-                previewNode={<span className={`text-2xl text-text-primary typo-${typo} font-serif`}>Ag</span>}
+                previewNode={
+                  <div className={`w-full h-full flex flex-col justify-center items-center p-2 text-center bg-bg-base typo-${typo} overflow-hidden pointer-events-none`}>
+                    <span className="text-display leading-none" style={{ fontSize: '2.5rem' }}>Aa</span>
+                    <span className="text-meta text-text-muted mt-2 opacity-70">No. 024</span>
+                  </div>
+                }
               />
             ))}
           </SettingCarousel>
