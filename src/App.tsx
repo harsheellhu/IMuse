@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { Home } from './pages/Home';
+import { LandingPage } from './pages/LandingPage';
 import { ThemeProvider } from './components/ThemeProvider';
 import { SettingsOverlay } from './components/settings/SettingsOverlay';
 import { ImportProgress } from './components/settings/ImportProgress';
@@ -39,8 +40,9 @@ export default function App() {
         <ImportProgress />
         <CreateCollectionModal />
         <Routes>
-          <Route path="/" element={<AppLayout />}>
-            <Route index element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route element={<AppLayout />}>
+            <Route path="home" element={<Home />} />
             <Route path="explore" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><ExploreWorld /></React.Suspense>} />
             <Route path="books" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Books /></React.Suspense>} />
             <Route path="films" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Films /></React.Suspense>} />

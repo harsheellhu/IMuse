@@ -106,4 +106,30 @@ export interface Song {
   lastPlayed?: string;
   isFavorite: boolean;
   blobId?: string; // Reference to the actual audio blob in IndexedDB
+  lyrics?: { time: number; text: string }[];
+}
+
+export interface LocalTrack extends Song {
+  file: File;
+  addedAt: number;
+  isFavorite: boolean;
+  blobId?: string; // Reference to the actual audio blob in IndexedDB
+  lyrics?: { time: number; text: string }[];
+}
+
+export interface LandingFeature {
+  id: string;
+  title: string;
+  category: string;
+  description?: string;
+  image: {
+    thumbnailUrl: string;
+    previewUrl: string;
+    fullUrl: string;
+    mobileUrl?: string;
+    width: number;
+    height: number;
+    alt: string;
+    source?: string;
+  };
 }

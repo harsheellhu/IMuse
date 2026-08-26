@@ -63,8 +63,25 @@ export const useMusicStore = create<MusicStoreState>((set, get) => ({
     
     const blobUrl = URL.createObjectURL(record.blob);
     
+    // Inject mock lyrics for testing if none exist
+    const songWithLyrics = {
+      ...song,
+      lyrics: song.lyrics || [
+        { time: 0, text: "(Instrumental intro)" },
+        { time: 5, text: "I've been looking at the turntable" },
+        { time: 10, text: "Watching the record spin around" },
+        { time: 15, text: "The needle drops, the music plays" },
+        { time: 20, text: "Lost inside this giant sound" },
+        { time: 30, text: "(Guitar Solo)" },
+        { time: 45, text: "And the colors fill the room" },
+        { time: 50, text: "Fading from the cover art" },
+        { time: 55, text: "Synchronized with every beat" },
+        { time: 60, text: "Playing right inside my heart" }
+      ]
+    };
+
     set({
-      currentSong: song,
+      currentSong: songWithLyrics,
       currentBlobUrl: blobUrl,
       isPlaying: true,
       progress: 0,

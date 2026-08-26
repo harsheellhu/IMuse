@@ -183,21 +183,18 @@ export function TurntableUnit() {
   };
 
   return (
-    <div className={clsx(
-      "relative w-full max-w-[480px] md:max-w-[560px] aspect-[4/3] rounded-3xl p-6 md:p-10 shadow-2xl flex items-center border",
-      isTron ? "bg-black border-cyan-500/20 shadow-[0_0_80px_rgba(6,182,212,0.1)]" : "bg-[#111] border-[#222] shadow-[0_30px_60px_rgba(0,0,0,0.8)]"
-    )}>
+    <div className="relative w-full aspect-square max-w-[90vh] md:max-w-[75vw] lg:max-w-full flex items-center justify-center mx-auto group">
       {/* Platter & Vinyl Area */}
-      <div className="relative h-full aspect-square flex items-center justify-center ml-2 md:ml-4">
+      <div className="relative w-full h-full flex items-center justify-center">
         
         {/* Turntable Platter (Base under record) */}
         <div className={clsx(
-          "absolute -inset-3 rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.9)] border-2",
-          isTron ? "bg-[#050505] border-cyan-500/10" : "bg-[#0a0a0a] border-[#1a1a1a]"
+          "absolute -inset-4 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.9)] border-2 transition-colors",
+          isTron ? "bg-[#050505] border-cyan-500/20" : "bg-[#0a0a0a] border-[#1a1a1a]"
         )} />
         
         {/* Platter Edge Highlight */}
-        <div className="absolute -inset-3 rounded-full border border-white/5 pointer-events-none" />
+        <div className="absolute -inset-4 rounded-full border border-white/10 pointer-events-none" />
 
         {/* Vinyl Disc - Rotation is handled purely by the ref and RAF loop, NOT css spin animations */}
         <div 
@@ -209,27 +206,27 @@ export function TurntableUnit() {
           style={{ willChange: 'transform' }} // Optimize GPU rendering
         >
           {/* Micro-grooves */}
-          <div className="absolute inset-1 rounded-full opacity-60 pointer-events-none" style={{
-            background: 'repeating-radial-gradient(circle at 50% 50%, transparent, transparent 2px, rgba(255,255,255,0.02) 3px, transparent 4px)'
+          <div className="absolute inset-1 rounded-full opacity-70 pointer-events-none mix-blend-overlay" style={{
+            background: 'repeating-radial-gradient(circle at 50% 50%, transparent, transparent 2px, rgba(255,255,255,0.04) 3px, rgba(0,0,0,0.1) 4px, transparent 5px)'
           }} />
 
           {/* Macro-groove zones (Outer, Middle, Inner) */}
-          <div className="absolute inset-0 rounded-full opacity-40 pointer-events-none" style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 20%, rgba(0,0,0,0.5) 30%, transparent 35%, rgba(0,0,0,0.6) 60%, transparent 65%, rgba(0,0,0,0.4) 85%, transparent 90%)'
+          <div className="absolute inset-0 rounded-full opacity-60 pointer-events-none" style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 18%, rgba(0,0,0,0.8) 30%, transparent 35%, rgba(0,0,0,0.9) 60%, transparent 65%, rgba(0,0,0,0.7) 85%, transparent 90%)'
           }} />
           
           {/* Vinyl Sheen/Reflection */}
           <div className="absolute inset-0 rounded-full pointer-events-none mix-blend-screen opacity-20" style={{
-            background: 'conic-gradient(from 45deg at 50% 50%, rgba(255,255,255,0.2) 0deg, transparent 40deg, transparent 140deg, rgba(255,255,255,0.2) 180deg, transparent 220deg, transparent 320deg, rgba(255,255,255,0.2) 360deg)'
+            background: 'conic-gradient(from 45deg at 50% 50%, rgba(255,255,255,0.3) 0deg, transparent 40deg, transparent 140deg, rgba(255,255,255,0.3) 180deg, transparent 220deg, transparent 320deg, rgba(255,255,255,0.3) 360deg)'
           }} />
           
           {/* Edge highlight */}
-          <div className="absolute inset-0 rounded-full border border-white/5 pointer-events-none" />
+          <div className="absolute inset-0 rounded-full border border-white/10 pointer-events-none shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]" />
 
           {/* Center Label Area */}
-          <div className="w-[32%] h-[32%] rounded-full relative z-10 flex items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.6),0_0_5px_rgba(0,0,0,0.5)] bg-bg-secondary overflow-hidden border border-[#222]">
+          <div className="w-[33%] h-[33%] rounded-full relative z-10 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.8),0_0_10px_rgba(0,0,0,0.9)] bg-bg-secondary overflow-hidden border border-[#222]">
             {currentSong?.artworkUrl ? (
-              <img src={currentSong.artworkUrl} alt={currentSong.title} className="w-full h-full object-cover opacity-90" />
+              <img src={currentSong.artworkUrl} alt={currentSong.title} className="w-full h-full object-cover opacity-95 transition-opacity duration-500" />
             ) : (
               <div className="text-2xl font-serif text-text-muted">{currentSong?.title?.charAt(0)}</div>
             )}
@@ -250,18 +247,18 @@ export function TurntableUnit() {
         ref={armRef}
         onPointerDown={handlePointerDown}
         className={clsx(
-          "absolute top-8 right-8 md:top-12 md:right-12 z-30 touch-none group cursor-pointer"
+          "absolute -top-4 -right-12 lg:-top-8 lg:-right-16 z-30 touch-none group cursor-pointer drop-shadow-2xl"
         )} 
         style={{ 
-          width: '48px',
-          height: '80%', 
-          transformOrigin: '24px 24px', // Center of the 48px pivot
+          width: '56px',
+          height: '110%', 
+          transformOrigin: '28px 28px', // Center of the 56px pivot
           transform: `rotate(${REST_ANGLE}deg)`,
           willChange: 'transform' // Optimize GPU rendering
         }}
       >
         {/* Expanded Invisible Grab Area */}
-        <div className="absolute inset-y-0 -inset-x-12" />
+        <div className="absolute inset-y-0 -inset-x-16" />
         
         {/* Live Tooltip Feedback while dragging */}
         <div 
@@ -277,9 +274,9 @@ export function TurntableUnit() {
 
         {/* Mechanical Pivot Assembly */}
         <div className={clsx(
-          "absolute top-0 left-0 w-12 h-12 rounded-full border-4 shadow-xl z-20 flex items-center justify-center transition-colors",
-          isTron ? "bg-[#050505] border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.4)]" : "bg-[#1a1a1a] border-[#333]",
-          isDragging && (isTron ? "border-cyan-400" : "border-gray-400")
+          "absolute top-0 left-0 w-14 h-14 rounded-full border-[5px] shadow-2xl z-20 flex items-center justify-center transition-colors",
+          isTron ? "bg-[#050505] border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.5)]" : "bg-[#111] border-[#333]",
+          isDragging && (isTron ? "border-cyan-400" : "border-gray-300")
         )}>
           <div className={clsx(
             "w-5 h-5 rounded-full border shadow-inner",
@@ -294,21 +291,21 @@ export function TurntableUnit() {
         
         {/* Counterweight */}
         <div className={clsx(
-          "absolute -top-8 left-[14px] w-5 h-10 rounded-sm shadow-xl z-10",
+          "absolute -top-10 left-[16px] w-6 h-12 rounded-sm shadow-2xl z-10",
           isTron ? "bg-[#050505] border border-cyan-500/30" : "bg-gradient-to-b from-gray-500 to-gray-700 border border-gray-400/50"
         )}>
-          <div className="absolute top-2 inset-x-0 h-px bg-black/40" />
-          <div className="absolute top-4 inset-x-0 h-px bg-black/40" />
-          <div className="absolute top-6 inset-x-0 h-px bg-black/40" />
+          <div className="absolute top-2 inset-x-0 h-[2px] bg-black/50" />
+          <div className="absolute top-5 inset-x-0 h-[2px] bg-black/50" />
+          <div className="absolute top-8 inset-x-0 h-[2px] bg-black/50" />
         </div>
 
         {/* Main Arm Tube */}
         <div 
           className={clsx(
-            "absolute top-10 left-[20px] w-2 rounded-full shadow-2xl z-10",
+            "absolute top-12 left-[23px] w-2.5 rounded-full shadow-2xl z-10",
             isTron ? "bg-cyan-950/80 border-x border-cyan-500/40" : "bg-gradient-to-r from-gray-300 via-white to-gray-400 border-x border-gray-200/50"
           )} 
-          style={{ height: 'calc(100% - 40px)' }}
+          style={{ height: 'calc(100% - 50px)' }}
         >
           <div className={clsx(
             "absolute inset-y-0 left-0 w-[1px] opacity-60",
@@ -318,11 +315,11 @@ export function TurntableUnit() {
         
         {/* Headshell & Cartridge */}
         <div className={clsx(
-          "absolute bottom-[-10px] left-[6px] w-7 h-14 rounded-sm shadow-2xl rotate-[22deg] origin-top z-20 flex flex-col items-center",
+          "absolute bottom-[-16px] left-[7px] w-9 h-16 rounded-sm shadow-2xl rotate-[22deg] origin-top z-20 flex flex-col items-center",
           isTron ? "bg-[#050505] border border-cyan-500/60" : "bg-[#181818] border-t border-r border-[#333]"
         )}>
           <div className={clsx(
-            "w-3 h-2 -mt-2",
+            "w-4 h-3 -mt-3",
             isTron ? "bg-cyan-800" : "bg-gray-400"
           )} />
           

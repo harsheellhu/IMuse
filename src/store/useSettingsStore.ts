@@ -31,6 +31,7 @@ export interface SettingsState {
   navStyle: NavStyle;
   homeLayout: HomeLayout;
   interfaceSounds: InterfaceSounds;
+  skipLandingPage: boolean;
 
   // Slideshow Config
   slideshowConfig: {
@@ -84,6 +85,7 @@ const defaultSettings = {
   navStyle: 'floating' as NavStyle,
   homeLayout: 'masonry' as HomeLayout,
   interfaceSounds: 'balanced' as InterfaceSounds,
+  skipLandingPage: false,
   slideshowConfig: {
     mode: 'shuffle' as const,
     autoplay: 'slow' as const,
@@ -132,6 +134,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       homeLayout: state.homeLayout,
       interfaceSounds: state.interfaceSounds,
       slideshowConfig: state.slideshowConfig,
+      skipLandingPage: state.skipLandingPage,
     };
     set((s) => ({
       presets: { ...s.presets, [name]: presetData }

@@ -36,7 +36,7 @@ export function Navbar() {
   const isDark = document.documentElement.classList.contains('dark');
 
   const navItems = [
-    { label: 'Home', path: '/' },
+    { label: 'Home', path: '/home' },
     { label: 'Explore World', path: '/explore' },
     { label: 'Books', path: '/books' },
     { label: 'Films', path: '/films' },
@@ -297,7 +297,7 @@ export function MobileNav() {
   const location = useLocation();
   
   const navItems = [
-    { icon: Compass, path: '/' },
+    { icon: Compass, path: '/home' },
     { icon: Search, path: '/explore' },
     { icon: Plus, path: '/create' },
     { icon: User, path: '/profile/me' },

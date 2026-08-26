@@ -6,11 +6,10 @@ import { useSettingsStore } from '../store/useSettingsStore';
 import clsx from 'clsx';
 import { Post } from '../types';
 import { PostCard } from '../components/feed/PostCard';
-import { SlideshowLanding } from '../components/landing/SlideshowLanding';
 
 export function Home() {
   const { posts } = useStore();
-  const { homeLayout, feedDensity, landingStyle, appearance } = useSettingsStore();
+  const { homeLayout, feedDensity } = useSettingsStore();
 
   React.useEffect(() => {
     if (posts.length === 0) {
@@ -24,40 +23,12 @@ export function Home() {
 
   const displayPosts = posts.slice(0, 50); // Show up to 50 for the feed
 
-  // If landing style is very minimal or specific (like original) we might render a hero first
-  const showHero = landingStyle === 'minimal' || landingStyle === 'observatory' || landingStyle === 'cosmic';
-
-  if (landingStyle === 'slideshow') {
-    return <SlideshowLanding posts={posts} />;
-  }
-
   return (
     <div className={clsx(
       "w-full min-h-[calc(100vh-5rem)] pt-20 px-6 md:px-12",
       `density-${feedDensity}` // Ensure density variables are picked up if applied globally or locally
     )}>
       
-      {showHero && (
-        <div className="relative z-10 flex flex-col items-center justify-center text-center py-20 mb-12">
-          <motion.h1 
-            initial={{ opacity: 0, letterSpacing: '0.5em' }}
-            animate={{ opacity: 1, letterSpacing: '0.2em' }}
-            transition={{ duration: 1 }}
-            className="text-text-primary text-4xl md:text-6xl font-serif tracking-[0.2em] mb-6"
-          >
-            IMuse
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="text-text-secondary text-sm max-w-md tracking-[0.1em] leading-relaxed mb-8"
-          >
-            A curated collection of inspiration.
-          </motion.p>
-        </div>
-      )}
-
       {/* Dynamic Layout Engine */}
       <div className={clsx(
         "w-full max-w-[1600px] mx-auto pb-20",

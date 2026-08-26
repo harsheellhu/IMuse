@@ -3,23 +3,21 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { useStore } from '../../store/useStore';
 import { useImagePalette } from '../../hooks/useImagePalette';
-import { Post } from '../../types';
-import { Bookmark, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LandingFeature } from '../../types';
 import clsx from 'clsx';
 
-export function SlideshowLanding({ posts }: { posts: Post[] }) {
+export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   const { slideshowConfig, appearance } = useSettingsStore();
-  const { openViewer, savedPostIds, toggleSavePost, isAuthenticated, setAuthModalOpen } = useStore();
+  const { isAuthenticated, setAuthModalOpen } = useStore();
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const isTron = appearance === 'tron';
 
-  // Filter posts that have images
-  const validPosts = React.useMemo(() => {
-    let p = posts.filter(p => p.imageUrl);
+  // Filter features
+  const validFeatures = React.useMemo(() => {
+    let p = features.filter(f => f.image?.fullUrl);
     if (slideshowConfig.mode === 'shuffle') {
-      // Create a stable shuffle for this session
       const shuffled = [...p];
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -28,27 +26,29 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
       return shuffled;
     }
     return p;
-  }, [posts, slideshowConfig.mode]);
+  }, [features, slideshowConfig.mode]);
 
-  const currentPost = validPosts[currentIndex];
+  const currentFeature = validFeatures[currentIndex];
   
-  // Preload images
+  // Preload images (current and next)
   useEffect(() => {
-    if (validPosts.length === 0) return;
-    const nextIndex = (currentIndex + 1) % validPosts.length;
-    const prevIndex = (currentIndex - 1 + validPosts.length) % validPosts.length;
+    if (validFeatures.length === 0) return;
     
-    [validPosts[nextIndex], validPosts[prevIndex]].forEach(p => {
-      if (p?.imageUrl) {
+    // We preload current, next, and previous fullUrls
+    const nextIndex = (currentIndex + 1) % validFeatures.length;
+    const prevIndex = (currentIndex - 1 + validFeatures.length) % validFeatures.length;
+    
+    [validFeatures[currentIndex], validFeatures[nextIndex], validFeatures[prevIndex]].forEach(f => {
+      if (f?.image?.fullUrl) {
         const img = new Image();
-        img.src = p.imageUrl;
+        img.src = f.image.fullUrl;
       }
     });
-  }, [currentIndex, validPosts]);
+  }, [currentIndex, validFeatures]);
 
   // Autoplay
   useEffect(() => {
-    if (slideshowConfig.autoplay === 'off' || validPosts.length <= 1) return;
+    if (slideshowConfig.autoplay === 'off' || validFeatures.length <= 1) return;
     
     let delay = 7000; // slow
     if (slideshowConfig.autoplay === 'fast') delay = 4000;
@@ -56,23 +56,23 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
 
     const timer = setInterval(() => {
       setDirection(1);
-      setCurrentIndex((prev) => (prev + 1) % validPosts.length);
+      setCurrentIndex((prev) => (prev + 1) % validFeatures.length);
     }, delay);
 
     return () => clearInterval(timer);
-  }, [slideshowConfig.autoplay, validPosts.length, currentIndex]); // Reset timer on index change
+  }, [slideshowConfig.autoplay, validFeatures.length, currentIndex]); // Reset timer on index change
 
   const goNext = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
     setDirection(1);
-    setCurrentIndex(prev => (prev + 1) % validPosts.length);
-  }, [validPosts.length]);
+    setCurrentIndex(prev => (prev + 1) % validFeatures.length);
+  }, [validFeatures.length]);
 
   const goPrev = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
     setDirection(-1);
-    setCurrentIndex(prev => (prev - 1 + validPosts.length) % validPosts.length);
-  }, [validPosts.length]);
+    setCurrentIndex(prev => (prev - 1 + validFeatures.length) % validFeatures.length);
+  }, [validFeatures.length]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -111,15 +111,6 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
     }
     touchStartRef.current = null;
   };
-
-  const handleSave = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!currentPost) return;
-    if (!isAuthenticated) setAuthModalOpen(true);
-    else toggleSavePost(currentPost.id);
-  };
-
-  const isSaved = currentPost ? savedPostIds.includes(currentPost.id) : false;
 
   // Variants based on transition
   const getVariants = () => {
@@ -163,9 +154,10 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
     ease: [0.16, 1, 0.3, 1]
   };
 
-  const { palette } = useImagePalette(currentPost?.imageUrl || null);
+  // Extract palette from the thumbnail for extreme performance
+  const { palette } = useImagePalette(currentFeature?.image?.thumbnailUrl || null);
 
-  if (!currentPost) return null;
+  if (!currentFeature) return null;
 
   return (
     <div 
@@ -173,7 +165,6 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      onClick={() => openViewer({ id: currentPost.id, type: 'post', data: currentPost })}
     >
       {/* Ambient Layer */}
       <div 
@@ -188,28 +179,36 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
       {/* Main Image Slideshow */}
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
-          key={currentPost.id}
+          key={currentFeature.id}
           custom={direction}
           variants={getVariants()}
           initial="initial"
           animate="animate"
           exit="exit"
           transition={transitionConfig}
-          className="absolute inset-0 w-full h-full cursor-pointer group"
+          className="absolute inset-0 w-full h-full cursor-default group bg-bg-base"
         >
-          <img 
-            src={currentPost.imageUrl} 
-            alt={currentPost.title} 
-            className={clsx(
-              "w-full h-full object-cover select-none",
-              // Gentle continuous cinematic pan/zoom if cinematic autoplay is on
-              slideshowConfig.autoplay === 'cinematic' && "animate-[cinematic-pan_20s_linear_infinite_alternate]"
+          <picture>
+            {currentFeature.image.mobileUrl && (
+              <source media="(max-width: 768px)" srcSet={currentFeature.image.mobileUrl} />
             )}
-            style={{ 
-              objectPosition: 'center', 
-              willChange: 'transform, opacity, filter'
-            }}
-          />
+            {currentFeature.image.previewUrl && (
+              <source media="(max-width: 1280px)" srcSet={currentFeature.image.previewUrl} />
+            )}
+            <img 
+              src={currentFeature.image.fullUrl} 
+              alt={currentFeature.image.alt} 
+              decoding="async"
+              className={clsx(
+                "w-full h-full object-cover select-none",
+                slideshowConfig.autoplay === 'cinematic' && "animate-[cinematic-pan_20s_linear_infinite_alternate]"
+              )}
+              style={{ 
+                objectPosition: 'center', 
+                willChange: 'transform, opacity' 
+              }}
+            />
+          </picture>
           
           {/* Subtle gradient for text readability */}
           <div className={clsx(
@@ -223,69 +222,43 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
       {/* UI Overlay */}
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-12 z-20">
         
-        {/* Top Area */}
-        <div className="flex justify-between items-start w-full">
-          {/* Caption if Top-Left */}
+        {/* Invisible Click Zones for Desktop Navigation */}
+        <div 
+          onClick={goPrev} 
+          className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer pointer-events-auto"
+          aria-label="Previous image"
+        />
+        <div 
+          onClick={goNext} 
+          className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer pointer-events-auto"
+          aria-label="Next image"
+        />
+
+        {/* Top Area - Empty, handled by LandingPage overlay */}
+        <div className="flex justify-between items-start w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto">
             {slideshowConfig.captionPosition === 'top-left' && (
-              <Caption post={currentPost} isTron={isTron} />
+              <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
-          
-          {/* Minimal App Navigation / Branding placeholder could go here if not handled by root nav */}
-        </div>
-
-        {/* Middle Nav Arrows (only visible on mouse move/hover in desktop) */}
-        <div className="absolute inset-y-0 left-0 w-32 flex items-center justify-start px-6 opacity-0 hover:opacity-100 transition-opacity pointer-events-auto">
-          <button onClick={goPrev} className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10 hover:bg-black/40 hover:scale-110 transition-all">
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-        </div>
-        <div className="absolute inset-y-0 right-0 w-32 flex items-center justify-end px-6 opacity-0 hover:opacity-100 transition-opacity pointer-events-auto">
-          <button onClick={goNext} className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10 hover:bg-black/40 hover:scale-110 transition-all">
-            <ChevronRight className="w-6 h-6" />
-          </button>
         </div>
 
         {/* Bottom Area */}
-        <div className="flex justify-between items-end w-full relative">
-          
-          {/* Caption if Bottom-Left */}
-          <div className="w-2/3 max-w-xl pointer-events-auto">
+        <div className="flex justify-between items-end w-full relative z-20 pointer-events-none">
+          <div className="w-2/3 max-w-xl pointer-events-auto pl-2 pb-2">
             {slideshowConfig.captionPosition === 'bottom-left' && (
-              <Caption post={currentPost} isTron={isTron} />
+              <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
 
           {/* Spacer if caption is not bottom-left/right */}
           {slideshowConfig.captionPosition === 'top-left' && <div />}
 
-          {/* Bottom Right Area: Save Button & Counter or Caption */}
-          <div className="flex items-end gap-6 md:gap-12 pointer-events-auto">
+          {/* Bottom Right Area */}
+          <div className="flex items-end gap-6 md:gap-12 pointer-events-auto pr-2 pb-2">
             {slideshowConfig.captionPosition === 'bottom-right' && (
-              <Caption post={currentPost} isTron={isTron} alignRight />
+              <Caption feature={currentFeature} isTron={isTron} alignRight />
             )}
-
-            <div className="flex flex-col items-end gap-4 pb-1">
-              <button 
-                onClick={handleSave}
-                className={clsx(
-                  "w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-lg",
-                  isSaved 
-                    ? "bg-white text-black border border-transparent" 
-                    : "bg-black/30 text-white hover:bg-white hover:text-black border border-white/20"
-                )}
-              >
-                {isSaved ? <Bookmark className="w-4 h-4" fill="currentColor" /> : <Plus className="w-4 h-4" />}
-              </button>
-
-              <div className={clsx(
-                "text-meta tracking-[0.2em] px-3 py-1 rounded-full backdrop-blur-md border",
-                isTron ? "bg-black/60 border-cyan-500/30 text-cyan-400 font-mono" : "bg-black/20 border-white/10 text-white/80"
-              )}>
-                {(currentIndex + 1).toString().padStart(2, '0')} <span className="opacity-50">/ {validPosts.length}</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -294,35 +267,38 @@ export function SlideshowLanding({ posts }: { posts: Post[] }) {
   );
 }
 
-function Caption({ post, isTron, alignRight }: { post: Post, isTron: boolean, alignRight?: boolean }) {
+function Caption({ feature, isTron, alignRight }: { feature: LandingFeature, isTron: boolean, alignRight?: boolean }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      key={post.id} // Re-animate when post changes
+      key={feature.id} // Re-animate when post changes
       transition={{ duration: 0.8, delay: 0.2 }}
-      className={clsx("flex flex-col gap-2 md:gap-3", alignRight ? "items-end text-right" : "items-start text-left")}
+      className={clsx(
+        "flex flex-col gap-1 md:gap-1.5", 
+        alignRight ? "items-end text-right" : "items-start text-left"
+      )}
     >
       <div className={clsx(
-        "text-meta flex items-center gap-2 px-3 py-1.5 rounded-sm backdrop-blur-sm shadow-sm",
-        isTron ? "bg-cyan-950/40 text-cyan-400 border border-cyan-500/30" : "bg-black/20 text-white/90 border border-white/10"
+        "text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-medium drop-shadow-md",
+        isTron ? "text-cyan-400" : "text-white/90"
       )}>
-        {post.category || 'Visual'} <span className="opacity-50 mx-1">/</span> {post.id.slice(0, 4).toUpperCase()}
+        {feature.category || 'Visual'}
       </div>
       
       <h2 className={clsx(
-        "text-display text-white drop-shadow-xl line-clamp-2 mix-blend-normal",
-        isTron && "text-cyan-50 drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]"
+        "text-xl md:text-2xl font-light tracking-wide text-white drop-shadow-md mix-blend-normal",
+        isTron && "text-cyan-50 drop-shadow-[0_0_8px_rgba(0,255,255,0.4)]"
       )}>
-        {post.title}
+        {feature.title}
       </h2>
       
-      {post.description && (
+      {feature.description && (
         <p className={clsx(
-          "text-body text-white/80 line-clamp-1 max-w-md drop-shadow-md",
-          isTron && "text-cyan-100/70"
+          "text-xs md:text-sm font-light line-clamp-2 max-w-sm drop-shadow-md mt-1",
+          isTron ? "text-cyan-100/70" : "text-white/70"
         )}>
-          {post.description}
+          {feature.description}
         </p>
       )}
     </motion.div>
