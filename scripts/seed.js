@@ -57,6 +57,10 @@ const worlds = [
   { id: 'w6', slug: 'tv-shows', name: 'TV Shows', description: 'Iconic television series and their visual worlds.', category: 'TV' },
   { id: 'w7', slug: 'places', name: 'Places', description: 'Destinations, streets, and hidden corners around the world.', category: 'Travel' },
   { id: 'w8', slug: 'shops', name: 'Shops', description: 'Storefronts, markets, and retail experiences.', category: 'Lifestyle' },
+  { id: 'w9', slug: 'books', name: 'Books', description: 'Literature, novels, and non-fiction.', category: 'Literature' },
+  { id: 'w10', slug: 'art', name: 'Art', description: 'Paintings, sculptures, and digital art.', category: 'Visual' },
+  { id: 'w11', slug: 'design', name: 'Design', description: 'Industrial design and objects.', category: 'Visual' },
+  { id: 'w12', slug: 'music', name: 'Music', description: 'Album covers, artists, and live performances.', category: 'Music' },
 ];
 
 const insertWorld = db.prepare(`
@@ -163,6 +167,29 @@ const shops = [
   { id: 'shop-12', title: 'Strand Book Store', desc: '18 miles of books in a New York City institution since 1927.', img: 'https://picsum.photos/id/1077/800/1000', tags: ['bookshop', 'nyc'] },
 ];
 
+const books = [
+  { id: 'book-0', title: 'Dune', desc: 'Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides.', img: 'https://picsum.photos/id/100/800/1000', tags: ['sci-fi', 'fiction'] },
+  { id: 'book-1', title: '1984', desc: 'Among the seminal texts of the 20th century, 1984 is a rare work that grows more haunting as its futuristic purgatory becomes more real.', img: 'https://picsum.photos/id/101/800/1000', tags: ['dystopia', 'fiction'] },
+  { id: 'book-2', title: 'The Great Gatsby', desc: 'The story of the mysteriously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.', img: 'https://picsum.photos/id/102/800/1000', tags: ['classic', 'fiction'] },
+];
+
+const films = [
+  { id: 'film-0', title: 'Blade Runner 2049', desc: 'Young Blade Runner Ks discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard.', img: 'https://picsum.photos/id/200/800/1000', tags: ['sci-fi', 'thriller'] },
+  { id: 'film-1', title: 'Inception', desc: 'A thief who steals corporate secrets through the use of dream-sharing technology.', img: 'https://picsum.photos/id/201/800/1000', tags: ['sci-fi', 'action'] },
+  { id: 'film-2', title: 'Interstellar', desc: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanitys survival.', img: 'https://picsum.photos/id/202/800/1000', tags: ['sci-fi', 'adventure'] },
+];
+
+const arts = [
+  { id: 'art-0', title: 'Starry Night', desc: 'Vincent van Goghs masterpiece depicting the view from his asylum room.', img: 'https://picsum.photos/id/300/800/1000', tags: ['painting', 'impressionism'] },
+  { id: 'art-1', title: 'The Persistence of Memory', desc: 'Salvador Dalís iconic surrealist work featuring melting clocks.', img: 'https://picsum.photos/id/301/800/1000', tags: ['surrealism', 'painting'] },
+];
+
+const designs = [
+  { id: 'design-0', title: 'Braun SK 4', desc: 'Dieter Rams iconic record player design, affectionately known as Snow White s Coffin.', img: 'https://picsum.photos/id/400/800/1000', tags: ['industrial', 'minimal'] },
+  { id: 'design-1', title: 'Eames Lounge Chair', desc: 'A classic of modern furniture design.', img: 'https://picsum.photos/id/401/800/1000', tags: ['furniture', 'mid-century'] },
+];
+
+
 const seedInlineContent = (items, type, category, worldId) => {
   items.forEach(item => {
     // Pack specific metadata like genres, locations, tags etc.
@@ -182,6 +209,10 @@ const seedInlineContent = (items, type, category, worldId) => {
 seedInlineContent(tvShows, 'tv_show', 'TV', 'w6');
 seedInlineContent(places, 'place', 'Travel', 'w7');
 seedInlineContent(shops, 'post', 'Lifestyle', 'w8');
+seedInlineContent(books, 'book', 'Literature', 'w9');
+seedInlineContent(films, 'film', 'Film', 'w10');
+seedInlineContent(arts, 'post', 'Art', 'w10');
+seedInlineContent(designs, 'post', 'Design', 'w11');
 
 // 5. Seed Demo Collections for the demo user
 const insertCollection = db.prepare(`

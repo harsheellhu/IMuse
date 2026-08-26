@@ -22,9 +22,9 @@ export function TurntableUnit() {
   const vinylRef = useRef<HTMLDivElement>(null);
 
   const [isDragging, setIsDragging] = useState(false);
-  const [dragTime, setDragTime] = useState<number | null>(null);
 
   const isDraggingRef = useRef(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const targetAngleRef = useRef(REST_ANGLE);
   const visualAngleRef = useRef(REST_ANGLE);
   const vinylRotationRef = useRef(0);
@@ -41,10 +41,15 @@ export function TurntableUnit() {
       const deltaTime = lastFrameTimeRef.current ? timestamp - lastFrameTimeRef.current : 0;
       lastFrameTimeRef.current = timestamp;
 
-      // 1. Flush pending seek to actual audio (throttle)
+      // 1. Flush pending seek to actual audio (throttle to avoid crashing audio engine)
       if (pendingSeekTimeRef.current !== null && audioElement) {
-        audioElement.currentTime = pendingSeekTimeRef.current;
-        pendingSeekTimeRef.current = null;
+        // Only seek if we're not spamming it too fast (e.g., max 10 times a second)
+        const lastSeek = parseInt(audioElement.dataset.lastSeek || '0', 10);
+        if (!isDraggingRef.current || (timestamp - lastSeek > 100)) {
+           audioElement.currentTime = pendingSeekTimeRef.current;
+           audioElement.dataset.lastSeek = timestamp.toString();
+           pendingSeekTimeRef.current = null;
+        }
       }
 
       // 2. Vinyl Rotation (Constant 4s per revolution when playing = 90 deg/s)
@@ -136,8 +141,10 @@ export function TurntableUnit() {
     // Schedule seek for the next RAF to avoid blocking main thread with dense audio seeking
     pendingSeekTimeRef.current = targetTime;
     
-    // Update React state for the tooltip 
-    setDragTime(targetTime);
+    // Update tooltip DOM directly to avoid React re-renders on pointer move
+    if (tooltipRef.current) {
+      tooltipRef.current.textContent = `${formatTime(targetTime)} / ${formatTime(duration)}`;
+    }
     
   }, [duration]);
 
@@ -146,7 +153,6 @@ export function TurntableUnit() {
     
     isDraggingRef.current = false;
     setIsDragging(false);
-    setDragTime(null);
     
     if (armRef.current) {
       armRef.current.releasePointerCapture(e.pointerId);
@@ -168,7 +174,9 @@ export function TurntableUnit() {
       armRef.current.setPointerCapture(e.pointerId);
     }
     
-    setDragTime(audioElement?.currentTime || 0);
+    if (tooltipRef.current) {
+      tooltipRef.current.textContent = `${formatTime(audioElement?.currentTime || 0)} / ${formatTime(duration)}`;
+    }
     
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
@@ -256,13 +264,15 @@ export function TurntableUnit() {
         <div className="absolute inset-y-0 -inset-x-12" />
         
         {/* Live Tooltip Feedback while dragging */}
-        <div className={clsx(
-          "absolute top-16 left-16 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border shadow-xl flex items-center gap-2 pointer-events-none transition-opacity duration-200",
-          isDragging ? "opacity-100" : "opacity-0",
-          isTron ? "border-cyan-500/50 text-cyan-400 font-mono" : "border-white/10 text-white font-medium text-sm"
-        )}>
-          {dragTime !== null && formatTime(dragTime)}
-          <span className="text-gray-500 text-xs">/ {duration ? formatTime(duration) : '0:00'}</span>
+        <div 
+          ref={tooltipRef}
+          className={clsx(
+            "absolute top-16 left-16 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border shadow-xl pointer-events-none transition-opacity duration-200 whitespace-nowrap",
+            isDragging ? "opacity-100" : "opacity-0",
+            isTron ? "border-cyan-500/50 text-cyan-400 font-mono" : "border-white/10 text-white font-medium text-sm"
+          )}
+        >
+          {formatTime(audioElement?.currentTime || 0)} / {duration ? formatTime(duration) : '0:00'}
         </div>
 
         {/* Mechanical Pivot Assembly */}

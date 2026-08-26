@@ -121,6 +121,8 @@ export function Collections() {
                       src={collection.coverImage} 
                       alt={collection.title}
                       className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
                     

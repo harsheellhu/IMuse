@@ -52,37 +52,43 @@ export interface Book {
 export interface Film {
   id: string;
   title: string;
-  director: string;
-  posterImage: string;
-  backdropImage: string;
-  releaseYear: number;
-  genres: string[];
-  runtime: number;
-  synopsis: string;
-  averageRating: number;
+  director?: string;
+  posterImage?: string;
+  backdropImage?: string;
+  imageUrl?: string;
+  releaseYear?: number;
+  genres?: string[];
+  tags?: string[];
+  runtime?: number;
+  synopsis?: string;
+  averageRating?: number;
 }
 
 export interface TvShow {
   id: string;
   title: string;
-  creator: string;
-  posterImage: string;
-  backdropImage: string;
+  creator?: string;
+  posterImage?: string;
+  backdropImage?: string;
+  imageUrl?: string;
   releaseYear?: number;
-  genres: string[];
-  synopsis: string;
+  genres?: string[];
+  tags?: string[];
+  synopsis?: string;
   averageRating?: number;
 }
 
 export interface Place {
   id: string;
-  name: string;
-  location: string;
-  country: string;
-  coverImage: string;
-  description: string;
-  category: string;
-  tags: string[];
+  title: string;
+  name?: string;
+  location?: string;
+  country?: string;
+  coverImage?: string;
+  imageUrl?: string;
+  description?: string;
+  category?: string;
+  tags?: string[];
 }
 
 export interface Song {

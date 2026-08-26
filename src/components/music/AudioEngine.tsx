@@ -42,9 +42,15 @@ export function AudioEngine() {
     return () => window.removeEventListener('seekAudio', handleSeek as EventListener);
   }, []);
   
+  const lastUpdateRef = useRef(0);
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      updateTime(audioRef.current.currentTime);
+      const now = Date.now();
+      // Throttle React state updates to ~250ms (4 times a second is smooth enough for progress bar, but drastically reduces React overhead compared to raw timeupdate)
+      if (now - lastUpdateRef.current > 250) {
+        updateTime(audioRef.current.currentTime);
+        lastUpdateRef.current = now;
+      }
     }
   };
   

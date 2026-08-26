@@ -10,7 +10,7 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
   const { users, savedPostIds, toggleSavePost, openViewer, isAuthenticated, setAuthModalOpen } = useStore();
   const creator = users.find(u => u.id === post.creatorId);
   const isSaved = savedPostIds.includes(post.id);
-  const [imgSrc, setImgSrc] = React.useState(post.imageUrl || post.image);
+  const [imgSrc, setImgSrc] = React.useState(post.imageUrl);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
 
