@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "books-0",
+    "title": "Dune",
+    "description": "a white box sitting on top of a blue sheet",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1718303728423-507cbf6d7df4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1922
+    },
+    "likes": 724,
+    "saves": 255,
+    "comments": 52,
+    "createdAt": "2026-07-29T03:24:54.833Z"
+  },
+  {
+    "id": "books-1",
+    "title": "1984",
+    "description": "Milk and Honey by Rupi Kaur book on side table",
+    "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2000
+    },
+    "likes": 62,
+    "saves": 49,
+    "comments": 97,
+    "createdAt": "2026-07-25T07:10:07.093Z"
+  },
+  {
+    "id": "books-2",
+    "title": "The Great Gatsby",
+    "description": "flowers beside yellow wall",
+    "imageUrl": "https://images.unsplash.com/photo-1487147264018-f937fba0c817?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1901
+    },
+    "likes": 328,
+    "saves": 339,
+    "comments": 31,
+    "createdAt": "2026-06-30T07:51:30.820Z"
+  },
+  {
+    "id": "books-3",
+    "title": "To Kill A Mockingbird",
+    "description": "A book sitting on top of a tree trunk",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731906-2163a06f3022?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1933
+    },
+    "likes": 184,
+    "saves": 7,
+    "comments": 85,
+    "createdAt": "2026-08-07T16:32:42.718Z"
+  },
+  {
+    "id": "books-4",
+    "title": "Pride And Prejudice",
+    "description": "a stack of three books sitting on top of each other",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758769-398dca4d5f1c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1943
+    },
+    "likes": 353,
+    "saves": 227,
+    "comments": 82,
+    "createdAt": "2026-06-06T11:11:56.857Z"
+  },
+  {
+    "id": "books-5",
+    "title": "The Catcher In The Rye",
+    "description": "a book sitting on top of a wooden table next to a laptop",
+    "imageUrl": "https://images.unsplash.com/photo-1612969308146-066d55f37ccb?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2000
+    },
+    "likes": 291,
+    "saves": 446,
+    "comments": 93,
+    "createdAt": "2026-05-12T13:26:19.581Z"
+  },
+  {
+    "id": "books-6",
+    "title": "Fahrenheit 451",
+    "description": "a yellow book with a picture of a man's face on it",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001657-722e6e14ae29?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1993
+    },
+    "likes": 864,
+    "saves": 142,
+    "comments": 50,
+    "createdAt": "2026-07-03T13:36:45.903Z"
+  },
+  {
+    "id": "books-7",
+    "title": "Brave New World",
+    "description": "a yellow book with a drawing of a man and a woman's face",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001555-c05f13f4362a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1917
+    },
+    "likes": 879,
+    "saves": 125,
+    "comments": 47,
+    "createdAt": "2026-08-21T04:27:34.547Z"
+  },
+  {
+    "id": "books-8",
+    "title": "The Hobbit",
+    "description": "a white piece of paper sitting on top of a table",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749904043-c9470c31cd48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1999
+    },
+    "likes": 930,
+    "saves": 61,
+    "comments": 4,
+    "createdAt": "2026-05-10T17:19:43.274Z"
+  },
+  {
+    "id": "books-9",
+    "title": "Moby Dick",
+    "description": "a yellow book cover with a drawing of a man and a woman's face",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001590-79a5b6207662?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1944
+    },
+    "likes": 783,
+    "saves": 403,
+    "comments": 80,
+    "createdAt": "2026-05-05T03:40:27.041Z"
+  },
+  {
+    "id": "books-10",
+    "title": "Frankenstein",
+    "description": "a yellow book sitting on top of a marble surface",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001560-935f123683f4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2006
+    },
+    "likes": 947,
+    "saves": 359,
+    "comments": 53,
+    "createdAt": "2026-08-20T21:07:30.851Z"
+  },
+  {
+    "id": "books-11",
+    "title": "Dracula",
+    "description": "A white notebook and dried flowers on a table",
+    "imageUrl": "https://images.unsplash.com/photo-1753526667964-72e724f41780?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1942
+    },
+    "likes": 244,
+    "saves": 332,
+    "comments": 37,
+    "createdAt": "2026-06-17T13:08:03.962Z"
+  },
+  {
+    "id": "books-12",
+    "title": "The Odyssey",
+    "description": "A book with a pen flying out of it",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1731951687922-1bb9d7722a49?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1982
+    },
+    "likes": 34,
+    "saves": 56,
+    "comments": 4,
+    "createdAt": "2026-08-12T11:32:38.159Z"
+  },
+  {
+    "id": "books-13",
+    "title": "Jane Eyre",
+    "description": "two yellow books with red lettering on them",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001559-dfaad6ac3ca4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1970
+    },
+    "likes": 391,
+    "saves": 225,
+    "comments": 86,
+    "createdAt": "2026-08-18T10:42:41.509Z"
+  },
+  {
+    "id": "books-14",
+    "title": "Wuthering Heights",
+    "description": "a book sitting on top of a wooden table",
+    "imageUrl": "https://images.unsplash.com/photo-1647529735054-9b68c881fdc9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2005
+    },
+    "likes": 465,
+    "saves": 425,
+    "comments": 55,
+    "createdAt": "2026-08-13T06:19:07.575Z"
+  },
+  {
+    "id": "books-15",
+    "title": "Crime And Punishment",
+    "description": "A book sitting on top of a tree stump",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731912-dde6e451e59f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1909
+    },
+    "likes": 379,
+    "saves": 364,
+    "comments": 31,
+    "createdAt": "2026-05-23T18:35:11.108Z"
+  },
+  {
+    "id": "books-16",
+    "title": "The Brothers Karamazov",
+    "description": "A dried tree against the background of a red-hot sun disc. Vertical format",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1711987494491-e2d3add52ff2?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1960
+    },
+    "likes": 61,
+    "saves": 176,
+    "comments": 93,
+    "createdAt": "2026-08-13T04:19:09.264Z"
+  },
+  {
+    "id": "books-17",
+    "title": "Anna Karenina",
+    "description": "A row of books on a shelf",
+    "imageUrl": "https://images.unsplash.com/photo-1760688352677-7808917e2a10?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1902
+    },
+    "likes": 52,
+    "saves": 418,
+    "comments": 27,
+    "createdAt": "2026-06-07T07:32:15.132Z"
+  },
+  {
+    "id": "books-18",
+    "title": "War And Peace",
+    "description": "white and red book on black textile",
+    "imageUrl": "https://images.unsplash.com/photo-1613643708215-e3a0b5e5cd8e?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1953
+    },
+    "likes": 499,
+    "saves": 157,
+    "comments": 47,
+    "createdAt": "2026-08-25T15:12:46.272Z"
+  },
+  {
+    "id": "books-19",
+    "title": "Les Misérables",
+    "description": "A book with the word \"look\" on a table",
+    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1965
+    },
+    "likes": 292,
+    "saves": 48,
+    "comments": 87,
+    "createdAt": "2026-05-15T03:53:23.258Z"
+  },
+  {
+    "id": "books-20",
+    "title": "The Lord Of The Rings",
+    "description": "a white book sitting on top of a table next to a plant",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1718290535214-0349997ec615?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1906
+    },
+    "likes": 101,
+    "saves": 221,
+    "comments": 58,
+    "createdAt": "2026-08-16T21:50:37.214Z"
+  },
+  {
+    "id": "books-21",
+    "title": "The Hitchhiker's Guide To The Galaxy",
+    "description": "A book with the word \"look\" on a table",
+    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1970
+    },
+    "likes": 911,
+    "saves": 371,
+    "comments": 23,
+    "createdAt": "2026-06-11T06:13:17.376Z"
+  },
+  {
+    "id": "books-22",
+    "title": "Neuromancer",
+    "description": "A book sitting on top of a table next to a cup of tea",
+    "imageUrl": "https://images.unsplash.com/photo-1722974611253-d9ecd8d03b48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1966
+    },
+    "likes": 130,
+    "saves": 298,
+    "comments": 67,
+    "createdAt": "2026-06-05T20:58:56.199Z"
+  },
+  {
+    "id": "books-23",
+    "title": "Snow Crash",
+    "description": "A book sitting on top of a tree stump",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731885-81d24c57f8ac?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1995
+    },
+    "likes": 48,
+    "saves": 111,
+    "comments": 70,
+    "createdAt": "2026-06-18T09:12:45.618Z"
+  },
+  {
+    "id": "books-24",
+    "title": "Foundation",
+    "description": "a stack of white books on a gray background",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985580-68558bafe97c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1960
+    },
+    "likes": 152,
+    "saves": 131,
+    "comments": 75,
+    "createdAt": "2026-06-04T08:16:23.519Z"
+  },
+  {
+    "id": "books-25",
+    "title": "I, Robot",
+    "description": "A book sitting on top of a sidewalk next to a pair of shoes",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731808-b116102d7004?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1981
+    },
+    "likes": 755,
+    "saves": 317,
+    "comments": 0,
+    "createdAt": "2026-08-24T04:41:31.369Z"
+  },
+  {
+    "id": "books-26",
+    "title": "The Martian Chronicles",
+    "description": "an open book with numbers on it",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001565-09a2d461982f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1979
+    },
+    "likes": 163,
+    "saves": 195,
+    "comments": 8,
+    "createdAt": "2026-05-31T14:05:26.001Z"
+  },
+  {
+    "id": "books-27",
+    "title": "Slaughterhouse-Five",
+    "description": "a person holding a book in their hand",
+    "imageUrl": "https://images.unsplash.com/photo-1710799885122-428e63eff691?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1982
+    },
+    "likes": 404,
+    "saves": 91,
+    "comments": 22,
+    "createdAt": "2026-06-20T23:50:30.424Z"
+  },
+  {
+    "id": "books-28",
+    "title": "Catch-22",
+    "description": "a stack of three books sitting on top of each other",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1677187301430-f72321664a74?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1981
+    },
+    "likes": 204,
+    "saves": 294,
+    "comments": 48,
+    "createdAt": "2026-07-27T22:32:27.456Z"
+  },
+  {
+    "id": "books-29",
+    "title": "One Hundred Years Of Solitude",
+    "description": "Pride and prejudice book cover with peacock design",
+    "imageUrl": "https://images.unsplash.com/photo-1763768861268-cb6b54173dbf?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1967
+    },
+    "likes": 617,
+    "saves": 97,
+    "comments": 34,
+    "createdAt": "2026-06-10T12:49:45.521Z"
+  },
+  {
+    "id": "books-30",
+    "title": "The Bell Jar",
+    "description": "A book sitting on top of a bag in the grass",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731941-8fab381f4523?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1904
+    },
+    "likes": 124,
+    "saves": 222,
+    "comments": 95,
+    "createdAt": "2026-05-12T13:33:50.773Z"
+  },
+  {
+    "id": "books-31",
+    "title": "Beloved",
+    "description": "A person holding up a book in front of a lake",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731848-f459363a6552?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1968
+    },
+    "likes": 360,
+    "saves": 309,
+    "comments": 42,
+    "createdAt": "2026-08-16T04:43:59.414Z"
+  },
+  {
+    "id": "books-32",
+    "title": "Invisible Man",
+    "description": "a row of old books sitting next to each other",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1674727219390-5953cefb3cd9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1916
+    },
+    "likes": 382,
+    "saves": 49,
+    "comments": 7,
+    "createdAt": "2026-06-17T19:12:05.189Z"
+  },
+  {
+    "id": "books-33",
+    "title": "The Color Purple",
+    "description": "A person holding a book in their hand",
+    "imageUrl": "https://images.unsplash.com/photo-1722706732139-5e3d11cee2c9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1969
+    },
+    "likes": 599,
+    "saves": 4,
+    "comments": 25,
+    "createdAt": "2026-06-21T18:01:01.648Z"
+  },
+  {
+    "id": "books-34",
+    "title": "The Handmaid's Tale",
+    "description": "A person holding up a book in a park",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731901-d263f929a100?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1977
+    },
+    "likes": 391,
+    "saves": 187,
+    "comments": 37,
+    "createdAt": "2026-05-17T07:04:24.179Z"
+  },
+  {
+    "id": "books-35",
+    "title": "The Alchemist",
+    "description": "A book sitting on top of a chair in a room",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731979-f478967c868c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1901
+    },
+    "likes": 199,
+    "saves": 209,
+    "comments": 44,
+    "createdAt": "2026-07-29T08:55:34.747Z"
+  },
+  {
+    "id": "books-36",
+    "title": "The Little Prince",
+    "description": "a white box with three sides on a gray background",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985615-ad90c28c83c5?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1965
+    },
+    "likes": 6,
+    "saves": 162,
+    "comments": 46,
+    "createdAt": "2026-08-23T19:15:07.598Z"
+  },
+  {
+    "id": "books-37",
+    "title": "The Kite Runner",
+    "description": "a yellow book with a drawing of a woman's face",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001554-71153626ea22?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1929
+    },
+    "likes": 78,
+    "saves": 444,
+    "comments": 52,
+    "createdAt": "2026-08-22T09:34:07.604Z"
+  },
+  {
+    "id": "books-38",
+    "title": "Life Of Pi",
+    "description": "A stack of books sitting on top of each other",
+    "imageUrl": "https://images.unsplash.com/photo-1732714403349-05fc43b67042?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1998
+    },
+    "likes": 593,
+    "saves": 19,
+    "comments": 44,
+    "createdAt": "2026-06-15T15:50:09.809Z"
+  },
+  {
+    "id": "books-39",
+    "title": "The Book Thief",
+    "description": "The remains of the day book on wooden table",
+    "imageUrl": "https://images.unsplash.com/photo-1758279771969-2cc6bcac3fd1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1960
+    },
+    "likes": 212,
+    "saves": 217,
+    "comments": 4,
+    "createdAt": "2026-05-27T06:42:58.449Z"
+  },
+  {
+    "id": "books-40",
+    "title": "The Hunger Games",
+    "description": "a close up of a yellow object with a yellow background",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667354155822-33bfbdfbe834?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1960
+    },
+    "likes": 704,
+    "saves": 191,
+    "comments": 50,
+    "createdAt": "2026-07-18T19:49:50.303Z"
+  },
+  {
+    "id": "books-41",
+    "title": "Harry Potter And The Sorcerer's Stone",
+    "description": "a shelf with books on it",
+    "imageUrl": "https://images.unsplash.com/photo-1657630399502-c56a39bed97a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1969
+    },
+    "likes": 308,
+    "saves": 225,
+    "comments": 47,
+    "createdAt": "2026-05-20T10:31:10.684Z"
+  },
+  {
+    "id": "books-42",
+    "title": "A Game Of Thrones",
+    "description": "A book titled \"change by design.\"",
+    "imageUrl": "https://images.unsplash.com/photo-1752243724485-6faf936bfa7f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1927
+    },
+    "likes": 906,
+    "saves": 493,
+    "comments": 4,
+    "createdAt": "2026-06-10T10:05:19.088Z"
+  },
+  {
+    "id": "books-43",
+    "title": "Outlander",
+    "description": "A light green book with a small image on top",
+    "imageUrl": "https://images.unsplash.com/photo-1769490315625-6e669d53e698?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1984
+    },
+    "likes": 100,
+    "saves": 153,
+    "comments": 32,
+    "createdAt": "2026-07-20T20:44:44.382Z"
+  },
+  {
+    "id": "books-44",
+    "title": "The Girl With The Dragon Tattoo",
+    "description": "a stack of three books sitting on top of each other",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758927-e49fcf04f862?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1981
+    },
+    "likes": 471,
+    "saves": 1,
+    "comments": 37,
+    "createdAt": "2026-05-24T07:19:20.822Z"
+  },
+  {
+    "id": "books-45",
+    "title": "Gone Girl",
+    "description": "Grayscale book cover titled 'russian poets' with illustration",
+    "imageUrl": "https://images.unsplash.com/photo-1784922903603-dee82c17a9f1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1999
+    },
+    "likes": 653,
+    "saves": 273,
+    "comments": 30,
+    "createdAt": "2026-05-09T12:24:27.901Z"
+  },
+  {
+    "id": "books-46",
+    "title": "The Fault In Our Stars",
+    "description": "A row of books behind a chain link fence",
+    "imageUrl": "https://images.unsplash.com/photo-1726951354883-7501b272a14b?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1900
+    },
+    "likes": 820,
+    "saves": 187,
+    "comments": 3,
+    "createdAt": "2026-06-18T14:07:34.288Z"
+  },
+  {
+    "id": "books-47",
+    "title": "The Martian",
+    "description": "a picture of a brown and white design on a wall",
+    "imageUrl": "https://images.unsplash.com/photo-1694636771662-6e7f034ca927?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 1910
+    },
+    "likes": 213,
+    "saves": 180,
+    "comments": 61,
+    "createdAt": "2026-05-20T12:57:39.655Z"
+  },
+  {
+    "id": "books-48",
+    "title": "Ready Player One",
+    "description": "A blue book with the bible written on it",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1725075087236-e32a71552098?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2002
+    },
+    "likes": 310,
+    "saves": 375,
+    "comments": 14,
+    "createdAt": "2026-05-23T09:01:04.433Z"
+  },
+  {
+    "id": "books-49",
+    "title": "Sapiens",
+    "description": "A bookshelf filled with lots of books behind a chain link fence",
+    "imageUrl": "https://images.unsplash.com/photo-1726951352977-7260c3eaec70?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Literature",
+    "tags": [
+      "books",
+      "curated",
+      "book"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "author": "Various Authors",
+      "year": 2004
+    },
+    "likes": 743,
+    "saves": 132,
+    "comments": 20,
+    "createdAt": "2026-06-05T07:51:39.210Z"
+  }
+]

@@ -87,7 +87,7 @@ export function Lyrics() {
             key={idx}
             ref={(el) => (linesRef.current[idx] = el)}
             className={clsx(
-              "transition-all duration-500 ease-out origin-left",
+              "transition-all duration-500 ease-out origin-left break-words",
               isActive 
                 ? clsx("text-2xl md:text-3xl font-semibold scale-100", isTron ? "text-cyan-400 drop-shadow-[0_0_12px_rgba(0,255,255,0.4)]" : "text-white drop-shadow-lg") 
                 : isPast 

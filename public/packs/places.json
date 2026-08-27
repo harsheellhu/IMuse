@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "places-0",
+    "title": "Santorini, Greece",
+    "description": "a grassy hill with a dirt road going up it",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1701199501594-2feb36c2d11a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Santorini",
+      "country": "Greece"
+    },
+    "likes": 137,
+    "saves": 284,
+    "comments": 97,
+    "createdAt": "2026-08-09T15:28:50.075Z"
+  },
+  {
+    "id": "places-1",
+    "title": "Kyoto, Japan",
+    "description": "Two hot air balloons floating over the rocky landscape of Cappadocia at golden hour",
+    "imageUrl": "https://images.unsplash.com/photo-1787055923493-492659dec9ce?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Kyoto",
+      "country": "Japan"
+    },
+    "likes": 787,
+    "saves": 385,
+    "comments": 0,
+    "createdAt": "2026-06-08T04:22:27.722Z"
+  },
+  {
+    "id": "places-2",
+    "title": "Amalfi Coast, Italy",
+    "description": "Rocky desert landscape with distant mountains under bright sun",
+    "imageUrl": "https://images.unsplash.com/photo-1759061002299-6aa0140f1d7c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Amalfi Coast",
+      "country": "Italy"
+    },
+    "likes": 588,
+    "saves": 33,
+    "comments": 39,
+    "createdAt": "2026-07-21T18:47:25.096Z"
+  },
+  {
+    "id": "places-3",
+    "title": "Hallstatt, Austria",
+    "description": "Rocky desert landscape with a large boulder in the foreground",
+    "imageUrl": "https://images.unsplash.com/photo-1772289935516-56551a7c0958?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Hallstatt",
+      "country": "Austria"
+    },
+    "likes": 162,
+    "saves": 342,
+    "comments": 59,
+    "createdAt": "2026-07-15T06:30:40.107Z"
+  },
+  {
+    "id": "places-4",
+    "title": "Marrakech, Morocco",
+    "description": "a grassy field with a house in the middle of it",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1669144690665-17dde1269f68?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Marrakech",
+      "country": "Morocco"
+    },
+    "likes": 910,
+    "saves": 175,
+    "comments": 29,
+    "createdAt": "2026-06-14T18:32:06.753Z"
+  },
+  {
+    "id": "places-5",
+    "title": "Banff, Canada",
+    "description": "Unusual rock formations in a desert landscape",
+    "imageUrl": "https://images.unsplash.com/photo-1778701984830-4d52e2b43a04?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Banff",
+      "country": "Canada"
+    },
+    "likes": 850,
+    "saves": 262,
+    "comments": 25,
+    "createdAt": "2026-05-09T20:31:24.243Z"
+  },
+  {
+    "id": "places-6",
+    "title": "Reykjavik, Iceland",
+    "description": "Snow-capped mountain peaks rising above dark forested slopes under a cloudy blue sky",
+    "imageUrl": "https://images.unsplash.com/photo-1786510023112-e541be9b25ee?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Reykjavik",
+      "country": "Iceland"
+    },
+    "likes": 261,
+    "saves": 377,
+    "comments": 52,
+    "createdAt": "2026-05-17T22:17:39.519Z"
+  },
+  {
+    "id": "places-7",
+    "title": "Lisbon, Portugal",
+    "description": "the sun is setting over the sand dunes",
+    "imageUrl": "https://images.unsplash.com/photo-1679151009294-f89d3f7b849c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OHx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Lisbon",
+      "country": "Portugal"
+    },
+    "likes": 877,
+    "saves": 280,
+    "comments": 12,
+    "createdAt": "2026-07-31T10:57:27.024Z"
+  },
+  {
+    "id": "places-8",
+    "title": "Petra, Jordan",
+    "description": "An aerial view of a mountain with a winding road in the foreground",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1724584154357-f1ffb3f42af6?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OXx8dHJhdmVsJTIwZGVzdGluYXRpb24lMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzg3ODM0NTgwfDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Petra",
+      "country": "Jordan"
+    },
+    "likes": 360,
+    "saves": 67,
+    "comments": 21,
+    "createdAt": "2026-08-06T06:21:24.095Z"
+  },
+  {
+    "id": "places-9",
+    "title": "Dubrovnik, Croatia",
+    "description": "Rv driving on a winding road towards a distant lake",
+    "imageUrl": "https://images.unsplash.com/photo-1778314085947-3ea7f3ca896e?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Dubrovnik",
+      "country": "Croatia"
+    },
+    "likes": 687,
+    "saves": 444,
+    "comments": 90,
+    "createdAt": "2026-05-09T14:43:35.741Z"
+  },
+  {
+    "id": "places-10",
+    "title": "Patagonia, Argentina",
+    "description": "Hiker with orange backpack views a lush green mountain valley",
+    "imageUrl": "https://images.unsplash.com/photo-1782827928737-a51813d3b776?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Patagonia",
+      "country": "Argentina"
+    },
+    "likes": 261,
+    "saves": 217,
+    "comments": 26,
+    "createdAt": "2026-05-07T21:19:47.578Z"
+  },
+  {
+    "id": "places-11",
+    "title": "Chefchaouen, Morocco",
+    "description": "Reddish-brown hills under a bright blue sky with white clouds",
+    "imageUrl": "https://images.unsplash.com/photo-1785684479419-6eacd44413a1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Chefchaouen",
+      "country": "Morocco"
+    },
+    "likes": 699,
+    "saves": 401,
+    "comments": 67,
+    "createdAt": "2026-05-21T04:55:08.779Z"
+  },
+  {
+    "id": "places-12",
+    "title": "Bruges, Belgium",
+    "description": "a dirt road leading to a mountain",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1669863278689-0c1d732c74d9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Bruges",
+      "country": "Belgium"
+    },
+    "likes": 360,
+    "saves": 462,
+    "comments": 65,
+    "createdAt": "2026-08-18T20:38:16.680Z"
+  },
+  {
+    "id": "places-13",
+    "title": "Cappadocia, Turkey",
+    "description": "Vast mountainous landscape with a valley under a cloudy sky",
+    "imageUrl": "https://images.unsplash.com/photo-1780914436306-ab992f891718?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Cappadocia",
+      "country": "Turkey"
+    },
+    "likes": 859,
+    "saves": 427,
+    "comments": 99,
+    "createdAt": "2026-07-12T21:41:54.108Z"
+  },
+  {
+    "id": "places-14",
+    "title": "Cinque Terre, Italy",
+    "description": "Calm lake reflecting mountains under a cloudy sky",
+    "imageUrl": "https://images.unsplash.com/photo-1759755261223-606dc1d2b907?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTV8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Cinque Terre",
+      "country": "Italy"
+    },
+    "likes": 551,
+    "saves": 398,
+    "comments": 71,
+    "createdAt": "2026-05-24T13:12:02.224Z"
+  },
+  {
+    "id": "places-15",
+    "title": "Machu Picchu, Peru",
+    "description": "a beach with people and a hill in the background",
+    "imageUrl": "https://images.unsplash.com/photo-1660950493868-e42d9a31702d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTZ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Machu Picchu",
+      "country": "Peru"
+    },
+    "likes": 174,
+    "saves": 352,
+    "comments": 16,
+    "createdAt": "2026-08-08T09:15:10.567Z"
+  },
+  {
+    "id": "places-16",
+    "title": "Taj Mahal, India",
+    "description": "a scenic view of a desert with a mountain in the background",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1699533136359-17d05b4a9c6d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTd8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Taj Mahal",
+      "country": "India"
+    },
+    "likes": 583,
+    "saves": 345,
+    "comments": 57,
+    "createdAt": "2026-08-06T04:33:16.928Z"
+  },
+  {
+    "id": "places-17",
+    "title": "Great Wall Of China, China",
+    "description": "Rocky mountain peak with green trees in foreground",
+    "imageUrl": "https://images.unsplash.com/photo-1771148885277-689937e0c30f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Great Wall Of China",
+      "country": "China"
+    },
+    "likes": 778,
+    "saves": 446,
+    "comments": 98,
+    "createdAt": "2026-07-06T10:00:59.779Z"
+  },
+  {
+    "id": "places-18",
+    "title": "Colosseum, Italy",
+    "description": "Snow-capped mountains rising above a calm lake under a clear deep blue sky",
+    "imageUrl": "https://images.unsplash.com/photo-1787384766561-20201b45cca1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTl8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Colosseum",
+      "country": "Italy"
+    },
+    "likes": 744,
+    "saves": 328,
+    "comments": 58,
+    "createdAt": "2026-06-17T00:09:39.074Z"
+  },
+  {
+    "id": "places-19",
+    "title": "Chichen Itza, Mexico",
+    "description": "A car driving on a road through monument valley",
+    "imageUrl": "https://images.unsplash.com/photo-1778110858872-a9e1ee9b4e54?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4MHww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Chichen Itza",
+      "country": "Mexico"
+    },
+    "likes": 252,
+    "saves": 245,
+    "comments": 42,
+    "createdAt": "2026-05-28T06:01:13.518Z"
+  },
+  {
+    "id": "places-20",
+    "title": "Angkor Wat, Cambodia",
+    "description": "a view of a valley with mountains in the background",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1676571232331-787a2c679aee?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjF8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Angkor Wat",
+      "country": "Cambodia"
+    },
+    "likes": 609,
+    "saves": 211,
+    "comments": 46,
+    "createdAt": "2026-05-25T16:18:56.558Z"
+  },
+  {
+    "id": "places-21",
+    "title": "Acropolis Of Athens, Greece",
+    "description": "a view of a mountain range with a cloudy sky",
+    "imageUrl": "https://images.unsplash.com/photo-1694762292368-017dbac870fa?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjJ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Acropolis Of Athens",
+      "country": "Greece"
+    },
+    "likes": 935,
+    "saves": 23,
+    "comments": 10,
+    "createdAt": "2026-06-28T12:33:02.175Z"
+  },
+  {
+    "id": "places-22",
+    "title": "Stonehenge, UK",
+    "description": "Distant mountains under a vast blue sky",
+    "imageUrl": "https://images.unsplash.com/photo-1777659026017-3c16c3799b31?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjN8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Stonehenge",
+      "country": "UK"
+    },
+    "likes": 160,
+    "saves": 320,
+    "comments": 16,
+    "createdAt": "2026-06-21T22:16:58.361Z"
+  },
+  {
+    "id": "places-23",
+    "title": "Pyramids Of Giza, Egypt",
+    "description": "Hot air balloons flying over a scenic landscape at sunrise",
+    "imageUrl": "https://images.unsplash.com/photo-1785313227322-8c547fd195d7?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjR8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Pyramids Of Giza",
+      "country": "Egypt"
+    },
+    "likes": 210,
+    "saves": 219,
+    "comments": 4,
+    "createdAt": "2026-07-11T18:17:28.330Z"
+  },
+  {
+    "id": "places-24",
+    "title": "Eiffel Tower, France",
+    "description": "a lush green hillside covered in lush green grass",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1672146835758-8232f3df9fb7?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjV8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Eiffel Tower",
+      "country": "France"
+    },
+    "likes": 679,
+    "saves": 97,
+    "comments": 23,
+    "createdAt": "2026-08-11T17:39:30.431Z"
+  },
+  {
+    "id": "places-25",
+    "title": "Statue Of Liberty, USA",
+    "description": "Winding road through snowy, barren hills undergrowth landscape",
+    "imageUrl": "https://images.unsplash.com/photo-1765858687988-7147145c33fe?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjZ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Statue Of Liberty",
+      "country": "USA"
+    },
+    "likes": 936,
+    "saves": 403,
+    "comments": 27,
+    "createdAt": "2026-08-10T21:44:11.154Z"
+  },
+  {
+    "id": "places-26",
+    "title": "Sydney Opera House, Australia",
+    "description": "River flowing past a village with mountains in the distance",
+    "imageUrl": "https://images.unsplash.com/photo-1782220933198-9342099b9e61?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Sydney Opera House",
+      "country": "Australia"
+    },
+    "likes": 23,
+    "saves": 436,
+    "comments": 22,
+    "createdAt": "2026-08-03T03:01:53.235Z"
+  },
+  {
+    "id": "places-27",
+    "title": "Mount Fuji, Japan",
+    "description": "Vast desert landscape with mountains under a blue sky",
+    "imageUrl": "https://images.unsplash.com/photo-1776601797505-b9ad819d4b5b?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjh8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Mount Fuji",
+      "country": "Japan"
+    },
+    "likes": 816,
+    "saves": 282,
+    "comments": 88,
+    "createdAt": "2026-08-19T04:17:35.430Z"
+  },
+  {
+    "id": "places-28",
+    "title": "Grand Canyon, USA",
+    "description": "A scenic view of a city next to the ocean",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1721353413070-bb55c58138fb?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjl8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Grand Canyon",
+      "country": "USA"
+    },
+    "likes": 479,
+    "saves": 328,
+    "comments": 52,
+    "createdAt": "2026-07-27T07:13:10.132Z"
+  },
+  {
+    "id": "places-29",
+    "title": "Yellowstone, USA",
+    "description": "Tall grassy reeds in front of a misty mountain landscape",
+    "imageUrl": "https://images.unsplash.com/photo-1774979131451-94f09a17b1c2?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzB8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Yellowstone",
+      "country": "USA"
+    },
+    "likes": 50,
+    "saves": 415,
+    "comments": 26,
+    "createdAt": "2026-07-04T07:20:49.919Z"
+  },
+  {
+    "id": "places-30",
+    "title": "Yosemite, USA",
+    "description": "Arid desert landscape with rocky mountains and dry brush",
+    "imageUrl": "https://images.unsplash.com/photo-1772289935324-dcd985799520?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzF8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Yosemite",
+      "country": "USA"
+    },
+    "likes": 817,
+    "saves": 385,
+    "comments": 45,
+    "createdAt": "2026-06-11T01:18:08.227Z"
+  },
+  {
+    "id": "places-31",
+    "title": "Zion, USA",
+    "description": "Two deer graze in a vast grassy plain with mountains",
+    "imageUrl": "https://images.unsplash.com/photo-1763073873866-aaf6333e3ab3?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzJ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Zion",
+      "country": "USA"
+    },
+    "likes": 906,
+    "saves": 195,
+    "comments": 10,
+    "createdAt": "2026-07-01T13:02:22.721Z"
+  },
+  {
+    "id": "places-32",
+    "title": "Glacier, USA",
+    "description": "Travel hiker taking photo of Lake Braies (Lago di Braies) in Dolomites Mountains, Italy. Hiking travel and adventure",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1661956362412-d8e85cf25c77?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzN8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Glacier",
+      "country": "USA"
+    },
+    "likes": 156,
+    "saves": 34,
+    "comments": 96,
+    "createdAt": "2026-05-14T05:01:08.405Z"
+  },
+  {
+    "id": "places-33",
+    "title": "Serengeti, Tanzania",
+    "description": "Endless road stretches across a salt flat towards distant mountains",
+    "imageUrl": "https://images.unsplash.com/photo-1785350647808-29adb097ae80?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzR8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Serengeti",
+      "country": "Tanzania"
+    },
+    "likes": 243,
+    "saves": 7,
+    "comments": 55,
+    "createdAt": "2026-05-09T07:41:02.906Z"
+  },
+  {
+    "id": "places-34",
+    "title": "Galapagos Islands, Ecuador",
+    "description": "A building nestled on a mountainside overlooking water",
+    "imageUrl": "https://images.unsplash.com/photo-1767075099412-0b388cf9f72a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzV8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Galapagos Islands",
+      "country": "Ecuador"
+    },
+    "likes": 111,
+    "saves": 84,
+    "comments": 22,
+    "createdAt": "2026-06-19T20:29:10.947Z"
+  },
+  {
+    "id": "places-35",
+    "title": "Bora Bora, French Polynesia",
+    "description": "Tall saguaro cactus against a desert landscape at sunset",
+    "imageUrl": "https://images.unsplash.com/photo-1774763160496-a5169aa77654?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzZ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Bora Bora",
+      "country": "French Polynesia"
+    },
+    "likes": 291,
+    "saves": 247,
+    "comments": 73,
+    "createdAt": "2026-06-07T20:02:25.145Z"
+  },
+  {
+    "id": "places-36",
+    "title": "Maldives",
+    "description": "the sun shines brightly over a snowy landscape",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1700504384277-3aa49ae807f7?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzd8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Maldives",
+      "country": "Unknown"
+    },
+    "likes": 853,
+    "saves": 161,
+    "comments": 95,
+    "createdAt": "2026-05-22T04:22:38.169Z"
+  },
+  {
+    "id": "places-37",
+    "title": "Seychelles",
+    "description": "Lush green valley with a large rocky mountain",
+    "imageUrl": "https://images.unsplash.com/photo-1772050959342-b63c194a4411?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzh8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Seychelles",
+      "country": "Unknown"
+    },
+    "likes": 589,
+    "saves": 116,
+    "comments": 42,
+    "createdAt": "2026-05-22T11:47:52.890Z"
+  },
+  {
+    "id": "places-38",
+    "title": "Maui, USA",
+    "description": "A sand dune in the foreground with sparse trees in a desert landscape",
+    "imageUrl": "https://images.unsplash.com/photo-1787430748290-51c08a11aecc?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzl8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Maui",
+      "country": "USA"
+    },
+    "likes": 350,
+    "saves": 343,
+    "comments": 72,
+    "createdAt": "2026-08-13T17:59:43.971Z"
+  },
+  {
+    "id": "places-39",
+    "title": "Bali, Indonesia",
+    "description": "Snow-capped mountains viewed through a window",
+    "imageUrl": "https://images.unsplash.com/photo-1772171701281-ff35cad74fa3?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDB8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4Mnww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Bali",
+      "country": "Indonesia"
+    },
+    "likes": 582,
+    "saves": 340,
+    "comments": 36,
+    "createdAt": "2026-07-17T01:52:55.359Z"
+  },
+  {
+    "id": "places-40",
+    "title": "Phuket, Thailand",
+    "description": "an aerial view of a beach surrounded by clouds",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1714580863811-3ea34a8be266?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDF8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Phuket",
+      "country": "Thailand"
+    },
+    "likes": 439,
+    "saves": 239,
+    "comments": 90,
+    "createdAt": "2026-07-27T05:35:35.258Z"
+  },
+  {
+    "id": "places-41",
+    "title": "Palawan, Philippines",
+    "description": "Orange sand dunes under a dark cloudy sky in the Namib desert",
+    "imageUrl": "https://images.unsplash.com/photo-1787204757717-210593a65863?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDJ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Palawan",
+      "country": "Philippines"
+    },
+    "likes": 313,
+    "saves": 5,
+    "comments": 1,
+    "createdAt": "2026-07-07T16:32:41.183Z"
+  },
+  {
+    "id": "places-42",
+    "title": "Fiji",
+    "description": "A winding river flows through a lush green mountain valley",
+    "imageUrl": "https://images.unsplash.com/photo-1772891022773-040abdef6062?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDN8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Fiji",
+      "country": "Unknown"
+    },
+    "likes": 208,
+    "saves": 358,
+    "comments": 14,
+    "createdAt": "2026-06-25T10:52:45.930Z"
+  },
+  {
+    "id": "places-43",
+    "title": "Tahiti, French Polynesia",
+    "description": "Hot air balloons float above unique rock formations at sunrise",
+    "imageUrl": "https://images.unsplash.com/photo-1783456309979-2f23fdd60ed1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDR8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Tahiti",
+      "country": "French Polynesia"
+    },
+    "likes": 308,
+    "saves": 422,
+    "comments": 69,
+    "createdAt": "2026-06-06T16:54:36.471Z"
+  },
+  {
+    "id": "places-44",
+    "title": "Kauai, USA",
+    "description": "Sun rays through clouds in Himalayan valley in Himalayas. Lahaul valley, Himachal Pradesh, India",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1661880922509-7db62ae56442?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDV8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Kauai",
+      "country": "USA"
+    },
+    "likes": 595,
+    "saves": 283,
+    "comments": 42,
+    "createdAt": "2026-05-08T07:27:21.569Z"
+  },
+  {
+    "id": "places-45",
+    "title": "Prague, Czechia",
+    "description": "A winding river flows through a dramatic canyon landscape",
+    "imageUrl": "https://images.unsplash.com/photo-1767708104152-a957b1491156?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDZ8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Prague",
+      "country": "Czechia"
+    },
+    "likes": 53,
+    "saves": 285,
+    "comments": 55,
+    "createdAt": "2026-06-08T09:48:35.666Z"
+  },
+  {
+    "id": "places-46",
+    "title": "Vienna, Austria",
+    "description": "Hilly landscape with scattered trees under a pale sky",
+    "imageUrl": "https://images.unsplash.com/photo-1770307773080-45ad96c5a6b4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDd8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Vienna",
+      "country": "Austria"
+    },
+    "likes": 491,
+    "saves": 154,
+    "comments": 90,
+    "createdAt": "2026-06-05T08:45:15.673Z"
+  },
+  {
+    "id": "places-47",
+    "title": "Budapest, Hungary",
+    "description": "Endless desert road under a gradient blue and orange sky",
+    "imageUrl": "https://images.unsplash.com/photo-1785421116456-fe67a3ee78f1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDh8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Budapest",
+      "country": "Hungary"
+    },
+    "likes": 865,
+    "saves": 457,
+    "comments": 45,
+    "createdAt": "2026-08-16T02:21:24.759Z"
+  },
+  {
+    "id": "places-48",
+    "title": "Amsterdam, Netherlands",
+    "description": "a small village on the shore of a body of water",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1700483717401-f10e066f228d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDl8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Amsterdam",
+      "country": "Netherlands"
+    },
+    "likes": 268,
+    "saves": 194,
+    "comments": 38,
+    "createdAt": "2026-07-27T17:02:30.167Z"
+  },
+  {
+    "id": "places-49",
+    "title": "Venice, Italy",
+    "description": "Person stands on suspension bridge over river with mountains",
+    "imageUrl": "https://images.unsplash.com/photo-1774286673653-9185dbdedbe6?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NTB8fHRyYXZlbCUyMGRlc3RpbmF0aW9uJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc4NzgzNDU4NXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Travel",
+    "tags": [
+      "places",
+      "curated",
+      "place"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "location": "Venice",
+      "country": "Italy"
+    },
+    "likes": 435,
+    "saves": 383,
+    "comments": 75,
+    "createdAt": "2026-07-14T17:09:12.294Z"
+  }
+]

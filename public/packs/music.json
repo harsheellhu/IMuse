@@ -1,0 +1,662 @@
+[
+  {
+    "id": "music-0",
+    "title": "Dark Side Of The Moon",
+    "description": "Hand holding variation of object",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1723507401206-a56e6ab6f11a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Dark Side Of The Moon",
+      "year": 2005
+    },
+    "likes": 883,
+    "saves": 462,
+    "comments": 25,
+    "createdAt": "2026-05-22T14:47:58.996Z"
+  },
+  {
+    "id": "music-1",
+    "title": "Abbey Road",
+    "description": "purple vinyl record on black and white table",
+    "imageUrl": "https://images.unsplash.com/photo-1619983081563-430f63602796?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Abbey Road",
+      "year": 1993
+    },
+    "likes": 234,
+    "saves": 171,
+    "comments": 54,
+    "createdAt": "2026-05-12T13:09:15.513Z"
+  },
+  {
+    "id": "music-2",
+    "title": "Thriller",
+    "description": "a hand holding an orange and black vinyl album",
+    "imageUrl": "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Thriller",
+      "year": 2004
+    },
+    "likes": 451,
+    "saves": 75,
+    "comments": 53,
+    "createdAt": "2026-06-18T20:34:38.398Z"
+  },
+  {
+    "id": "music-3",
+    "title": "Rumours",
+    "description": "yellow round plastic round table",
+    "imageUrl": "https://images.unsplash.com/photo-1619983081593-e2ba5b543168?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Rumours",
+      "year": 1990
+    },
+    "likes": 55,
+    "saves": 208,
+    "comments": 18,
+    "createdAt": "2026-06-27T18:45:47.266Z"
+  },
+  {
+    "id": "music-4",
+    "title": "Led Zeppelin IV",
+    "description": "A group of red and black records sitting on top of each other",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1738566263545-3e3dcaed4045?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Led Zeppelin IV",
+      "year": 1970
+    },
+    "likes": 608,
+    "saves": 305,
+    "comments": 31,
+    "createdAt": "2026-08-18T21:08:38.519Z"
+  },
+  {
+    "id": "music-5",
+    "title": "The Wall",
+    "description": "Nigeria vinyl record",
+    "imageUrl": "https://images.unsplash.com/photo-1528643609128-c50fdc20cc58?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "The Wall",
+      "year": 1981
+    },
+    "likes": 476,
+    "saves": 276,
+    "comments": 39,
+    "createdAt": "2026-05-11T02:28:03.980Z"
+  },
+  {
+    "id": "music-6",
+    "title": "Hotel California",
+    "description": "blue white and red mickey mouse print textile",
+    "imageUrl": "https://images.unsplash.com/photo-1629923759854-156b88c433aa?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Hotel California",
+      "year": 1989
+    },
+    "likes": 611,
+    "saves": 484,
+    "comments": 31,
+    "createdAt": "2026-08-01T13:58:24.989Z"
+  },
+  {
+    "id": "music-7",
+    "title": "Back In Black",
+    "description": "a close up of a disc with a blurry background",
+    "imageUrl": "https://images.unsplash.com/photo-1653579658400-5818b7e5b8e9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OHx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Back In Black",
+      "year": 1973
+    },
+    "likes": 986,
+    "saves": 105,
+    "comments": 88,
+    "createdAt": "2026-07-17T20:04:06.185Z"
+  },
+  {
+    "id": "music-8",
+    "title": "Appetite For Destruction",
+    "description": "A hand holding a purple vinyl record sleeve with the text Life is Simple",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1723773745755-6d48c5780481?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OXx8dmlueWwlMjBhbGJ1bSUyMGNvdmVyJTIwYXJ0JTIwbXVzaWN8ZW58MHx8fHwxNzg3ODM0NjM3fDA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Appetite For Destruction",
+      "year": 1972
+    },
+    "likes": 621,
+    "saves": 221,
+    "comments": 63,
+    "createdAt": "2026-05-11T00:59:38.917Z"
+  },
+  {
+    "id": "music-9",
+    "title": "Nevermind",
+    "description": "a wall of records and cds in a store",
+    "imageUrl": "https://images.unsplash.com/photo-1677930074991-ebeeb1365f31?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Nevermind",
+      "year": 1974
+    },
+    "likes": 452,
+    "saves": 203,
+    "comments": 39,
+    "createdAt": "2026-06-15T07:49:41.923Z"
+  },
+  {
+    "id": "music-10",
+    "title": "OK Computer",
+    "description": "Rows of vinyl records displayed at a market",
+    "imageUrl": "https://images.unsplash.com/photo-1760302318706-e4ae9fbde12c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "OK Computer",
+      "year": 2019
+    },
+    "likes": 5,
+    "saves": 129,
+    "comments": 76,
+    "createdAt": "2026-05-21T08:56:28.118Z"
+  },
+  {
+    "id": "music-11",
+    "title": "The Joshua Tree",
+    "description": "a close up of a speaker on a black surface",
+    "imageUrl": "https://images.unsplash.com/photo-1653579656806-b290ca2efd83?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "The Joshua Tree",
+      "year": 1996
+    },
+    "likes": 535,
+    "saves": 68,
+    "comments": 31,
+    "createdAt": "2026-07-13T19:09:33.633Z"
+  },
+  {
+    "id": "music-12",
+    "title": "Ten",
+    "description": "a woman sitting on a stool holding a record",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1705352059513-aa41eacfef54?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Ten",
+      "year": 1982
+    },
+    "likes": 951,
+    "saves": 477,
+    "comments": 77,
+    "createdAt": "2026-07-07T12:15:03.293Z"
+  },
+  {
+    "id": "music-13",
+    "title": "Purple Rain",
+    "description": "an old record player with a blue disc",
+    "imageUrl": "https://images.unsplash.com/photo-1653579656823-307797687591?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Purple Rain",
+      "year": 1986
+    },
+    "likes": 777,
+    "saves": 330,
+    "comments": 87,
+    "createdAt": "2026-05-10T09:31:43.060Z"
+  },
+  {
+    "id": "music-14",
+    "title": "Born To Run",
+    "description": "a close up of a speaker with a black background",
+    "imageUrl": "https://images.unsplash.com/photo-1653579657403-25b2695601d4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTV8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Born To Run",
+      "year": 1983
+    },
+    "likes": 632,
+    "saves": 391,
+    "comments": 85,
+    "createdAt": "2026-07-30T14:16:37.580Z"
+  },
+  {
+    "id": "music-15",
+    "title": "London Calling",
+    "description": "a record player with a blue disc in the background",
+    "imageUrl": "https://images.unsplash.com/photo-1653579656377-78794344eb4f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTZ8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "London Calling",
+      "year": 2001
+    },
+    "likes": 364,
+    "saves": 104,
+    "comments": 75,
+    "createdAt": "2026-06-23T07:22:42.692Z"
+  },
+  {
+    "id": "music-16",
+    "title": "Blood On The Tracks",
+    "description": "a woman sitting on top of a bucket filled with vinyl records",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1705351823427-ae0523ca8c7b?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTd8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Blood On The Tracks",
+      "year": 1981
+    },
+    "likes": 302,
+    "saves": 297,
+    "comments": 25,
+    "createdAt": "2026-08-11T07:10:57.388Z"
+  },
+  {
+    "id": "music-17",
+    "title": "Highway 61 Revisited",
+    "description": "Hand holding a record with colorful abstract art",
+    "imageUrl": "https://images.unsplash.com/photo-1778084844742-65f66486c536?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Highway 61 Revisited",
+      "year": 2018
+    },
+    "likes": 424,
+    "saves": 24,
+    "comments": 87,
+    "createdAt": "2026-07-07T02:04:51.309Z"
+  },
+  {
+    "id": "music-18",
+    "title": "Pet Sounds",
+    "description": "Three vinyl records displayed on the floor",
+    "imageUrl": "https://images.unsplash.com/photo-1773430266140-ad5d57a83994?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTl8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Pet Sounds",
+      "year": 2000
+    },
+    "likes": 334,
+    "saves": 418,
+    "comments": 89,
+    "createdAt": "2026-08-07T13:00:14.577Z"
+  },
+  {
+    "id": "music-19",
+    "title": "Revolver",
+    "description": "Kings of convenience vinyl album cover on a shelf",
+    "imageUrl": "https://images.unsplash.com/photo-1785813124588-328724eece7f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzN3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Revolver",
+      "year": 2007
+    },
+    "likes": 576,
+    "saves": 187,
+    "comments": 10,
+    "createdAt": "2026-06-25T03:24:37.182Z"
+  },
+  {
+    "id": "music-20",
+    "title": "Sgt. Pepper's Lonely Hearts Club Band",
+    "description": "a woman sitting on top of a pile of records",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1705352059512-db808d7b907e?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjF8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Sgt. Pepper's Lonely Hearts Club Band",
+      "year": 1987
+    },
+    "likes": 185,
+    "saves": 440,
+    "comments": 62,
+    "createdAt": "2026-07-03T00:10:37.832Z"
+  },
+  {
+    "id": "music-21",
+    "title": "The White Album",
+    "description": "Taylor swift's \"reputation\" album cover in a record store",
+    "imageUrl": "https://images.unsplash.com/photo-1776533696336-d22a12c01630?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjJ8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "The White Album",
+      "year": 1990
+    },
+    "likes": 301,
+    "saves": 11,
+    "comments": 8,
+    "createdAt": "2026-07-02T14:10:39.731Z"
+  },
+  {
+    "id": "music-22",
+    "title": "Sticky Fingers",
+    "description": "Vinyl record covers displayed on a shelf under warm yellow lighting",
+    "imageUrl": "https://images.unsplash.com/photo-1786609899710-c4c95fc92de3?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjN8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Sticky Fingers",
+      "year": 2017
+    },
+    "likes": 600,
+    "saves": 268,
+    "comments": 21,
+    "createdAt": "2026-06-07T01:37:33.091Z"
+  },
+  {
+    "id": "music-23",
+    "title": "Exile On Main St.",
+    "description": "Vinyl records by adele and iu on shelf",
+    "imageUrl": "https://images.unsplash.com/photo-1759455409415-9d91d286fe47?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjR8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Exile On Main St.",
+      "year": 1975
+    },
+    "likes": 733,
+    "saves": 399,
+    "comments": 90,
+    "createdAt": "2026-08-06T19:19:40.748Z"
+  },
+  {
+    "id": "music-24",
+    "title": "Let It Bleed",
+    "description": "a woman standing in front of a white backdrop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1705351635784-29adb034aa0a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjV8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Let It Bleed",
+      "year": 1971
+    },
+    "likes": 916,
+    "saves": 346,
+    "comments": 0,
+    "createdAt": "2026-08-05T12:15:07.364Z"
+  },
+  {
+    "id": "music-25",
+    "title": "Who's Next",
+    "description": "Three vinyl record album covers displayed upright on the floor",
+    "imageUrl": "https://images.unsplash.com/photo-1773430266095-1278b9cda4df?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjZ8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Who's Next",
+      "year": 2006
+    },
+    "likes": 247,
+    "saves": 365,
+    "comments": 33,
+    "createdAt": "2026-07-11T03:29:23.423Z"
+  },
+  {
+    "id": "music-26",
+    "title": "Tommy",
+    "description": "Two men shake hands in front of a building",
+    "imageUrl": "https://images.unsplash.com/photo-1778084844730-2ebe2da195d1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Tommy",
+      "year": 1990
+    },
+    "likes": 945,
+    "saves": 91,
+    "comments": 8,
+    "createdAt": "2026-08-21T23:44:41.151Z"
+  },
+  {
+    "id": "music-27",
+    "title": "The Velvet Underground & Nico",
+    "description": "Wall of vintage vinyl records displayed on shelves",
+    "imageUrl": "https://images.unsplash.com/photo-1770782773489-20ecd12070b6?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjh8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "The Velvet Underground & Nico",
+      "year": 1998
+    },
+    "likes": 233,
+    "saves": 312,
+    "comments": 20,
+    "createdAt": "2026-07-16T22:11:56.490Z"
+  },
+  {
+    "id": "music-28",
+    "title": "Are You Experienced",
+    "description": "a group of people sitting on top of a white sheet",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1705352059500-7249526d1c05?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjl8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Are You Experienced",
+      "year": 1995
+    },
+    "likes": 549,
+    "saves": 434,
+    "comments": 51,
+    "createdAt": "2026-07-17T12:39:00.391Z"
+  },
+  {
+    "id": "music-29",
+    "title": "Electric Ladyland",
+    "description": "Collection of vintage vinyl records and album covers",
+    "imageUrl": "https://images.unsplash.com/photo-1760274741733-21a64eed83c7?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzB8fHZpbnlsJTIwYWxidW0lMjBjb3ZlciUyMGFydCUyMG11c2ljfGVufDB8fHx8MTc4NzgzNDYzOXww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "category": "Music",
+    "tags": [
+      "music",
+      "curated",
+      "music"
+    ],
+    "creatorId": "discovery-bot",
+    "metadata": {
+      "artist": "Various Artists",
+      "album": "Electric Ladyland",
+      "year": 2006
+    },
+    "likes": 176,
+    "saves": 312,
+    "comments": 78,
+    "createdAt": "2026-05-27T07:41:59.307Z"
+  }
+]
