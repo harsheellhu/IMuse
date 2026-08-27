@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { MasonryFeed } from '../components/feed/MasonryFeed';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
+import { experiencesApi } from '../api/experiences';
+import { Experience } from '../types';
 
 export function Profile() {
   const { id } = useParams();
   const { currentUser, users, posts } = useStore();
   const [activeTab, setActiveTab] = useState('posts');
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  React.useEffect(() => {
+    if (activeTab === 'experiences') {
+      experiencesApi.getAll().then(setExperiences).catch(console.error);
+    }
+  }, [activeTab]);
 
   const profileId = id === 'me' ? currentUser.id : id;
   const user = users.find(u => u.id === profileId) || currentUser;
@@ -17,6 +26,7 @@ export function Profile() {
   const tabs = [
     { id: 'posts', label: 'Archive' },
     { id: 'collections', label: 'Collections' },
+    { id: 'experiences', label: 'Experiences' },
     { id: 'library', label: 'Library' },
     { id: 'likes', label: 'Likes' },
   ];
@@ -86,7 +96,36 @@ export function Profile() {
               <MasonryFeed posts={userPosts} />
             </motion.div>
           )}
-          {activeTab !== 'posts' && (
+          {activeTab === 'experiences' && (
+            <motion.div
+              key="experiences"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-12"
+            >
+              {experiences.map(exp => (
+                <Link key={exp.id} to={`/experience/${exp.id}`} className="block group">
+                  <div className="bg-bg-elevated/50 border border-border-subtle rounded-2xl p-6 transition-all duration-500 hover:border-text-primary/30 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-serif text-2xl text-text-primary mb-2 line-clamp-2">{exp.title}</h3>
+                      <p className="text-sm text-text-secondary line-clamp-3 mb-6">{exp.description}</p>
+                    </div>
+                    <div className="text-xs text-text-muted uppercase tracking-widest border-t border-border-subtle/50 pt-4">
+                      {exp.events?.length || 0} events
+                    </div>
+                  </div>
+                </Link>
+              ))}
+              {experiences.length === 0 && (
+                <div className="col-span-full py-20 text-center text-text-secondary italic font-serif">
+                  No connected experiences found.
+                </div>
+              )}
+            </motion.div>
+          )}
+          {activeTab !== 'posts' && activeTab !== 'experiences' && (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}

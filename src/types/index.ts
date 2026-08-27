@@ -133,3 +133,47 @@ export interface LandingFeature {
     source?: string;
   };
 }
+
+export interface ExperienceEvent {
+  id: string;
+  experienceId: string;
+  contentId: string;
+  eventType: string; // 'Read', 'Watched', 'Visited', 'Listened', 'Started Reading', etc.
+  eventAt: string; // ISO date string
+  datePrecision: 'year' | 'month' | 'day' | 'exact';
+  locationName?: string;
+  city?: string;
+  country?: string;
+  note?: string;
+  // joined fields
+  contentTitle?: string;
+  contentType?: string;
+  contentCategory?: string;
+  creator?: string;
+  imageUrl?: string;
+}
+
+export interface ExperienceLink {
+  id: string;
+  experienceId: string;
+  sourceContentId: string;
+  targetContentId: string;
+  relationshipType: string;
+  confidence: 'exact' | 'strong' | 'possible';
+  sourceTitle?: string;
+  targetTitle?: string;
+  targetImage?: string;
+  targetId?: string;
+}
+
+export interface Experience {
+  id: string;
+  userId: string;
+  title: string;
+  description?: string;
+  status: 'active' | 'suggested' | 'archived';
+  events?: ExperienceEvent[];
+  suggestions?: ExperienceLink[];
+  updatedAt: string;
+}
+

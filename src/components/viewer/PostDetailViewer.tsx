@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Bookmark, Share2, Star } from 'lucide-react';
+import { X, Bookmark, Share2, Star, PlusCircle } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
+import { ExperienceLogModal } from '../ui/ExperienceLogModal';
+import { ConnectedExperienceTeaser } from './ConnectedExperienceTeaser';
 import clsx from 'clsx';
 
 export function PostDetailViewer() {
@@ -43,6 +45,7 @@ export function PostDetailViewer() {
 
 function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () => void }) {
   const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen } = useStore();
+  const [isExperienceModalOpen, setExperienceModalOpen] = React.useState(false);
   const { data, type } = item;
 
   let imageUrl = '';
@@ -217,101 +220,125 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
 
       {/* Center Artwork & Editorial Content */}
       <main
-        className="relative z-[10000] flex-1 flex items-center justify-center px-6 md:px-16 py-4 overflow-y-auto"
+        className="relative z-[10000] flex-1 w-full flex items-center justify-center px-6 md:px-12 py-4 overflow-y-auto overflow-x-hidden"
         onClick={onClose}
       >
         <div
-          className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24 w-full max-w-6xl my-auto"
+          className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-16 w-full max-w-[1400px] my-auto pt-8 pb-12 lg:py-0"
           onClick={(e) => e.stopPropagation()} // Keep viewer open on inside click
         >
-          {/* Main Visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="relative shrink-0 w-full md:w-[48vw] max-w-[560px] max-h-[70vh] rounded-sm overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6)] bg-bg-surface flex items-center justify-center"
-            style={{ aspectRatio }}
-          >
-            <img
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full object-cover"
-              crossOrigin="anonymous"
-            />
-          </motion.div>
+          {/* Main Visual (LEFT 60%) */}
+          <div className="w-full lg:w-[60%] flex items-center justify-center lg:justify-end">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-[800px] max-h-[75vh] rounded-sm overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6)] bg-bg-surface flex items-center justify-center shrink-0"
+              style={{ aspectRatio }}
+            >
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-full object-contain"
+                crossOrigin="anonymous"
+              />
+            </motion.div>
+          </div>
 
-          {/* Editorial Details */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col w-full md:w-[360px] shrink-0 text-left"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-[10px] tracking-[0.25em] uppercase text-text-secondary font-medium">
-                {categoryOrMeta}
-              </span>
-              {rating > 0 && (
-                <div className="flex items-center gap-1 text-[11px] text-text-primary font-medium">
-                  <Star className="w-3 h-3 fill-text-primary text-text-primary" />
-                  <span>{rating}</span>
-                </div>
+          {/* Editorial Details (RIGHT 40%) */}
+          <div className="w-full lg:w-[40%] flex items-center lg:justify-start">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col w-full max-w-[440px] text-left lg:max-h-[75vh] lg:overflow-y-auto scrollbar-hide pr-4"
+            >
+              <div className="flex items-center gap-3 mb-4 shrink-0">
+                <span className="text-[10px] tracking-[0.25em] uppercase text-text-secondary font-medium">
+                  {categoryOrMeta}
+                </span>
+                {rating > 0 && (
+                  <div className="flex items-center gap-1 text-[11px] text-text-primary font-medium">
+                    <Star className="w-3 h-3 fill-text-primary text-text-primary" />
+                    <span>{rating}</span>
+                  </div>
+                )}
+              </div>
+
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-light tracking-tight text-text-primary mb-3 leading-[1.15] shrink-0">
+                {title}
+              </h2>
+
+              {creatorInfo && (
+                <p className="text-base text-text-secondary font-serif italic mb-6 shrink-0">
+                  {creatorInfo}
+                </p>
               )}
-            </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-light tracking-tight text-text-primary mb-3 leading-[1.15]">
-              {title}
-            </h2>
+              {description && (
+                <p className="text-sm text-text-secondary/90 leading-relaxed font-light mb-8 max-w-sm shrink-0">
+                  {description}
+                </p>
+              )}
 
-            {creatorInfo && (
-              <p className="text-base text-text-secondary font-serif italic mb-6">
-                {creatorInfo}
-              </p>
-            )}
-
-            {description && (
-              <p className="text-sm text-text-secondary/90 leading-relaxed font-light mb-8 max-w-sm">
-                {description}
-              </p>
-            )}
-
-            {/* Editorial Action Buttons */}
-            <div className="flex items-center gap-6 mt-2 pt-4 border-t border-border-subtle/40">
-              <button
-                type="button"
-                onClick={() => {
-                  if (type === 'post') {
+              {/* Editorial Action Buttons */}
+              <div className="flex flex-wrap items-center gap-6 mt-4 shrink-0 pointer-events-auto">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (!isAuthenticated) {
                       setAuthModalOpen(true);
                     } else {
-                      toggleSavePost(data.id);
+                      setExperienceModalOpen(true);
                     }
-                  }
-                }}
-                className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-1"
-              >
-                <Bookmark
-                  className={`w-3.5 h-3.5 ${isSaved ? 'fill-text-primary' : ''}`}
-                />
-                <span>{isSaved ? 'Saved' : 'Save'}</span>
-              </button>
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add to My Experience</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (navigator.clipboard) {
-                    navigator.clipboard.writeText(window.location.href);
-                  }
-                }}
-                className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-secondary hover:text-text-primary transition-colors cursor-pointer py-1"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Share</span>
-              </button>
-            </div>
-          </motion.div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (type === 'post') {
+                      if (!isAuthenticated) {
+                        setAuthModalOpen(true);
+                      } else {
+                        toggleSavePost(data.id);
+                      }
+                    }
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2"
+                >
+                  <Bookmark
+                    className={`w-3.5 h-3.5 ${isSaved ? 'fill-text-primary' : ''}`}
+                  />
+                  <span>{isSaved ? 'Saved' : 'Save'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(window.location.href);
+                    }
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-secondary hover:text-text-primary transition-colors cursor-pointer py-2"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </button>
+              </div>
+
+              {/* Connected Experience Section */}
+              <ConnectedExperienceTeaser contentId={data.id} />
+              
+            </motion.div>
+          </div>
         </div>
       </main>
 
@@ -320,6 +347,13 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
         <span>Press ESC to return</span>
         <span>IMuse Visual Universe</span>
       </footer>
+
+      {/* Modals */}
+      <ExperienceLogModal 
+        isOpen={isExperienceModalOpen}
+        onClose={() => setExperienceModalOpen(false)}
+        content={data as any}
+      />
     </motion.div>
   );
 }

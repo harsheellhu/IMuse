@@ -30,6 +30,7 @@ import collectionsRoutes from './routes/collections.js';
 import savedRoutes from './routes/saved.js';
 import historyRoutes from './routes/history.js';
 import jobsRoutes from './routes/jobs.js';
+import experiencesRoutes from './routes/experiences.js';
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -42,6 +43,7 @@ app.use('/api/me/collections', collectionsRoutes);
 app.use('/api/me/saved', savedRoutes);
 app.use('/api/me/history', historyRoutes);
 app.use('/api/jobs', jobsRoutes);
+app.use('/api/me/experiences', experiencesRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

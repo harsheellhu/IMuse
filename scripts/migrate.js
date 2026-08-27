@@ -158,7 +158,57 @@ db.exec(`
   );
 `);
 
-// 11. Performance Indices
+// 11. Experiences
+db.exec(`
+  CREATE TABLE IF NOT EXISTS experiences (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    status TEXT DEFAULT 'active', -- active, suggested, archived
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+`);
+
+// 12. Experience Events
+db.exec(`
+  CREATE TABLE IF NOT EXISTS experience_events (
+    id TEXT PRIMARY KEY,
+    experience_id TEXT NOT NULL,
+    content_id TEXT NOT NULL,
+    event_type TEXT NOT NULL, -- read, watched, visited, listened, etc.
+    event_at DATETIME,
+    date_precision TEXT DEFAULT 'exact', -- year, month, day, exact
+    location_name TEXT,
+    city TEXT,
+    country TEXT,
+    latitude REAL,
+    longitude REAL,
+    note TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (experience_id) REFERENCES experiences(id) ON DELETE CASCADE,
+    FOREIGN KEY (content_id) REFERENCES content(id) ON DELETE CASCADE
+  );
+`);
+
+// 13. Experience Links
+db.exec(`
+  CREATE TABLE IF NOT EXISTS experience_links (
+    id TEXT PRIMARY KEY,
+    experience_id TEXT NOT NULL,
+    source_content_id TEXT,
+    target_content_id TEXT,
+    relationship_type TEXT,
+    confidence TEXT DEFAULT 'strong', -- exact, strong, possible
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (experience_id) REFERENCES experiences(id) ON DELETE CASCADE
+  );
+`);
+
+// 14. Performance Indices
 db.exec(`
   CREATE INDEX IF NOT EXISTS idx_content_type ON content(type);
   CREATE INDEX IF NOT EXISTS idx_content_category ON content(category);
