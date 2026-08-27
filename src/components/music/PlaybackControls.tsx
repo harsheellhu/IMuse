@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import clsx from 'clsx';
@@ -12,7 +13,16 @@ function formatTime(seconds: number) {
 
 export function PlaybackControls() {
   // We subscribe to progress and currentTime here so ONLY this component re-renders
-  const { currentSong, isPlaying, togglePlay, progress, currentTime, duration, playNext, playPrev } = useMusicStore();
+  const { currentSong, isPlaying, togglePlay, progress, currentTime, duration, playNext, playPrev } = useMusicStore(useShallow(s => ({
+    currentSong: s.currentSong,
+    isPlaying: s.isPlaying,
+    togglePlay: s.togglePlay,
+    progress: s.progress,
+    currentTime: s.currentTime,
+    duration: s.duration,
+    playNext: s.playNext,
+    playPrev: s.playPrev
+  })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
   const progressRef = useRef<HTMLDivElement>(null);

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
 
@@ -15,7 +16,11 @@ function formatTime(seconds: number) {
 }
 
 export function TurntableUnit() {
-  const { audioElement, duration, currentSong } = useMusicStore();
+  const { audioElement, duration, currentSong } = useMusicStore(useShallow(s => ({
+    audioElement: s.audioElement,
+    duration: s.duration,
+    currentSong: s.currentSong
+  })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
 

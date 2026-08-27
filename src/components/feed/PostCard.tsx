@@ -54,13 +54,13 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
           <img 
             src={imgSrc} 
             alt={post.title} 
+            loading="lazy"
             onLoad={() => setIsLoaded(true)}
             onError={() => { setHasError(true); setIsLoaded(true); }}
             className={clsx(
               "w-full h-auto object-cover transform transition-all duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.015]",
               isLoaded ? "opacity-100" : "opacity-0"
             )}
-            loading="lazy"
             decoding="async"
           />
         )}

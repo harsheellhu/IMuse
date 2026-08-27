@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { Minimize2 } from 'lucide-react';
 import clsx from 'clsx';
@@ -10,7 +11,11 @@ import { PlaybackControls } from './PlaybackControls';
 import { Lyrics } from './Lyrics';
 
 export function FullPlayer() {
-  const { currentSong, isMaximized, setMaximized } = useMusicStore();
+  const { currentSong, isMaximized, setMaximized } = useMusicStore(useShallow(s => ({
+    currentSong: s.currentSong,
+    isMaximized: s.isMaximized,
+    setMaximized: s.setMaximized
+  })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
 

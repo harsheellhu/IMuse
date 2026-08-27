@@ -28,12 +28,12 @@ export const useInitializeApp = () => {
           console.error("Failed to load preferences", e);
         }
 
-        // Fetch collections and saves
-        try {
-          const collections = await collectionsApi.getAll();
+        // Fetch collections and saves in the background without blocking the shell
+        Promise.all([
+          collectionsApi.getAll().catch(e => { console.error(e); return []; }),
+          contentApi.getSaved().catch(e => { console.error(e); return []; })
+        ]).then(([collections, saves]) => {
           useStore.setState({ collections });
-          
-          const saves = await contentApi.getSaved();
           useStore.setState(state => {
             const existingIds = new Set(state.posts.map(p => p.id));
             const newPosts = saves.filter(s => !existingIds.has(s.id));
@@ -42,9 +42,7 @@ export const useInitializeApp = () => {
               posts: [...state.posts, ...newPosts] as any
             };
           });
-        } catch (e) {
-          console.error("Failed to load user data", e);
-        }
+        });
 
       } catch (e) {
         // Not logged in or error

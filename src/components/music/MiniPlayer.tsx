@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { Play, Pause, X, SkipForward, SkipBack, Volume2 } from 'lucide-react';
 import clsx from 'clsx';
@@ -12,7 +13,17 @@ function formatTime(seconds: number) {
 }
 
 export function MiniPlayer() {
-  const { currentSong, isPlaying, togglePlay, closePlayer, progress, currentTime, duration, setMaximized, isMaximized } = useMusicStore();
+  const { currentSong, isPlaying, togglePlay, closePlayer, progress, currentTime, duration, setMaximized, isMaximized } = useMusicStore(useShallow(s => ({
+    currentSong: s.currentSong,
+    isPlaying: s.isPlaying,
+    togglePlay: s.togglePlay,
+    closePlayer: s.closePlayer,
+    progress: s.progress,
+    currentTime: s.currentTime,
+    duration: s.duration,
+    setMaximized: s.setMaximized,
+    isMaximized: s.isMaximized
+  })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
   const progressRef = useRef<HTMLDivElement>(null);

@@ -1,10 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
 
 export function Lyrics() {
-  const { currentSong, audioElement } = useMusicStore();
+  const { currentSong, audioElement } = useMusicStore(useShallow(s => ({
+    currentSong: s.currentSong,
+    audioElement: s.audioElement
+  })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
   

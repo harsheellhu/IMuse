@@ -1,9 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { useMusicStore } from '../../store/useMusicStore';
+import { useShallow } from 'zustand/react/shallow';
 
 export function AudioEngine() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const { currentBlobUrl, isPlaying, volume, setProgress, updateTime, setDuration, progress, setAudioElement } = useMusicStore();
+  const { currentBlobUrl, isPlaying, volume, updateTime, setDuration, setAudioElement } = useMusicStore(useShallow(s => ({
+    currentBlobUrl: s.currentBlobUrl,
+    isPlaying: s.isPlaying,
+    volume: s.volume,
+    updateTime: s.updateTime,
+    setDuration: s.setDuration,
+    setAudioElement: s.setAudioElement
+  })));
   
   useEffect(() => {
     setAudioElement(audioRef.current);
