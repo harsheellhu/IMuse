@@ -52,4 +52,14 @@ db.exec(`
   );
 `);
 
+// 5. Additional Performance Indices
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_exp_events_content ON experience_events(content_id);
+  CREATE INDEX IF NOT EXISTS idx_exp_events_exp ON experience_events(experience_id);
+  CREATE INDEX IF NOT EXISTS idx_col_items_col ON collection_items(collection_id);
+  CREATE INDEX IF NOT EXISTS idx_col_items_content ON collection_items(content_id);
+  CREATE INDEX IF NOT EXISTS idx_content_tags_content ON content_tags(content_id);
+  CREATE INDEX IF NOT EXISTS idx_content_tags_tag ON content_tags(tag);
+`);
+
 console.log('v2 Database migrations completed successfully.');

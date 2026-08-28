@@ -33,8 +33,12 @@ export const apiClient = async <T>(endpoint: string, options: RequestInit = {}):
     },
   };
 
-  // Only deduplicate and cache GET requests
+  // Clear cache on mutations (POST, PUT, PATCH, DELETE)
   const isGet = !config.method || config.method.toUpperCase() === 'GET';
+  if (!isGet) {
+    responseCache.clear();
+  }
+
   const cacheKey = isGet ? endpoint : null;
 
   // 1. Return pending request if it exists

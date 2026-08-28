@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
+import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star } from 'lucide-react';
 import clsx from 'clsx';
@@ -8,6 +9,14 @@ export function Books() {
   const { books, openViewer } = useStore();
   const [activeTab, setActiveTab] = useState('All');
   const tabs = ['All', 'Want to Read', 'Reading', 'Read', 'Favorites'];
+
+  useEffect(() => {
+    if (books.length === 0) {
+      contentApi.getAll('book', 100).then((data: any[]) => {
+        useStore.setState({ books: data as any });
+      }).catch(console.error);
+    }
+  }, [books.length]);
 
   return (
     <div className="w-full">

@@ -15,6 +15,9 @@ import { CreateCollectionModal } from './components/ui/CreateCollectionModal';
 import { useInitializeApp } from './hooks/useInitializeApp';
 import { SerendipityMode } from './pages/SerendipityMode';
 import { ColorMemory } from './pages/ColorMemory';
+import { MuseumPage } from './pages/Museum';
+import { MuseumRoomPage } from './pages/MuseumRoom';
+import { CulturalDNAPage } from './pages/CulturalDNA';
 
 // Lazy Load heavy secondary routes
 const ExploreWorld = React.lazy(() => import('./pages/ExploreWorld').then(module => ({ default: module.ExploreWorld })));
@@ -63,6 +66,9 @@ export default function App() {
             <Route path="profile/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
             <Route path="serendipity" element={<SerendipityMode />} />
             <Route path="color-memory" element={<ColorMemory />} />
+            <Route path="museum" element={<MuseumPage />} />
+            <Route path="museum/:roomId" element={<MuseumRoomPage />} />
+            <Route path="dna" element={<CulturalDNAPage />} />
             {/* Fallback for unbuilt pages */}
             <Route path="*" element={<div className="p-8 text-center text-text-secondary">Page coming soon.</div>} />
           </Route>

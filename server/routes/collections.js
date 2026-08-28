@@ -1,6 +1,6 @@
 import express from 'express';
 import db from '../db.js';
-import { requireAuth } from '../middleware/auth.js';
+import { requireAuth, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -75,34 +75,47 @@ router.post('/:id/items/:contentId', requireAuth, (req, res) => {
 });
 
 // Get items in a collection
-router.get('/:id/items', requireAuth, (req, res) => {
+router.get('/:id/items', optionalAuth, (req, res) => {
   try {
-    // Basic verification of access (if public, anyone can see; if private, only owner)
     const collection = db.prepare('SELECT user_id, is_private FROM collections WHERE id = ?').get(req.params.id);
     if (!collection) {
       return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Collection not found' } });
     }
     
-    if (collection.is_private && collection.user_id !== req.user.id) {
+    if (collection.is_private && (!req.user || collection.user_id !== req.user.id)) {
       return res.status(403).json({ error: { code: 'FORBIDDEN', message: 'Unauthorized' } });
     }
 
     // Join with content table to get the actual items
     const items = db.prepare(`
-      SELECT c.* 
+      SELECT c.*, ci.metadata as canvas_metadata 
       FROM content c
       JOIN collection_items ci ON c.id = ci.content_id
       WHERE ci.collection_id = ?
       ORDER BY ci.added_at DESC
     `).all(req.params.id);
 
-    // Parse JSON arrays
-    const formattedItems = items.map(item => ({
-      ...item,
-      tags: item.tags ? JSON.parse(item.tags) : [],
-      metadata: item.metadata ? JSON.parse(item.metadata) : null,
-      categories: item.categories ? JSON.parse(item.categories) : []
-    }));
+    // Parse JSON arrays and metadata
+    const formattedItems = items.map(item => {
+      let canvasMeta = null;
+      if (item.canvas_metadata) {
+        try { canvasMeta = typeof item.canvas_metadata === 'string' ? JSON.parse(item.canvas_metadata) : item.canvas_metadata; } catch(e){}
+      }
+      let meta = null;
+      if (item.metadata) {
+        try { meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata; } catch(e){}
+      }
+      let tags = [];
+      const tagRows = db.prepare('SELECT tag FROM content_tags WHERE content_id = ?').all(item.id);
+      tags = tagRows.map(r => r.tag);
+
+      return {
+        ...item,
+        canvas_metadata: canvasMeta,
+        metadata: meta,
+        tags
+      };
+    });
 
     res.json(formattedItems);
   } catch (err) {

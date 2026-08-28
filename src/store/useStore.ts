@@ -139,8 +139,10 @@ export const useStore = create<StoreState>((set, get) => ({
   activeViewerItem: null,
   openViewer: (item) => {
     const url = new URL(window.location.href);
-    url.searchParams.set('viewer', item.id);
-    window.history.pushState({ viewerOpen: true }, '', url.toString());
+    if (url.searchParams.get('viewer') !== item.id) {
+      url.searchParams.set('viewer', item.id);
+      window.history.pushState({ viewerOpen: true }, '', url.toString());
+    }
     set({ activeViewerItem: item });
   },
   closeViewer: () => {

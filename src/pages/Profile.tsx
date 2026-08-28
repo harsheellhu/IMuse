@@ -65,6 +65,12 @@ export function Profile() {
           <Link to="/color-memory" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
             Color Memory
           </Link>
+          <Link to="/museum" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
+            Museum
+          </Link>
+          <Link to="/dna" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
+            Cultural DNA
+          </Link>
           <button className="px-6 py-2 rounded-full border border-gray-200 text-xs tracking-widest uppercase font-medium hover:border-black transition-colors">
             Share
           </button>

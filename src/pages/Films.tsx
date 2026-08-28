@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
+import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star } from 'lucide-react';
 import clsx from 'clsx';
@@ -8,6 +9,14 @@ export function Films() {
   const { films, openViewer } = useStore();
   const [activeTab, setActiveTab] = useState('All');
   const tabs = ['All', 'Watchlist', 'Watched', 'Favorites'];
+
+  useEffect(() => {
+    if (films.length === 0) {
+      contentApi.getAll('film', 100).then((data: any[]) => {
+        useStore.setState({ films: data as any });
+      }).catch(console.error);
+    }
+  }, [films.length]);
 
   return (
     <div className="w-full">

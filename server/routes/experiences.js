@@ -1,7 +1,7 @@
 import express from 'express';
 import crypto from 'crypto';
 import db from '../db.js';
-import { requireAuth } from '../middleware/auth.js';
+import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import { ExperienceLinkService } from '../services/experienceLinkService.js';
 
 const router = express.Router();
@@ -64,9 +64,12 @@ router.get('/:id', requireAuth, (req, res) => {
 });
 
 // GET experiences by contentId
-router.get('/by-content/:contentId', requireAuth, (req, res) => {
+router.get('/by-content/:contentId', optionalAuth, (req, res) => {
   try {
     const { contentId } = req.params;
+    if (!req.user) {
+      return res.json([]);
+    }
     const experiences = db.prepare(`
       SELECT DISTINCT exp.*
       FROM experiences exp

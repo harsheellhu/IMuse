@@ -28,3 +28,20 @@ export const requireAuth = (req, res, next) => {
     });
   }
 };
+
+export const optionalAuth = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    req.user = null;
+    return next();
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT id, username, email, avatar_url, bio FROM users WHERE id = ?').get(decoded.id);
+    req.user = user || null;
+    next();
+  } catch (err) {
+    req.user = null;
+    next();
+  }
+};
