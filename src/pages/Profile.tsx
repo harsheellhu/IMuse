@@ -62,6 +62,9 @@ export function Profile() {
           <Link to="/replay" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
             Archive Replay
           </Link>
+          <Link to="/color-memory" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
+            Color Memory
+          </Link>
           <button className="px-6 py-2 rounded-full border border-gray-200 text-xs tracking-widest uppercase font-medium hover:border-black transition-colors">
             Share
           </button>

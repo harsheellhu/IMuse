@@ -45,7 +45,7 @@ export const ColorMemoryService = {
       const d = new Date(item.saved_at);
       const m = d.getMonth() + 1; // 1-12
       const year = d.getFullYear();
-      const key = \`\${year}-\${m.toString().padStart(2, '0')}\`;
+      const key = `${year}-${m.toString().padStart(2, '0')}`;
 
       if (!grouped[key]) {
         grouped[key] = {

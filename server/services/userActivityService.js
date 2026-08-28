@@ -102,7 +102,7 @@ export class UserActivityService {
           totalCount: row.count,
           breakdown,
           covers,
-          reason: \`This appeared because you interacted with \${row.count} \${row.theme} items across your experiences and collections.\`
+          reason: `This appeared because you interacted with ${row.count} ${row.theme} items across your experiences and collections.`
         };
       });
 
@@ -145,8 +145,8 @@ export class UserActivityService {
 
   static getCulturalReplay(userId, year) {
     try {
-      const startDate = \`\${year}-01-01T00:00:00.000Z\`;
-      const endDate = \`\${year}-12-31T23:59:59.999Z\`;
+      const startDate = `${year}-01-01T00:00:00.000Z`;
+      const endDate = `${year}-12-31T23:59:59.999Z`;
 
       const metrics = db.prepare(`
         SELECT 

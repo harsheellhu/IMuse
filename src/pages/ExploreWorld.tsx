@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { useStore, ActiveViewerItem } from '../store/useStore';
 import clsx from 'clsx';
 import { Post, Book, Film, Collection, TvShow, Place } from '../types';
+import { Link } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 
 type WorldItemType = 'post' | 'book' | 'film' | 'collection' | 'tv_show' | 'place';
 
@@ -130,6 +132,15 @@ export function ExploreWorld() {
           />
         ))}
       </motion.div>
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50">
+        <Link 
+          to="/serendipity" 
+          className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white border border-white/20 hover:border-white/60 hover:bg-black/80 transition-colors shadow-2xl backdrop-blur-md"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span className="text-xs uppercase tracking-widest font-medium">Lose Me</span>
+        </Link>
+      </div>
     </div>
   );
 }

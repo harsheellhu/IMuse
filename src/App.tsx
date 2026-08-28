@@ -13,6 +13,8 @@ import { SettingsOverlay } from './components/settings/SettingsOverlay';
 import { ImportProgress } from './components/settings/ImportProgress';
 import { CreateCollectionModal } from './components/ui/CreateCollectionModal';
 import { useInitializeApp } from './hooks/useInitializeApp';
+import { SerendipityMode } from './pages/SerendipityMode';
+import { ColorMemory } from './pages/ColorMemory';
 
 // Lazy Load heavy secondary routes
 const ExploreWorld = React.lazy(() => import('./pages/ExploreWorld').then(module => ({ default: module.ExploreWorld })));
@@ -59,6 +61,8 @@ export default function App() {
             <Route path="patterns/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><PatternThreadViewer /></React.Suspense>} />
             <Route path="replay" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><CulturalReplay /></React.Suspense>} />
             <Route path="profile/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
+            <Route path="serendipity" element={<SerendipityMode />} />
+            <Route path="color-memory" element={<ColorMemory />} />
             {/* Fallback for unbuilt pages */}
             <Route path="*" element={<div className="p-8 text-center text-text-secondary">Page coming soon.</div>} />
           </Route>
