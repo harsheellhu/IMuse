@@ -190,7 +190,7 @@ function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Ke
       onClick={onClick}
     >
       <div className={clsx(
-        "relative w-full h-full overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_12px_40px_rgba(255,255,255,0.03)]",
+        "relative w-full h-full overflow-hidden shadow-[0_12px_40px_var(--color-shadow)]",
         type === 'collection' ? 'rounded-md' : 'rounded-sm'
       )}>
         <img 

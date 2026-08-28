@@ -65,7 +65,7 @@ export function Shops() {
                 className="group cursor-pointer flex flex-col"
                 onClick={() => openViewer({ id: shop.id, type: 'post', data: shop })}
               >
-                <div className="relative aspect-square overflow-hidden mb-5 bg-bg-secondary rounded-sm shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] transform transition-transform duration-700 ease-out group-hover:scale-[1.02]">
+                <div className="relative aspect-square overflow-hidden mb-5 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:scale-[1.02]">
                   <img 
                     src={shop.imageUrl} 
                     alt={shop.title} 

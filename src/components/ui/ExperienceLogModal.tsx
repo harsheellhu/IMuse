@@ -62,11 +62,25 @@ export function ExperienceLogModal({ isOpen, onClose, content }: ExperienceLogMo
 
   const getEventTypes = () => {
     switch (content.type) {
-      case 'book': return ['Read', 'Started reading', 'Finished reading'];
+      case 'book': return [
+        { label: 'Started reading', value: 'STARTED_READING' },
+        { label: 'Finished reading', value: 'FINISHED_READING' },
+        { label: 'Read', value: 'READ' }
+      ];
       case 'film':
-      case 'tv-show': return ['Watched', 'Rewatched'];
-      case 'place': return ['Visited'];
-      default: return ['Discovered', 'Saved', 'Experienced'];
+      case 'tv-show':
+      case 'tv_show': return [
+        { label: 'Watched', value: 'WATCHED' }, 
+        { label: 'Rewatched', value: 'REWATCHED' }
+      ];
+      case 'place': return [{ label: 'Visited', value: 'VISITED' }, { label: 'Revisited', value: 'REVISITED' }];
+      case 'song':
+      case 'audio': return [{ label: 'Listened', value: 'LISTENED' }];
+      default: return [
+        { label: 'Discovered', value: 'DISCOVERED' },
+        { label: 'Saved', value: 'SAVED' },
+        { label: 'Experienced', value: 'EXPERIENCED' }
+      ];
     }
   };
 
@@ -114,11 +128,11 @@ export function ExperienceLogModal({ isOpen, onClose, content }: ExperienceLogMo
                     <div className="grid grid-cols-1 gap-2">
                       {getEventTypes().map((type) => (
                         <button
-                          key={type}
-                          onClick={() => { setEventType(type); setStep(2); }}
+                          key={type.value}
+                          onClick={() => { setEventType(type.value); setStep(2); }}
                           className="px-4 py-3 text-left rounded-xl border border-border-subtle hover:border-text-primary hover:bg-bg-base/50 transition-colors text-text-primary"
                         >
-                          {type}
+                          {type.label}
                         </button>
                       ))}
                     </div>
@@ -153,7 +167,7 @@ export function ExperienceLogModal({ isOpen, onClose, content }: ExperienceLogMo
                       </div>
                     )}
 
-                    {['Visited', 'Watched'].includes(eventType) && (
+                    {['VISITED', 'WATCHED', 'REWATCHED', 'REVISITED'].includes(eventType) && (
                       <div className="space-y-3">
                         <label className="text-sm text-text-secondary flex items-center gap-2">
                           <MapPin className="w-4 h-4" /> Where? (Optional)

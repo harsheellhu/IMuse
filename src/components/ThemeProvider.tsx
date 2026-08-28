@@ -7,8 +7,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const root = window.document.documentElement;
     
-    // Remove all previous classes that this provider might have added
-    root.className = '';
+    // Remove previous theme-related classes cleanly
+    const classesToRemove = Array.from(root.classList).filter(c => 
+      c.startsWith('theme-') || c === 'dark' || c === 'light' || 
+      c.startsWith('landing-') || c.startsWith('tron-') || c.startsWith('motion-') ||
+      c.startsWith('ambient-') || c.startsWith('density-') || c.startsWith('img-') ||
+      c.startsWith('typo-') || c.startsWith('shape-') || c.startsWith('texture-') ||
+      c.startsWith('nav-')
+    );
+    root.classList.remove(...classesToRemove);
     
     // Base theme handling (dark/light) based on appearance
     let isDark = false;

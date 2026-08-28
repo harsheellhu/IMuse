@@ -94,8 +94,10 @@ const defaultSettings = {
   },
 };
 
-export const useSettingsStore = create<SettingsState>((set, get) => ({
-  ...defaultSettings,
+export const useSettingsStore = create<SettingsState>()(
+  persist(
+    (set, get) => ({
+      ...defaultSettings,
   presets: {},
   isSettingsOpen: false,
   discoveryTask: {
@@ -204,5 +206,27 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     });
   },
 
-  resetToDefault: () => set(defaultSettings),
-}));
+      resetToDefault: () => set(defaultSettings),
+    }),
+    {
+      name: 'imuse-settings',
+      partialize: (state) => ({ 
+        appearance: state.appearance,
+        landingStyle: state.landingStyle,
+        tronIntensity: state.tronIntensity,
+        motion: state.motion,
+        ambientMode: state.ambientMode,
+        feedDensity: state.feedDensity,
+        imageStyle: state.imageStyle,
+        typography: state.typography,
+        shapeLanguage: state.shapeLanguage,
+        texture: state.texture,
+        navStyle: state.navStyle,
+        homeLayout: state.homeLayout,
+        interfaceSounds: state.interfaceSounds,
+        skipLandingPage: state.skipLandingPage,
+        slideshowConfig: state.slideshowConfig
+      }),
+    }
+  )
+);

@@ -10,7 +10,7 @@ export interface User {
 
 export interface Post {
   id: string;
-  type: 'image' | 'book' | 'film' | 'link' | 'text';
+  type: 'image' | 'book' | 'film' | 'link' | 'text' | 'tv-show' | 'tv_show' | 'place' | 'collection' | string;
   title?: string;
   description?: string;
   imageUrl?: string;
@@ -111,7 +111,7 @@ export interface Song {
 
 export interface LocalTrack extends Song {
   file: File;
-  addedAt: number;
+  addedAt: string;
   isFavorite: boolean;
   blobId?: string; // Reference to the actual audio blob in IndexedDB
   lyrics?: { time: number; text: string }[];

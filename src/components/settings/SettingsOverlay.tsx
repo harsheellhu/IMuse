@@ -41,9 +41,9 @@ export function SettingsOverlay() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: '100%' }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="fixed inset-0 z-[100] bg-bg-base overflow-y-auto"
+        className="fixed inset-0 z-[100] bg-background overflow-y-auto"
       >
-        <div className="sticky top-0 z-50 bg-bg-base/80 backdrop-blur-xl border-b border-border-subtle px-6 md:px-12 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border-subtle px-6 md:px-12 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Sliders className="w-5 h-5 text-text-primary" />
             <h1 className="text-xl font-serif tracking-tight text-text-primary">Experience Settings</h1>
@@ -52,7 +52,7 @@ export function SettingsOverlay() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => settings.randomize()}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-bg-secondary text-text-primary text-sm hover:bg-bg-elevated border border-border-subtle transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface text-text-primary text-sm hover:bg-background-elevated border border-border-subtle transition-all"
             >
               <Wand2 className="w-4 h-4" />
               <span className="hidden md:inline">Surprise Me</span>
@@ -66,7 +66,7 @@ export function SettingsOverlay() {
             </button>
             <button 
               onClick={() => settings.setSettingsOpen(false)}
-              className="w-10 h-10 rounded-full bg-bg-secondary flex items-center justify-center text-text-primary hover:bg-text-primary hover:text-bg-base transition-all"
+              className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-text-primary hover:bg-text-primary hover:text-background transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -76,7 +76,7 @@ export function SettingsOverlay() {
         <div className="py-12 max-w-[1600px] mx-auto space-y-4">
           
           <SettingCarousel title="Your Presets" description="Save and load your favorite configurations.">
-            <div className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-bg-elevated transition-colors"
+            <div className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle bg-surface flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-background-elevated transition-colors"
                  onClick={() => {
                    const name = prompt('Name your new preset:');
                    if (name) settings.savePreset(name);
@@ -95,7 +95,7 @@ export function SettingsOverlay() {
                 </div>
                 <button 
                   onClick={(e) => { e.stopPropagation(); settings.deletePreset(name); }}
-                  className="absolute top-2 right-2 w-6 h-6 bg-bg-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                  className="absolute top-2 right-2 w-6 h-6 bg-background-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
                 >
                   <X className="w-3 h-3 text-text-secondary hover:text-text-primary" />
                 </button>
@@ -110,7 +110,7 @@ export function SettingsOverlay() {
               { name: 'ARCHIVE', preset: { landingStyle: 'slideshow', typography: 'archive', motion: 'minimal', slideshowConfig: { autoplay: 'slow', transition: 'fade' } } },
               { name: 'PURE', preset: { landingStyle: 'slideshow', typography: 'minimal', slideshowConfig: { autoplay: 'off', transition: 'fade' } } },
             ].map(combo => (
-              <div key={combo.name} className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle overflow-hidden flex flex-col group cursor-pointer bg-bg-secondary hover:bg-bg-elevated transition-colors"
+              <div key={combo.name} className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle overflow-hidden flex flex-col group cursor-pointer bg-surface hover:bg-background-elevated transition-colors"
                    onClick={() => settings.setSettings(combo.preset as any)}>
                 <div className={`flex-1 flex flex-col justify-end relative p-4 typo-${combo.preset.typography}`}>
                   <span className="text-display text-text-primary z-10 leading-none tracking-tight">{combo.name}</span>
@@ -127,7 +127,7 @@ export function SettingsOverlay() {
                 isSelected={settings.appearance === mode}
                 onClick={() => settings.setSettings({ appearance: mode })}
                 previewNode={
-                  <div className={`w-full h-full bg-bg-base theme-${mode} flex items-center justify-center p-4 text-text-primary transition-colors`}>
+                  <div className={`w-full h-full bg-background theme-${mode} flex items-center justify-center p-4 text-text-primary transition-colors`}>
                     {getThemeIcon(mode)}
                   </div>
                 }
@@ -148,7 +148,7 @@ export function SettingsOverlay() {
           
           {/* Slideshow Settings (Expandable if slideshow is active) */}
           {settings.landingStyle === 'slideshow' && (
-            <div className="bg-bg-secondary/50 rounded-2xl p-6 md:p-8 space-y-8 border border-border-subtle">
+            <div className="bg-surface/50 rounded-2xl p-6 md:p-8 space-y-8 border border-border-subtle">
               <h3 className="text-heading text-xl text-text-primary mb-2">Slideshow Configuration</h3>
               
               <SettingCarousel title="Slideshow Mode" description="Content selection strategy.">
@@ -156,7 +156,7 @@ export function SettingsOverlay() {
                   <SettingCard 
                     key={mode} id={mode} title={mode.charAt(0).toUpperCase() + mode.slice(1)} 
                     isSelected={settings.slideshowConfig.mode === mode}
-                    onClick={() => settings.updateDiscoveryTask({} /* hack to trigger */) || settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, mode } })}
+                    onClick={() => { settings.updateDiscoveryTask({} as any); settings.setSettings({ slideshowConfig: { ...settings.slideshowConfig, mode } }) }}
                     previewNode={<div className="text-meta text-text-muted">{mode}</div>}
                   />
                 ))}
@@ -255,7 +255,7 @@ export function SettingsOverlay() {
                 isSelected={settings.typography === typo}
                 onClick={() => settings.setSettings({ typography: typo })}
                 previewNode={
-                  <div className={`w-full h-full flex flex-col justify-center items-center p-2 text-center bg-bg-base typo-${typo} overflow-hidden pointer-events-none`}>
+                  <div className={`w-full h-full flex flex-col justify-center items-center p-2 text-center bg-background typo-${typo} overflow-hidden pointer-events-none`}>
                     <span className="text-display leading-none" style={{ fontSize: '2.5rem' }}>Aa</span>
                     <span className="text-meta text-text-muted mt-2 opacity-70">No. 024</span>
                   </div>
@@ -331,11 +331,11 @@ export function SettingsOverlay() {
           </SettingCarousel>
 
           <SettingCarousel title="Authentication" description="Your connected sign-in method.">
-             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4">
+             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-surface flex flex-col items-center justify-center p-4">
                 <span className="text-sm text-text-primary font-medium">Google Account</span>
                 <span className="text-xs text-text-muted mt-1">Available for sign-in</span>
              </div>
-             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-bg-secondary flex flex-col items-center justify-center p-4">
+             <div className="relative flex-shrink-0 w-64 h-32 rounded-xl border border-border-subtle bg-surface flex flex-col items-center justify-center p-4">
                 <span className="text-sm text-text-primary font-medium">Email Account</span>
                 <span className="text-xs text-text-muted mt-1">Available for sign-in</span>
              </div>

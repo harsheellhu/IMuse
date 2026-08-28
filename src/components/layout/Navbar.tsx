@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin, Music } from 'lucide-react';
-import { useStore, Theme, ColorMode } from '../../store/useStore';
+import { useStore } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
@@ -13,17 +13,14 @@ import { Song } from '../../types';
 export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { 
-    currentUser, theme, setTheme, colorMode, setColorMode, 
+  const {
+    currentUser, 
     bgGradient, setBgGradient, isAuthenticated, setAuthModalOpen,
     isSearchOpen, setSearchOpen, searchQuery, setSearchQuery,
     preferences, setPreferences
   } = useStore();
   
-  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
-  const [gradientMenuOpen, setGradientMenuOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
-  const [customizationMenuOpen, setCustomizationMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const { scrollY } = useScroll();
@@ -32,8 +29,6 @@ export function Navbar() {
   const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.85]);
   const blur = useTransform(scrollY, [0, 50], [0, 16]);
   
-  // Check if we are in dark mode visually
-  const isDark = document.documentElement.classList.contains('dark');
 
   const navItems = [
     { label: 'Home', path: '/home' },
@@ -102,9 +97,9 @@ export function Navbar() {
   return (
     <motion.nav 
       className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between transition-all duration-500"
-      style={{ 
+      style={{
         backgroundColor: useTransform(bgOpacity, v => 
-          isDark ? `rgba(10, 10, 10, ${v})` : `rgba(253, 252, 251, ${v})`
+          `color-mix(in srgb, var(--color-background) ${Math.round(v * 100)}%, transparent)`
         ),
         backdropFilter: useTransform(blur, v => `blur(${v}px)`)
       }}
@@ -151,8 +146,6 @@ export function Navbar() {
           <button 
             onClick={() => {
               setCreateMenuOpen(!createMenuOpen);
-              setGradientMenuOpen(false);
-              setCustomizationMenuOpen(false);
               setProfileMenuOpen(false);
             }}
             className="flex items-center justify-center w-10 h-10 rounded-full text-text-primary hover:bg-bg-secondary transition-colors duration-300"
@@ -233,9 +226,7 @@ export function Navbar() {
             onClick={() => {
               if (isAuthenticated) {
                 setProfileMenuOpen(!profileMenuOpen);
-                setGradientMenuOpen(false);
                 setCreateMenuOpen(false);
-                setCustomizationMenuOpen(false);
               } else {
                 setAuthModalOpen(true);
               }

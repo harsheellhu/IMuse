@@ -31,6 +31,9 @@ import savedRoutes from './routes/saved.js';
 import historyRoutes from './routes/history.js';
 import jobsRoutes from './routes/jobs.js';
 import experiencesRoutes from './routes/experiences.js';
+import patternsRoutes from './routes/patterns.js';
+import replayRoutes from './routes/replay.js';
+import discoveryEngineRoutes from './routes/discoveryEngine.js';
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -44,6 +47,9 @@ app.use('/api/me/saved', savedRoutes);
 app.use('/api/me/history', historyRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/me/experiences', experiencesRoutes);
+app.use('/api/me/patterns', patternsRoutes);
+app.use('/api/me/replay', replayRoutes);
+app.use('/api/engine', discoveryEngineRoutes); // Using /api/engine for the new intelligence layer
 
 // Health check
 app.get('/api/health', (req, res) => {

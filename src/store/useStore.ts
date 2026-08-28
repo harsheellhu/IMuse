@@ -3,7 +3,6 @@ import { User, Post, Collection, Book, Film, TvShow, Place } from '../types';
 import { authApi } from '../api/auth';
 import { contentApi } from '../api/content';
 
-export type Theme = 'light' | 'dark' | 'system';
 export type ColorMode = 'neutral' | 'warm' | 'cool';
 
 export interface ActiveViewerItem {
@@ -18,8 +17,6 @@ export interface Preferences {
 }
 
 interface StoreState {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
   colorMode: ColorMode;
   setColorMode: (mode: ColorMode) => void;
   bgGradient: string | null;
@@ -74,12 +71,16 @@ interface StoreState {
   // Customization State
   preferences: Preferences;
   setPreferences: (prefs: Partial<Preferences>) => void;
+
+  // Activity & Memory System Cache
+  patterns: any[];
+  setPatterns: (patterns: any[]) => void;
+  replays: Record<string, any>;
+  setReplay: (year: string, replay: any) => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
   // Theme & Color Mode
-  theme: 'system',
-  setTheme: (theme) => set({ theme }),
   colorMode: 'neutral',
   setColorMode: (colorMode) => set({ colorMode }),
   bgGradient: null,
@@ -192,5 +193,13 @@ export const useStore = create<StoreState>((set, get) => ({
   preferences: { visualDensity: 'comfortable', motionIntensity: 'normal' },
   setPreferences: (prefs) => set((state) => ({
     preferences: { ...state.preferences, ...prefs }
+  })),
+
+  // Activity & Memory System Cache
+  patterns: [],
+  setPatterns: (patterns) => set({ patterns }),
+  replays: {},
+  setReplay: (year, replay) => set((state) => ({
+    replays: { ...state.replays, [year]: replay }
   })),
 }));

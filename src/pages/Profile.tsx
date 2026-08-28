@@ -12,10 +12,15 @@ export function Profile() {
   const { currentUser, users, posts } = useStore();
   const [activeTab, setActiveTab] = useState('posts');
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [patterns, setPatternsState] = useState<any[]>([]);
 
   React.useEffect(() => {
     if (activeTab === 'experiences') {
       experiencesApi.getAll().then(setExperiences).catch(console.error);
+    } else if (activeTab === 'patterns') {
+      import('../api/activity').then(({ activityApi }) => {
+        activityApi.getPatterns().then(setPatternsState).catch(console.error);
+      });
     }
   }, [activeTab]);
 
@@ -25,6 +30,7 @@ export function Profile() {
 
   const tabs = [
     { id: 'posts', label: 'Archive' },
+    { id: 'patterns', label: 'Patterns' },
     { id: 'collections', label: 'Collections' },
     { id: 'experiences', label: 'Experiences' },
     { id: 'library', label: 'Library' },
@@ -53,6 +59,9 @@ export function Profile() {
         </div>
         
         <div className="flex gap-4">
+          <Link to="/replay" className="px-6 py-2 rounded-full border border-text-primary/20 text-xs tracking-widest uppercase font-medium hover:border-text-primary transition-colors flex items-center gap-2">
+            Archive Replay
+          </Link>
           <button className="px-6 py-2 rounded-full border border-gray-200 text-xs tracking-widest uppercase font-medium hover:border-black transition-colors">
             Share
           </button>
@@ -125,7 +134,31 @@ export function Profile() {
               )}
             </motion.div>
           )}
-          {activeTab !== 'posts' && activeTab !== 'experiences' && (
+          {activeTab === 'patterns' && (
+            <motion.div
+              key="patterns"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 md:px-12"
+            >
+              {patterns.map(pattern => {
+                const PatternCard = React.lazy(() => import('../components/patterns/PatternCard').then(m => ({ default: m.PatternCard })));
+                return (
+                  <React.Suspense key={pattern.id} fallback={<div className="h-64 bg-bg-elevated/20 rounded-2xl animate-pulse" />}>
+                    <PatternCard pattern={pattern} />
+                  </React.Suspense>
+                );
+              })}
+              {patterns.length === 0 && (
+                <div className="col-span-full py-20 text-center text-text-secondary italic font-serif">
+                  Not enough activity yet to discover patterns. Keep exploring!
+                </div>
+              )}
+            </motion.div>
+          )}
+          {activeTab !== 'posts' && activeTab !== 'experiences' && activeTab !== 'patterns' && (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}

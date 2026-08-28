@@ -50,7 +50,7 @@ export function Books() {
                 className="group cursor-pointer flex flex-col"
                 onClick={() => openViewer({ id: book.id, type: 'book', data: book })}
               >
-                <div className="relative aspect-[2/3] overflow-hidden mb-6 bg-bg-secondary transform transition-transform duration-700 ease-out group-hover:-translate-y-2 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)]">
+                <div className="relative aspect-[2/3] overflow-hidden mb-6 bg-surface transform transition-transform duration-700 ease-out group-hover:-translate-y-2 shadow-[0_8px_30px_var(--color-shadow)]">
                   <img 
                     src={book.coverImage} 
                     alt={book.title} 

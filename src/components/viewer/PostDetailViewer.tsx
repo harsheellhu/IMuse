@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Bookmark, Share2, Star, PlusCircle } from 'lucide-react';
+import { X, Bookmark, Share2, Star, PlusCircle, Globe } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
 import { ExperienceLogModal } from '../ui/ExperienceLogModal';
 import { ConnectedExperienceTeaser } from './ConnectedExperienceTeaser';
+import { UniverseGraphViewer } from '../discovery/UniverseGraphViewer';
 import clsx from 'clsx';
 
 export function PostDetailViewer() {
@@ -114,9 +115,6 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
   if (type === 'collection') aspectRatio = '4/3';
 
   const { palette } = useImagePalette(imageUrl);
-  const isDark = document.documentElement.classList.contains('dark');
-  const isTron = document.documentElement.classList.contains('theme-tron');
-  const baseBg = isTron ? '#010409' : (isDark ? '#080808' : '#FAF9F6');
 
   return (
     <motion.div
@@ -128,21 +126,17 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
     >
       {/* Layer 1: Solid Theme Base */}
       <div
-        className="absolute inset-0 transition-colors duration-700"
-        style={{ backgroundColor: baseBg }}
+        className="absolute inset-0 transition-colors duration-700 bg-background"
         onClick={onClose}
       />
 
-      {/* Layer 1.5: TRON Grid if applicable */}
-      {isTron && (
-        <div className="absolute inset-0 texture-technical-grid pointer-events-none" />
-      )}
+
 
       {/* Layer 2: Ambient Blur Bloom of Image */}
       <motion.div
-        className="absolute inset-0 pointer-events-none mix-blend-normal dark:mix-blend-screen"
+        className="absolute inset-0 pointer-events-none mix-blend-normal dark:mix-blend-screen opacity-15 dark:opacity-20"
         initial={{ opacity: 0 }}
-        animate={{ opacity: isDark ? 0.15 : 0.2 }}
+        animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.8 }}
         style={{
@@ -164,11 +158,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
             transition={{ duration: 0.9, ease: 'easeInOut' }}
             className="absolute inset-0 mix-blend-multiply dark:mix-blend-screen pointer-events-none"
             style={{
-              background: isTron ? `
-                radial-gradient(circle at 20% 25%, ${palette.primary}25, transparent 65%),
-                radial-gradient(circle at 80% 75%, rgba(0, 255, 255, 0.15), transparent 75%),
-                radial-gradient(circle at 50% 50%, ${palette.accent}20, transparent 70%)
-              ` : `
+              background: `
                 radial-gradient(circle at 20% 25%, ${palette.primary}50, transparent 55%),
                 radial-gradient(circle at 80% 75%, ${palette.secondary}40, transparent 55%),
                 radial-gradient(circle at 50% 50%, ${palette.accent}25, transparent 65%)
@@ -180,10 +170,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
 
       {/* Layer 4: Ambient Tone & Vignette */}
       <div
-        className={clsx(
-          "absolute inset-0 pointer-events-none",
-          isTron ? "bg-black/40" : "bg-black/5 dark:bg-black/40"
-        )}
+        className="absolute inset-0 pointer-events-none bg-black/5 dark:bg-black/40"
         onClick={onClose}
       />
 
@@ -234,7 +221,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[800px] max-h-[75vh] rounded-sm overflow-hidden shadow-[0_24px_60px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.6)] bg-bg-surface flex items-center justify-center shrink-0"
+              className="relative w-full max-w-[800px] max-h-[75vh] rounded-sm overflow-hidden shadow-[0_24px_60px_-12px_var(--shadow-color,rgba(0,0,0,0.25))] bg-surface flex items-center justify-center shrink-0"
               style={{ aspectRatio }}
             >
               <img
@@ -289,6 +276,18 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
+                    setUniverseOpen(true);
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2 border border-text-primary/20 hover:border-text-primary px-4 rounded-full"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Expand This</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (!isAuthenticated) {
                       setAuthModalOpen(true);
                     } else {
@@ -298,7 +297,20 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                   className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add to My Experience</span>
+                  <span>
+                    {(() => {
+                      switch(type) {
+                        case 'book': return 'Log Reading';
+                        case 'film':
+                        case 'tv_show':
+                        case 'tv-show': return 'Log Watch';
+                        case 'place': return 'Log Visit';
+                        case 'song':
+                        case 'audio': return 'Log Listening';
+                        default: return 'Add to My Experience';
+                      }
+                    })()}
+                  </span>
                 </button>
 
                 <button

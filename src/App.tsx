@@ -26,6 +26,8 @@ const Places = React.lazy(() => import('./pages/Places').then(module => ({ defau
 const Shops = React.lazy(() => import('./pages/Shops').then(module => ({ default: module.Shops })));
 const Music = React.lazy(() => import('./pages/Music').then(module => ({ default: module.Music })));
 const ExperiencePage = React.lazy(() => import('./pages/ExperiencePage').then(module => ({ default: module.ExperiencePage })));
+const PatternThreadViewer = React.lazy(() => import('./pages/PatternThreadViewer').then(module => ({ default: module.PatternThreadViewer })));
+const CulturalReplay = React.lazy(() => import('./pages/CulturalReplay').then(module => ({ default: module.CulturalReplay })));
 
 
 export default function App() {
@@ -54,6 +56,8 @@ export default function App() {
             <Route path="library" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Library /></React.Suspense>} />
             <Route path="music" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Music /></React.Suspense>} />
             <Route path="experience/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><ExperiencePage /></React.Suspense>} />
+            <Route path="patterns/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><PatternThreadViewer /></React.Suspense>} />
+            <Route path="replay" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><CulturalReplay /></React.Suspense>} />
             <Route path="profile/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
             {/* Fallback for unbuilt pages */}
             <Route path="*" element={<div className="p-8 text-center text-text-secondary">Page coming soon.</div>} />

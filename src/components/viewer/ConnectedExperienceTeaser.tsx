@@ -43,8 +43,13 @@ export function ConnectedExperienceTeaser({ contentId }: ConnectedExperienceTeas
       <div className="space-y-3">
         {experiences.map((exp) => {
           // Render a small visual chain
-          const types = exp.events?.map(e => e.eventType) || [];
-          const chain = exp.events?.map(e => e.contentType).filter(Boolean) || [];
+          const formatEventType = (type: string) => {
+            if (!type) return 'Logged';
+            if (type === 'STARTED_READING') return 'Started reading';
+            if (type === 'FINISHED_READING') return 'Finished reading';
+            return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+          };
+          const chain = exp.events?.map(e => formatEventType(e.eventType)) || [];
           
           let dateStr = '';
           if (exp.events && exp.events.length > 0) {

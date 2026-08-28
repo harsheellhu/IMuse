@@ -66,7 +66,7 @@ export function TvShows() {
                 className="group cursor-pointer flex flex-col"
                 onClick={() => openViewer({ id: show.id, type: 'tv_show', data: show })}
               >
-                <div className="relative aspect-[4/5] overflow-hidden mb-5 bg-bg-secondary rounded-sm shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] transform transition-transform duration-700 ease-out group-hover:-translate-y-1">
+                <div className="relative aspect-[4/5] overflow-hidden mb-5 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:-translate-y-1">
                   <img 
                     src={show.imageUrl} 
                     alt={show.title} 

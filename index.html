@@ -11,6 +11,28 @@
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
+    <script>
+      (function() {
+        try {
+          var state = localStorage.getItem('imuse-settings');
+          if (state) {
+            var parsed = JSON.parse(state);
+            if (parsed && parsed.state && parsed.state.appearance) {
+              var appearance = parsed.state.appearance;
+              var isDark = false;
+              var darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory'];
+              if (appearance === 'default') {
+                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              } else {
+                isDark = darkThemes.includes(appearance);
+              }
+              document.documentElement.classList.add(isDark ? 'dark' : 'light');
+              document.documentElement.classList.add('theme-' + appearance);
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

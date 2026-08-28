@@ -58,7 +58,7 @@ export function Collections() {
               onClick={() => setViewMode('grid')}
               className={clsx(
                 "px-6 py-2 rounded-full transition-all duration-300 text-[10px] tracking-widest uppercase font-medium flex items-center gap-2",
-                viewMode === 'grid' ? "bg-bg-elevated text-text-primary shadow-[0_2px_8px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_8px_rgba(255,255,255,0.02)]" : "text-text-secondary hover:text-text-primary"
+                viewMode === 'grid' ? "bg-background-elevated text-text-primary shadow-[0_2px_8px_var(--color-shadow)]" : "text-text-secondary hover:text-text-primary"
               )}
             >
               <LayoutGrid className="w-3 h-3" /> Grid
@@ -67,7 +67,7 @@ export function Collections() {
               onClick={() => setViewMode('moodboard')}
               className={clsx(
                 "px-6 py-2 rounded-full transition-all duration-300 text-[10px] tracking-widest uppercase font-medium flex items-center gap-2",
-                viewMode === 'moodboard' ? "bg-bg-elevated text-text-primary shadow-[0_2px_8px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_8px_rgba(255,255,255,0.02)]" : "text-text-secondary hover:text-text-primary"
+                viewMode === 'moodboard' ? "bg-background-elevated text-text-primary shadow-[0_2px_8px_var(--color-shadow)]" : "text-text-secondary hover:text-text-primary"
               )}
             >
               <Layout className="w-3 h-3" /> Canvas
@@ -115,7 +115,7 @@ export function Collections() {
                 >
                   <motion.div 
                     layoutId={`collection-image-${collection.id}`}
-                    className="relative aspect-[4/3] overflow-hidden mb-6 bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] rounded-sm"
+                    className="relative aspect-[4/3] overflow-hidden mb-6 bg-surface shadow-[0_8px_30px_var(--color-shadow)] rounded-sm"
                   >
                     <img 
                       src={collection.coverImage} 
