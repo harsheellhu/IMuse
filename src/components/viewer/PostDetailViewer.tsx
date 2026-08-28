@@ -366,6 +366,20 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
         onClose={() => setExperienceModalOpen(false)}
         content={data as any}
       />
+      {isUniverseOpen && (
+        <UniverseGraphViewer 
+          initialContentId={data.id}
+          onClose={() => setUniverseOpen(false)}
+          onNavigateToContent={(content) => {
+            setUniverseOpen(false);
+            useStore.getState().openViewer({
+              id: content.id,
+              type: content.type as any,
+              data: content
+            });
+          }}
+        />
+      )}
     </motion.div>
   );
 }
