@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Sliders, Wand2, RotateCcw, Palette, Moon, FileText, Star, Hexagon, Cloud, Sun, Contrast, Sparkles, Sunset, Droplets, TreePine, CloudMoon, Zap, Cpu, Plus } from 'lucide-react';
-import { useSettingsStore, AppearanceMode, LandingStyle, MotionMode, AmbientMode, FeedDensity, ImageStyle, TypographyStyle, ShapeLanguage, BackgroundTexture, NavStyle, HomeLayout, TronIntensity } from '../../store/useSettingsStore';
+import { X, Sliders, Wand2, RotateCcw, Palette, Moon, FileText, Star, Hexagon, Cloud, Sun, Contrast, Sparkles, Sunset, Droplets, TreePine, CloudMoon, Zap, Cpu, Plus, Orbit, Layers, LayoutGrid, Film, Disc } from 'lucide-react';
+import { useSettingsStore, AppearanceMode, LandingStyle, UniverseLayoutMode, MotionMode, AmbientMode, FeedDensity, ImageStyle, TypographyStyle, ShapeLanguage, BackgroundTexture, NavStyle, HomeLayout, TronIntensity } from '../../store/useSettingsStore';
 import { SettingCarousel } from './SettingCarousel';
 import { SettingCard } from './SettingCard';
 import clsx from 'clsx';
@@ -196,6 +196,32 @@ export function SettingsOverlay() {
               </SettingCarousel>
             </div>
           )}
+
+          <SettingCarousel title="Universe Navigation" description="The spatial layout and interaction model for deep universe exploration.">
+            {([
+              { id: 'orbit', title: 'Orbit', icon: <Orbit className="w-5 h-5 opacity-80" />, desc: 'Planetary orbit' },
+              { id: 'flow', title: 'Flow', icon: <Disc className="w-5 h-5 opacity-80" />, desc: 'Curved spatial path' },
+              { id: 'stack', title: 'Stack', icon: <Layers className="w-5 h-5 opacity-80" />, desc: 'Layered 3D cards' },
+              { id: 'gallery', title: 'Gallery', icon: <LayoutGrid className="w-5 h-5 opacity-80" />, desc: 'Dominant centerpiece' },
+              { id: 'constellation', title: 'Constellation', icon: <Sparkles className="w-5 h-5 opacity-80" />, desc: 'Celestial galaxy graph' },
+              { id: 'cinematic', title: 'Cinematic', icon: <Film className="w-5 h-5 opacity-80" />, desc: 'Deep camera perspective' },
+              { id: 'auto', title: 'Auto (Smart)', icon: <Wand2 className="w-5 h-5 opacity-80" />, desc: 'Content-driven layout' },
+            ] as const).map(item => (
+              <SettingCard 
+                key={item.id} 
+                id={item.id} 
+                title={item.title} 
+                isSelected={settings.universeLayout === item.id}
+                onClick={() => settings.setSettings({ universeLayout: item.id as UniverseLayoutMode })}
+                previewNode={
+                  <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center gap-1.5 bg-surface/40">
+                    {item.icon}
+                    <span className="text-[10px] text-text-muted font-mono leading-tight">{item.desc}</span>
+                  </div>
+                }
+              />
+            ))}
+          </SettingCarousel>
 
           <SettingCarousel title="Home Layout" description="The structural arrangement of the feed.">
             {(['masonry', 'editorial', 'magazine', 'gallery', 'grid', 'staggered', 'minimal'] as HomeLayout[]).map(layout => (

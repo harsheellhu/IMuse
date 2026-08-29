@@ -6,13 +6,14 @@ import { useSettingsStore } from '../../store/useSettingsStore';
 import { uiAudio } from '../../utils/audio';
 import { contentApi } from '../../api/content';
 import { useImagePalette } from '../../hooks/useImagePalette';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import clsx from 'clsx';
 
 export function CollectionCarouselViewer() {
   const { activeViewerItem, closeViewer } = useStore();
   const { appearance, motion: motionSetting } = useSettingsStore();
 
-  if (!activeViewerItem || activeViewerItem.type !== 'collection') return null;
+  if (!activeViewerItem || (activeViewerItem.type !== 'collection' && activeViewerItem.mode !== 'collection')) return null;
 
   return (
     <AnimatePresence>
@@ -22,6 +23,7 @@ export function CollectionCarouselViewer() {
 }
 
 const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; appearance: string; motionSetting: string }> = ({ item, onClose, appearance, motionSetting }) => {
+  useBodyScrollLock(true);
   const collection = item.data;
   const [items, setItems] = useState<any[]>(collection.items || []);
   const [isLoading, setIsLoading] = useState(!collection.items);
@@ -97,7 +99,7 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: transitionDuration }}
-      className="fixed inset-0 z-[100000] flex flex-col justify-between select-none overflow-hidden"
+      className="fixed inset-0 z-[1000] flex flex-col justify-between select-none overflow-hidden"
     >
       {/* Base Background */}
       <div className="absolute inset-0 transition-colors duration-1000" style={{ backgroundColor: baseBg }} />

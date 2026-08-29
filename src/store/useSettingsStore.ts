@@ -15,11 +15,13 @@ export type BackgroundTexture = 'none' | 'fine-grain' | 'paper' | 'dust' | 'grid
 export type NavStyle = 'minimal' | 'floating' | 'integrated' | 'editorial' | 'cinematic' | 'tron';
 export type HomeLayout = 'masonry' | 'editorial' | 'magazine' | 'gallery' | 'grid' | 'staggered' | 'minimal';
 export type InterfaceSounds = 'off' | 'subtle' | 'balanced';
+export type UniverseLayoutMode = 'orbit' | 'flow' | 'stack' | 'gallery' | 'constellation' | 'cinematic' | 'auto';
 
 export interface SettingsState {
   // Options
   appearance: AppearanceMode;
   landingStyle: LandingStyle;
+  universeLayout: UniverseLayoutMode;
   tronIntensity: TronIntensity;
   motion: MotionMode;
   ambientMode: AmbientMode;
@@ -74,6 +76,7 @@ export interface SettingsState {
 const defaultSettings = {
   appearance: 'default' as AppearanceMode,
   landingStyle: 'minimal' as LandingStyle,
+  universeLayout: 'orbit' as UniverseLayoutMode,
   tronIntensity: 'balanced' as TronIntensity,
   motion: 'smooth' as MotionMode,
   ambientMode: 'balanced' as AmbientMode,
@@ -124,6 +127,7 @@ export const useSettingsStore = create<SettingsState>()(
     const presetData = {
       appearance: state.appearance,
       landingStyle: state.landingStyle,
+      universeLayout: state.universeLayout,
       tronIntensity: state.tronIntensity,
       motion: state.motion,
       ambientMode: state.ambientMode,
@@ -161,6 +165,7 @@ export const useSettingsStore = create<SettingsState>()(
   randomize: () => {
     const themes: AppearanceMode[] = ['default', 'obsidian', 'paper', 'midnight', 'electric', 'tron'];
     const layouts: LandingStyle[] = ['minimal', 'editorial', 'gallery', 'tron', 'paper', 'slideshow'];
+    const universeLayouts: UniverseLayoutMode[] = ['orbit', 'flow', 'stack', 'gallery', 'constellation', 'cinematic', 'auto'];
     const dens: FeedDensity[] = ['spacious', 'relaxed', 'balanced', 'dense'];
     const typo: TypographyStyle[] = ['neutral', 'editorial', 'modern', 'humanist', 'classical', 'newspaper', 'brutalist', 'technical', 'cinema', 'minimal', 'luxury'];
     const shapes: ShapeLanguage[] = ['sharp', 'subtle', 'rounded', 'editorial'];
@@ -193,6 +198,7 @@ export const useSettingsStore = create<SettingsState>()(
     set({
       appearance: theme,
       landingStyle: layout,
+      universeLayout: universeLayouts[Math.floor(Math.random() * universeLayouts.length)],
       typography: t,
       shapeLanguage: shape,
       feedDensity: dens[Math.floor(Math.random() * dens.length)],
@@ -213,6 +219,7 @@ export const useSettingsStore = create<SettingsState>()(
       partialize: (state) => ({ 
         appearance: state.appearance,
         landingStyle: state.landingStyle,
+        universeLayout: state.universeLayout,
         tronIntensity: state.tronIntensity,
         motion: state.motion,
         ambientMode: state.ambientMode,

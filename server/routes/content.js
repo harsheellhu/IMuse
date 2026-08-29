@@ -19,14 +19,30 @@ router.get('/', (req, res) => {
     params.push(limit, offset);
     
     const rows = db.prepare(query).all(...params);
+    if (rows.length === 0) {
+      return res.json([]);
+    }
+
+    // Batch fetch all tags in a single query to eliminate N+1 latency
+    const contentIds = rows.map(r => r.id);
+    const placeholders = contentIds.map(() => '?').join(',');
+    const allTags = db.prepare(`SELECT content_id, tag FROM content_tags WHERE content_id IN (${placeholders})`).all(...contentIds);
     
-    // Process JSON metadata and tags
+    const tagMap = new Map();
+    for (const t of allTags) {
+      if (!tagMap.has(t.content_id)) tagMap.set(t.content_id, []);
+      tagMap.get(t.content_id).push(t.tag);
+    }
+
     const content = rows.map(row => {
-      const tags = db.prepare('SELECT tag FROM content_tags WHERE content_id = ?').all(row.id).map(t => t.tag);
+      let meta = null;
+      if (row.metadata) {
+        try { meta = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata; } catch(e){}
+      }
       return {
         ...row,
-        metadata: row.metadata ? JSON.parse(row.metadata) : null,
-        tags
+        metadata: meta,
+        tags: tagMap.get(row.id) || []
       };
     });
     

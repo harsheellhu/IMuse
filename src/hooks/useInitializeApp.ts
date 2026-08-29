@@ -28,7 +28,7 @@ export const useInitializeApp = () => {
           console.error("Failed to load preferences", e);
         }
 
-        // Fetch collections and saves in the background without blocking the shell
+        // Fetch collections and saves in parallel
         Promise.all([
           collectionsApi.getAll().catch(e => { console.error(e); return []; }),
           contentApi.getSaved().catch(e => { console.error(e); return []; })
@@ -45,10 +45,33 @@ export const useInitializeApp = () => {
         });
 
       } catch (e) {
-        // Not logged in or error
+        // Not logged in or guest mode
         useStore.setState({ isAuthenticated: false });
       } finally {
         setIsInitializing(false);
+
+        // Background Idle Prefetch: Warm cache and store silently without blocking the UI
+        if (typeof window !== 'undefined') {
+          const runIdle = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 200));
+          runIdle(() => {
+            Promise.all([
+              contentApi.getAll('post', 50).catch(() => []),
+              contentApi.getAll('book', 50).catch(() => []),
+              contentApi.getAll('film', 50).catch(() => []),
+              contentApi.getAll('tv_show', 50).catch(() => []),
+              contentApi.getAll('place', 50).catch(() => []),
+              contentApi.getDiscoveryWorlds().catch(() => [])
+            ]).then(([posts, books, films, tvShows, places]) => {
+              useStore.setState(state => ({
+                posts: state.posts.length > 0 ? state.posts : posts as any,
+                books: state.books.length > 0 ? state.books : books as any,
+                films: state.films.length > 0 ? state.films : films as any,
+                tvShows: state.tvShows.length > 0 ? state.tvShows : tvShows as any,
+                places: state.places.length > 0 ? state.places : places as any
+              }));
+            });
+          });
+        }
       }
     };
 

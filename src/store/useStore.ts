@@ -5,10 +5,14 @@ import { contentApi } from '../api/content';
 
 export type ColorMode = 'neutral' | 'warm' | 'cool';
 
+export type ViewerMode = 'detail' | 'universe' | 'collection';
+
 export interface ActiveViewerItem {
   id: string;
   type: 'post' | 'book' | 'film' | 'collection' | 'tv_show' | 'place';
-  data: Post | Book | Film | Collection | TvShow | Place | any;
+  data?: Post | Book | Film | Collection | TvShow | Place | any;
+  mode?: ViewerMode;
+  previousViewerItem?: ActiveViewerItem | null;
 }
 
 export interface Preferences {
@@ -49,7 +53,9 @@ interface StoreState {
   // Viewer State (Not Persisted)
   activeViewerItem: ActiveViewerItem | null;
   openViewer: (item: ActiveViewerItem) => void;
+  expandToUniverse: (contentId: string, initialData?: any) => void;
   closeViewer: () => void;
+  closeAllViewers: () => void;
   
   // Auth State
   isAuthenticated: boolean;
@@ -135,23 +141,86 @@ export const useStore = create<StoreState>((set, get) => ({
   addItemsToCollection: (collectionId, itemIds) => {},
   removeItemsFromCollection: (collectionId, itemIds) => {},
 
-  // Viewer
+  // Viewer State (Single Canonical Foreground Layer)
   activeViewerItem: null,
   openViewer: (item) => {
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('viewer') !== item.id) {
-      url.searchParams.set('viewer', item.id);
-      window.history.pushState({ viewerOpen: true }, '', url.toString());
+    const mode = item.mode || (item.type === 'collection' ? 'collection' : 'detail');
+    const resolvedItem: ActiveViewerItem = { ...item, mode };
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('viewer');
+      url.searchParams.delete('universe');
+      url.searchParams.delete('collection');
+
+      if (mode === 'collection') {
+        url.searchParams.set('collection', item.id);
+      } else if (mode === 'universe') {
+        url.searchParams.set('universe', item.id);
+      } else {
+        url.searchParams.set('viewer', item.id);
+      }
+
+      window.history.pushState({ viewerOpen: true, mode, id: item.id }, '', url.toString());
     }
-    set({ activeViewerItem: item });
+
+    set({ activeViewerItem: resolvedItem });
+  },
+  expandToUniverse: (contentId, initialData) => {
+    const current = get().activeViewerItem;
+    const resolvedItem: ActiveViewerItem = {
+      id: contentId,
+      type: initialData?.type || current?.type || 'place',
+      data: initialData || current?.data,
+      mode: 'universe',
+      previousViewerItem: current || null
+    };
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('viewer');
+      url.searchParams.delete('collection');
+      url.searchParams.set('universe', contentId);
+      window.history.pushState({ viewerOpen: true, mode: 'universe', id: contentId }, '', url.toString());
+    }
+
+    set({ activeViewerItem: resolvedItem });
   },
   closeViewer: () => {
-    set({ activeViewerItem: null });
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('viewer')) {
+    const current = get().activeViewerItem;
+    if (current?.mode === 'universe' && current.previousViewerItem) {
+      // Step back from Universe to the previous Post Viewer cleanly
+      const prev = current.previousViewerItem;
+      const restoredItem: ActiveViewerItem = { ...prev, mode: 'detail', previousViewerItem: null };
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('universe');
+        url.searchParams.delete('collection');
+        url.searchParams.set('viewer', prev.id);
+        window.history.pushState({ viewerOpen: true, mode: 'detail', id: prev.id }, '', url.toString());
+      }
+      set({ activeViewerItem: restoredItem });
+    } else {
+      // Full close
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('viewer');
+        url.searchParams.delete('universe');
+        url.searchParams.delete('collection');
+        window.history.pushState({}, '', url.toString());
+      }
+      set({ activeViewerItem: null });
+    }
+  },
+  closeAllViewers: () => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
       url.searchParams.delete('viewer');
+      url.searchParams.delete('universe');
+      url.searchParams.delete('collection');
       window.history.pushState({}, '', url.toString());
     }
+    set({ activeViewerItem: null });
   },
   
   // Auth Implementation

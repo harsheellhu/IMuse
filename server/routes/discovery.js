@@ -34,13 +34,29 @@ router.get('/worlds/:slug/content', (req, res) => {
     
     const rows = db.prepare('SELECT * FROM content WHERE world_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
       .all(world.id, limit, offset);
+    if (rows.length === 0) {
+      return res.json([]);
+    }
       
+    const contentIds = rows.map(r => r.id);
+    const placeholders = contentIds.map(() => '?').join(',');
+    const allTags = db.prepare(`SELECT content_id, tag FROM content_tags WHERE content_id IN (${placeholders})`).all(...contentIds);
+    
+    const tagMap = new Map();
+    for (const t of allTags) {
+      if (!tagMap.has(t.content_id)) tagMap.set(t.content_id, []);
+      tagMap.get(t.content_id).push(t.tag);
+    }
+
     const content = rows.map(row => {
-      const tags = db.prepare('SELECT tag FROM content_tags WHERE content_id = ?').all(row.id).map(t => t.tag);
+      let meta = null;
+      if (row.metadata) {
+        try { meta = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata; } catch(e){}
+      }
       return {
         ...row,
-        metadata: row.metadata ? JSON.parse(row.metadata) : null,
-        tags
+        metadata: meta,
+        tags: tagMap.get(row.id) || []
       };
     });
     

@@ -5,9 +5,9 @@ import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, Refr
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { ExperienceLogModal } from '../ui/ExperienceLogModal';
 import { ConnectedExperienceTeaser } from './ConnectedExperienceTeaser';
-import { UniverseGraphViewer } from '../discovery/UniverseGraphViewer';
 import { contentApi } from '../../api/content';
 import clsx from 'clsx';
 
@@ -73,6 +73,9 @@ export function PostDetailViewer() {
   const [isLoadingUrlItem, setIsLoadingUrlItem] = useState(false);
   const [urlFetchError, setUrlFetchError] = useState<string | null>(null);
   const [currentViewerParam, setCurrentViewerParam] = useState<string | null>(null);
+
+  // Lock background body scroll
+  useBodyScrollLock(true);
 
   // Sync with URL ?viewer= query parameter on mount and route/popstate changes
   useEffect(() => {
@@ -305,9 +308,8 @@ export function PostDetailViewer() {
 }
 
 function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () => void }) {
-  const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen } = useStore();
+  const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen, expandToUniverse } = useStore();
   const [isExperienceModalOpen, setExperienceModalOpen] = React.useState(false);
-  const [isUniverseOpen, setUniverseOpen] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
   const { data, type } = item;
 
@@ -554,7 +556,9 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setUniverseOpen(true);
+                    if (data?.id) {
+                      expandToUniverse(data.id, data);
+                    }
                   }}
                   className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2 border border-text-primary/20 hover:border-text-primary px-4 rounded-full"
                 >
@@ -620,7 +624,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
       </main>
 
       {/* Bottom Subtle Padding Bar */}
-      <footer className="relative z-[10000] w-full px-6 md:px-12 py-4 flex items-center justify-between text-[11px] text-text-secondary/50 font-light pointer-events-none">
+      <footer className="relative z-50 w-full px-6 md:px-12 py-4 flex items-center justify-between text-[11px] text-text-secondary/50 font-light pointer-events-none">
         <span>Press ESC to return</span>
         <span>IMuse Visual Universe</span>
       </footer>
@@ -631,20 +635,6 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
           isOpen={isExperienceModalOpen}
           onClose={() => setExperienceModalOpen(false)}
           content={data as any}
-        />
-      )}
-      {isUniverseOpen && data && (
-        <UniverseGraphViewer 
-          initialContentId={data.id}
-          onClose={() => setUniverseOpen(false)}
-          onNavigateToContent={(content) => {
-            setUniverseOpen(false);
-            useStore.getState().openViewer({
-              id: content.id,
-              type: (content.type as any) || 'place',
-              data: content
-            });
-          }}
         />
       )}
     </motion.div>

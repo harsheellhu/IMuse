@@ -15,15 +15,28 @@ router.get('/', requireAuth, (req, res) => {
       ORDER BY updated_at DESC
     `).all(req.user.id);
     
-    // For each experience, optionally fetch its events and content imagery (so we can build the cover)
+    if (experiences.length === 0) {
+      return res.json([]);
+    }
+
+    const expIds = experiences.map(e => e.id);
+    const placeholders = expIds.map(() => '?').join(',');
+    const allEvents = db.prepare(`
+      SELECT e.*, c.title as content_title, c.image_url, c.type as content_type 
+      FROM experience_events e
+      JOIN content c ON e.content_id = c.id
+      WHERE e.experience_id IN (${placeholders})
+      ORDER BY e.event_at ASC
+    `).all(...expIds);
+
+    const eventMap = new Map();
+    for (const ev of allEvents) {
+      if (!eventMap.has(ev.experience_id)) eventMap.set(ev.experience_id, []);
+      eventMap.get(ev.experience_id).push(ev);
+    }
+
     for (const exp of experiences) {
-      exp.events = db.prepare(`
-        SELECT e.*, c.title as content_title, c.image_url, c.type as content_type 
-        FROM experience_events e
-        JOIN content c ON e.content_id = c.id
-        WHERE e.experience_id = ?
-        ORDER BY e.event_at ASC
-      `).all(exp.id);
+      exp.events = eventMap.get(exp.id) || [];
     }
 
     res.json(experiences);

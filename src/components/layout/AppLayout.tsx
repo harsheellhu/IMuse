@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar, MobileNav } from './Navbar';
 import { SearchOverlay } from './SearchOverlay';
-import { PostDetailViewer } from '../viewer/PostDetailViewer';
+import { ImmersiveViewer } from '../viewer/ImmersiveViewer';
 import { AuthModal } from '../auth/AuthModal';
 import { useStore } from '../../store/useStore';
 import { useMusicStore } from '../../store/useMusicStore';
@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom';
 import { AudioEngine } from '../music/AudioEngine';
 import { MiniPlayer } from '../music/MiniPlayer';
 import { FullPlayer } from '../music/FullPlayer';
-import { CollectionCarouselViewer } from '../viewer/CollectionCarouselViewer';
 import { RouteTransition } from './RouteTransition';
 
 export function AppLayout() {
@@ -32,8 +31,7 @@ export function AppLayout() {
       </main>
       <MobileNav />
       <SearchOverlay />
-      <PostDetailViewer />
-      <CollectionCarouselViewer />
+      <ImmersiveViewer />
       <AuthModal />
       
       {/* Global Music Components */}

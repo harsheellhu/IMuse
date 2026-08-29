@@ -20,9 +20,42 @@ const keysToCamel = function(o: any): any {
   return o;
 };
 
+// In-Memory Fast Cache
 const pendingRequests = new Map<string, Promise<any>>();
-const responseCache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_TTL = 1000 * 60 * 5; // 5 minutes cache
+const memoryCache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL = 1000 * 60 * 10; // 10 minutes fresh cache
+
+// LocalStorage Persistent Cache for offline availability and 0ms instant cold starts
+const STORAGE_PREFIX = 'imuse_api_cache_';
+
+const getPersistentCache = (key: string): { data: any; timestamp: number } | null => {
+  try {
+    const stored = localStorage.getItem(STORAGE_PREFIX + key);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {}
+  return null;
+};
+
+const setPersistentCache = (key: string, data: any) => {
+  try {
+    localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify({ data, timestamp: Date.now() }));
+  } catch (e) {}
+};
+
+const clearPersistentCache = () => {
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(STORAGE_PREFIX)) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+  } catch (e) {}
+};
 
 export const apiClient = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
   const config = {
@@ -33,32 +66,39 @@ export const apiClient = async <T>(endpoint: string, options: RequestInit = {}):
     },
   };
 
-  // Clear cache on mutations (POST, PUT, PATCH, DELETE)
   const isGet = !config.method || config.method.toUpperCase() === 'GET';
+
+  // Invalidate cache immediately on data mutations (POST, PUT, PATCH, DELETE)
   if (!isGet) {
-    responseCache.clear();
+    memoryCache.clear();
+    clearPersistentCache();
   }
 
   const cacheKey = isGet ? endpoint : null;
 
-  // 1. Return pending request if it exists
+  // 1. Return in-flight pending promise if identical request is currently active
   if (cacheKey && pendingRequests.has(cacheKey)) {
     return pendingRequests.get(cacheKey);
   }
 
-  // 2. Return valid cached response immediately to save network request
-  if (cacheKey && responseCache.has(cacheKey)) {
-    const cached = responseCache.get(cacheKey)!;
+  // 2. Return memory cache immediately if fresh
+  if (cacheKey && memoryCache.has(cacheKey)) {
+    const cached = memoryCache.get(cacheKey)!;
     if (Date.now() - cached.timestamp < CACHE_TTL) {
       return Promise.resolve(cached.data as T);
     }
+  }
+
+  // 3. Check persistent storage for instant availability
+  const persistent = cacheKey ? getPersistentCache(cacheKey) : null;
+  if (persistent && cacheKey) {
+    memoryCache.set(cacheKey, persistent);
   }
 
   const requestPromise = (async () => {
     try {
       const response = await fetch(endpoint, config);
       
-      // Attempt to parse JSON response
       const rawData = await response.json().catch(() => null);
       const data = rawData ? keysToCamel(rawData) : null;
 
@@ -69,17 +109,21 @@ export const apiClient = async <T>(endpoint: string, options: RequestInit = {}):
         throw new Error(response.statusText || 'An unknown error occurred');
       }
 
-      // Update cache on success
+      // Update both memory and persistent cache
       if (cacheKey) {
-        responseCache.set(cacheKey, { data, timestamp: Date.now() });
+        memoryCache.set(cacheKey, { data, timestamp: Date.now() });
+        setPersistentCache(cacheKey, data);
       }
 
       return data as T;
     } catch (error) {
-      // Graceful Fallback: If network fails but we have stale cache, return it
-      if (cacheKey && responseCache.has(cacheKey)) {
-        console.warn(`[apiClient] Network request to ${endpoint} failed, falling back to stale cache. Error:`, error);
-        return responseCache.get(cacheKey)!.data as T;
+      // Graceful Offline / Stale Cache Fallback
+      if (cacheKey) {
+        const fallback = memoryCache.get(cacheKey) || persistent;
+        if (fallback) {
+          console.warn(`[apiClient] Network request to ${endpoint} failed, serving cached fallback data.`);
+          return fallback.data as T;
+        }
       }
       
       if (error instanceof APIError) {
