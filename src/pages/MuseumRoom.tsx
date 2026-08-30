@@ -93,7 +93,17 @@ export function MuseumRoomPage() {
     );
   }
 
-  if (!room) return null;
+  if (!room) {
+    return (
+      <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typography-${typography}`}>
+        <h2 className="text-2xl font-serif text-text-primary">Room Not Found</h2>
+        <p className="text-sm text-text-secondary max-w-md">This exhibition room is currently unavailable or being reorganized.</p>
+        <Link to="/museum" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all">
+          Back to Museum
+        </Link>
+      </div>
+    );
+  }
 
   const currentIdx = allRooms.findIndex(r => r.id === roomId);
   const prevRoom = currentIdx > 0 ? allRooms[currentIdx - 1] : null;

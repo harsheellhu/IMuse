@@ -25,7 +25,7 @@ export function Home() {
 
   return (
     <div className={clsx(
-      "w-full min-h-[calc(100vh-5rem)] pt-20 px-6 md:px-12",
+      "w-full min-h-[calc(100vh-5rem)] pt-4 md:pt-8 px-6 md:px-12",
       `density-${feedDensity}` // Ensure density variables are picked up if applied globally or locally
     )}>
       

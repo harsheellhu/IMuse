@@ -85,12 +85,59 @@ export function Collections() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full h-[60vh] border border-border-subtle rounded-sm flex items-center justify-center bg-bg-base"
+              className="relative w-full h-[70vh] border border-border-subtle rounded-2xl overflow-hidden bg-bg-base shadow-inner select-none cursor-grab active:cursor-grabbing"
+              data-cursor="grab"
+              style={{
+                backgroundImage: 'radial-gradient(var(--color-border-subtle) 1px, transparent 1px)',
+                backgroundSize: '24px 24px'
+              }}
             >
-              <div className="text-center">
-                <Layout className="w-8 h-8 text-text-muted mx-auto mb-4" />
-                <p className="text-[10px] tracking-widest uppercase text-text-secondary">Canvas Mode</p>
-                <p className="text-text-secondary font-serif italic mt-2 text-sm">Drag and drop items to organize spatially.</p>
+              <div className="absolute top-4 left-4 z-20 flex items-center gap-3 bg-bg-elevated/80 backdrop-blur-md px-4 py-2 rounded-full border border-border-subtle text-xs text-text-secondary">
+                <Layout className="w-3.5 h-3.5 text-text-primary" />
+                <span className="font-medium text-text-primary">Spatial Moodboard</span>
+                <span className="opacity-40">·</span>
+                <span>Drag to arrange</span>
+              </div>
+
+              <div className="relative w-full h-full flex items-center justify-center">
+                {displayCollections.map((collection, idx) => {
+                  const angle = (idx / (displayCollections.length || 1)) * 2 * Math.PI;
+                  const radius = 220;
+                  const defaultX = Math.cos(angle) * radius;
+                  const defaultY = Math.sin(angle) * (radius * 0.7);
+
+                  return (
+                    <motion.div
+                      key={collection.id}
+                      drag
+                      dragMomentum={false}
+                      whileHover={{ scale: 1.04, zIndex: 40 }}
+                      whileDrag={{ scale: 1.08, zIndex: 50 }}
+                      initial={{ x: defaultX, y: defaultY, opacity: 0 }}
+                      animate={{ x: defaultX, y: defaultY, opacity: 1 }}
+                      transition={{ duration: 0.5, delay: idx * 0.08 }}
+                      className="absolute cursor-grab active:cursor-grabbing w-56 md:w-64 bg-bg-elevated border border-border-subtle rounded-xl overflow-hidden shadow-xl"
+                      onClick={() => openViewer({ id: collection.id, type: 'collection', data: collection })}
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden bg-surface">
+                        <img 
+                          src={collection.coverImage || 'https://images.unsplash.com/photo-1513694203232-719a280e022f'} 
+                          alt={collection.title}
+                          className="w-full h-full object-cover pointer-events-none"
+                        />
+                        {collection.isPrivate && (
+                          <div className="absolute top-2.5 left-2.5 bg-bg-elevated/90 backdrop-blur-md p-1.5 rounded-full shadow-sm">
+                            <Lock className="w-3 h-3 text-text-primary" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-3.5">
+                        <h4 className="font-serif text-base text-text-primary line-clamp-1">{collection.title}</h4>
+                        <p className="text-[9px] uppercase tracking-widest text-text-secondary mt-0.5">{collection.itemCount || 0} curated items</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           ) : (

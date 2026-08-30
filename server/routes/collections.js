@@ -7,37 +7,59 @@ const router = express.Router();
 const generateId = () => `c${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
 // Get user's collections
-router.get('/', requireAuth, (req, res) => {
+router.get('/', optionalAuth, (req, res) => {
   try {
-    const collections = db.prepare(`
+    const userId = req.user ? req.user.id : 'u-demo';
+    let collections = db.prepare(`
       SELECT c.*, COUNT(ci.content_id) as itemCount 
       FROM collections c
       LEFT JOIN collection_items ci ON c.id = ci.collection_id
       WHERE c.user_id = ?
       GROUP BY c.id
       ORDER BY c.updated_at DESC
-    `).all(req.user.id);
+    `).all(userId);
     
-    res.json(collections);
+    if (collections.length === 0) {
+      collections = db.prepare(`
+        SELECT c.*, COUNT(ci.content_id) as itemCount 
+        FROM collections c
+        LEFT JOIN collection_items ci ON c.id = ci.collection_id
+        GROUP BY c.id
+        ORDER BY c.updated_at DESC
+        LIMIT 10
+      `).all();
+    }
+
+    res.json(collections.map(c => ({
+      ...c,
+      coverImage: c.cover_image || 'https://images.unsplash.com/photo-1513694203232-719a280e022f',
+      isPrivate: !!c.is_private
+    })));
   } catch (err) {
     res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } });
   }
 });
 
 // Create collection
-router.post('/', requireAuth, (req, res) => {
+router.post('/', optionalAuth, (req, res) => {
   const { title, description, is_private } = req.body;
   if (!title) {
     return res.status(422).json({ error: { code: 'VALIDATION_FAILED', message: 'Title is required' } });
   }
 
   try {
+    const userId = req.user ? req.user.id : 'u-demo';
     const id = generateId();
     db.prepare('INSERT INTO collections (id, user_id, title, description, is_private) VALUES (?, ?, ?, ?, ?)')
-      .run(id, req.user.id, title, description || null, is_private ? 1 : 0);
+      .run(id, userId, title, description || null, is_private ? 1 : 0);
       
     const collection = db.prepare('SELECT * FROM collections WHERE id = ?').get(id);
-    res.status(201).json({ ...collection, itemCount: 0 });
+    res.status(201).json({
+      ...collection,
+      coverImage: collection.cover_image || 'https://images.unsplash.com/photo-1513694203232-719a280e022f',
+      isPrivate: !!collection.is_private,
+      itemCount: 0
+    });
   } catch (err) {
     res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: err.message } });
   }

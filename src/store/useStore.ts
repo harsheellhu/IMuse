@@ -2,6 +2,17 @@ import { create } from 'zustand';
 import { User, Post, Collection, Book, Film, TvShow, Place } from '../types';
 import { authApi } from '../api/auth';
 import { contentApi } from '../api/content';
+import { collectionsApi } from '../api/collections';
+
+const DEFAULT_USER: User = {
+  id: 'u-demo',
+  name: 'Demo Curator',
+  username: 'demo',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150',
+  bio: 'Curating architecture, design, and visual culture.',
+  followers: 248,
+  following: 86
+};
 
 export type ColorMode = 'neutral' | 'warm' | 'cool';
 
@@ -93,8 +104,8 @@ export const useStore = create<StoreState>((set, get) => ({
   setBgGradient: (bgGradient) => set({ bgGradient }),
   
   // Data State
-  currentUser: null as unknown as User, // Will be set on init
-  users: [],
+  currentUser: DEFAULT_USER,
+  users: [DEFAULT_USER],
   posts: [],
   collections: [],
   books: [],
@@ -125,7 +136,6 @@ export const useStore = create<StoreState>((set, get) => ({
       }
     } catch (err) {
       console.error(err);
-      // Optional: rollback on error
     }
   },
   
@@ -134,12 +144,53 @@ export const useStore = create<StoreState>((set, get) => ({
     posts: [post, ...state.posts]
   })),
 
-  // Collection CRUD - Will be wired to backend via API client
-  createCollection: (title, description, isPrivate) => {},
-  deleteCollection: (id) => {},
-  updateCollection: (id, updates) => {},
-  addItemsToCollection: (collectionId, itemIds) => {},
-  removeItemsFromCollection: (collectionId, itemIds) => {},
+  // Collection CRUD
+  createCollection: async (title, description, isPrivate) => {
+    try {
+      const newCol = await collectionsApi.create({ title, description, is_private: isPrivate });
+      set(state => ({
+        collections: [newCol, ...state.collections]
+      }));
+    } catch (e) {
+      console.error('Failed to create collection', e);
+    }
+  },
+  deleteCollection: async (id) => {
+    try {
+      await collectionsApi.delete(id);
+      set(state => ({
+        collections: state.collections.filter(c => c.id !== id)
+      }));
+    } catch (e) {
+      console.error('Failed to delete collection', e);
+    }
+  },
+  updateCollection: async (id, updates) => {
+    try {
+      await collectionsApi.update(id, updates);
+      set(state => ({
+        collections: state.collections.map(c => c.id === id ? { ...c, ...updates } : c)
+      }));
+    } catch (e) {
+      console.error('Failed to update collection', e);
+    }
+  },
+  addItemsToCollection: async (collectionId, itemIds) => {
+    for (const itemId of itemIds) {
+      await collectionsApi.addItem(collectionId, itemId).catch(console.error);
+    }
+    set(state => ({
+      collections: state.collections.map(c => c.id === collectionId ? { ...c, itemCount: (c.itemCount || 0) + itemIds.length } : c)
+    }));
+  },
+  removeItemsFromCollection: async (collectionId, itemIds) => {
+    for (const itemId of itemIds) {
+      await collectionsApi.removeItem(collectionId, itemId).catch(console.error);
+    }
+    set(state => ({
+      collections: state.collections.map(c => c.id === collectionId ? { ...c, itemCount: Math.max(0, (c.itemCount || 0) - itemIds.length) } : c)
+    }));
+  },
 
   // Viewer State (Single Canonical Foreground Layer)
   activeViewerItem: null,

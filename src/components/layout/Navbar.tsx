@@ -286,21 +286,42 @@ export function Navbar() {
 
 export function MobileNav() {
   const location = useLocation();
+  const { setCreateCollectionOpen } = useStore();
   
   const navItems = [
-    { icon: Compass, path: '/home' },
-    { icon: Search, path: '/explore' },
-    { icon: Plus, path: '/create' },
-    { icon: User, path: '/profile/me' },
+    { icon: Compass, path: '/home', label: 'Home' },
+    { icon: Search, path: '/explore', label: 'Explore' },
+    { icon: Plus, action: () => setCreateCollectionOpen(true), label: 'Create' },
+    { icon: Book, path: '/books', label: 'Books' },
+    { icon: User, path: '/profile', label: 'Profile' },
   ];
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-bg-elevated/90 backdrop-blur-xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.2)] border border-border-subtle z-50 flex items-center justify-center gap-2 px-4 py-2 rounded-full">
+    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-bg-elevated/95 backdrop-blur-xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] border border-border-subtle z-50 flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full">
       {navItems.map((item, idx) => {
         const Icon = item.icon;
-        const isActive = location.pathname === item.path || (item.path === '/profile/me' && location.pathname.startsWith('/profile'));
+        const isActive = item.path ? (location.pathname === item.path || (item.path === '/profile' && location.pathname.startsWith('/profile'))) : false;
+        
+        if (item.action) {
+          return (
+            <button 
+              key={idx} 
+              onClick={item.action} 
+              aria-label={item.label}
+              className="p-3 rounded-full hover:bg-bg-secondary text-text-primary active:scale-95 transition-all"
+            >
+              <Icon className="w-5 h-5 text-text-primary" />
+            </button>
+          );
+        }
+
         return (
-          <Link key={idx} to={item.path} className="p-3 rounded-full hover:bg-bg-secondary transition-colors">
+          <Link 
+            key={idx} 
+            to={item.path!} 
+            aria-label={item.label}
+            className="p-3 rounded-full hover:bg-bg-secondary active:scale-95 transition-all"
+          >
             <Icon className={clsx("w-5 h-5 transition-colors duration-300", isActive ? "text-text-primary" : "text-text-muted")} />
           </Link>
         );

@@ -15,7 +15,10 @@ export const MuseumService = {
       museum = db.prepare('SELECT * FROM museums WHERE id = ?').get(museumId);
       
       // Auto-create initial rooms from existing collections for demo
-      const collections = db.prepare('SELECT * FROM collections WHERE user_id = ?').all(userId);
+      let collections = db.prepare('SELECT * FROM collections WHERE user_id = ?').all(userId);
+      if (collections.length === 0) {
+        collections = db.prepare('SELECT * FROM collections LIMIT 5').all();
+      }
       collections.forEach((col, idx) => {
         const roomId = 'room_' + Date.now() + idx;
         db.prepare(`
@@ -39,13 +42,33 @@ export const MuseumService = {
   },
 
   getRooms: (museumId) => {
-    const rooms = db.prepare(`
+    let rooms = db.prepare(`
       SELECT r.*, c.title as collection_title, c.description as collection_desc, c.cover_image as collection_cover 
       FROM museum_rooms r
       JOIN collections c ON r.collection_id = c.id
       WHERE r.museum_id = ?
       ORDER BY r.room_order ASC
     `).all(museumId);
+
+    // If museum has no rooms yet, create them from available collections
+    if (rooms.length === 0) {
+      const collections = db.prepare('SELECT * FROM collections LIMIT 5').all();
+      collections.forEach((col, idx) => {
+        const roomId = 'room_' + Date.now() + idx;
+        db.prepare(`
+          INSERT OR IGNORE INTO museum_rooms (id, museum_id, collection_id, room_order)
+          VALUES (?, ?, ?, ?)
+        `).run(roomId, museumId, col.id, idx);
+      });
+
+      rooms = db.prepare(`
+        SELECT r.*, c.title as collection_title, c.description as collection_desc, c.cover_image as collection_cover 
+        FROM museum_rooms r
+        JOIN collections c ON r.collection_id = c.id
+        WHERE r.museum_id = ?
+        ORDER BY r.room_order ASC
+      `).all(museumId);
+    }
 
     // Fetch items for each room
     rooms.forEach(room => {

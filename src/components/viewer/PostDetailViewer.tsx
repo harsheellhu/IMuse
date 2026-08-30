@@ -323,37 +323,37 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
 
   if (type === 'post') {
     const post = (data || {}) as Post;
-    imageUrl = post.imageUrl || '';
+    imageUrl = post.imageUrl || (post as any).image_url || '';
     title = post.title || 'Untitled';
     description = post.description || (post.tags ? post.tags.join(' · ') : '');
     categoryOrMeta = post.category || 'Visual';
     creatorInfo = post.source ? `Source: ${post.source}` : '';
   } else if (type === 'book') {
     const book = (data || {}) as Book;
-    imageUrl = book.coverImage || '';
+    imageUrl = book.coverImage || (book as any).imageUrl || (book as any).image_url || '';
     title = book.title || 'Untitled Book';
     description = book.description || '';
-    creatorInfo = book.author ? `by ${book.author}` : '';
+    creatorInfo = book.author ? `by ${book.author}` : ((book as any).creator ? `by ${(book as any).creator}` : '');
     categoryOrMeta = `${book.publicationYear ? `${book.publicationYear} · ` : ''}${book.categories ? book.categories.join(', ') : 'Book'}`;
     rating = book.averageRating || 0;
   } else if (type === 'film') {
     const film = (data || {}) as Film;
-    imageUrl = film.posterImage || '';
+    imageUrl = film.posterImage || (film as any).imageUrl || (film as any).image_url || '';
     title = film.title || 'Untitled Film';
     description = film.synopsis || '';
-    creatorInfo = film.director ? `Directed by ${film.director}` : '';
+    creatorInfo = film.director ? `Directed by ${film.director}` : ((film as any).creator ? `Directed by ${(film as any).creator}` : '');
     categoryOrMeta = `${film.releaseYear || ''}${film.runtime ? ` · ${film.runtime} min` : ''}`;
     rating = film.averageRating || 0;
   } else if (type === 'collection') {
     const col = (data || {}) as Collection;
-    imageUrl = col.coverImage || '';
+    imageUrl = col.coverImage || (col as any).cover_image || (col as any).imageUrl || (col as any).image_url || '';
     title = col.title || 'Curated Collection';
     description = col.description || '';
     creatorInfo = col.itemCount !== undefined ? `${col.itemCount} curated items` : '';
     categoryOrMeta = col.isPrivate ? 'Private Collection' : 'Curated Collection';
   } else if (type === 'tv_show') {
     const show = (data || {}) as any;
-    imageUrl = show.imageUrl || show.posterImage || '';
+    imageUrl = show.imageUrl || show.posterImage || show.image_url || '';
     title = show.title || 'Untitled Show';
     description = show.description || show.synopsis || '';
     creatorInfo = show.creator ? `Created by ${show.creator}` : '';
@@ -361,7 +361,7 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
     rating = show.averageRating || 0;
   } else if (type === 'place') {
     const place = (data || {}) as any;
-    imageUrl = place.imageUrl || place.coverImage || '';
+    imageUrl = place.imageUrl || place.coverImage || place.image_url || '';
     title = place.title || place.name || 'Untitled Place';
     description = place.description || '';
     const loc = place.metadata?.location || place.location;

@@ -5,13 +5,21 @@ import { useSettingsStore, MotionMode } from '../../store/useSettingsStore';
 
 const CANONICAL_ROUTES = [
   '/',
+  '/home',
   '/explore',
   '/books',
   '/films',
   '/tv-shows',
   '/places',
+  '/shops',
   '/collections',
-  '/music'
+  '/music',
+  '/library',
+  '/museum',
+  '/dna',
+  '/color-memory',
+  '/profile',
+  '/experiences'
 ];
 
 // Helper to extract the base route (e.g. "/profile/me" -> "/profile")

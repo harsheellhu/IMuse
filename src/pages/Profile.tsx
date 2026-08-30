@@ -1,18 +1,36 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { MasonryFeed } from '../components/feed/MasonryFeed';
 import { motion, AnimatePresence } from 'motion/react';
+import { Lock } from 'lucide-react';
 import clsx from 'clsx';
 import { experiencesApi } from '../api/experiences';
 import { Experience } from '../types';
 
+const FALLBACK_USER = {
+  id: 'u-demo',
+  name: 'Demo Curator',
+  username: 'demo',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150',
+  bio: 'Curating architecture, design, and visual culture.',
+  followers: 248,
+  following: 86
+};
+
 export function Profile() {
   const { id } = useParams();
-  const { currentUser, users, posts } = useStore();
-  const [activeTab, setActiveTab] = useState('posts');
+  const [searchParams] = useSearchParams();
+  const { currentUser, users, posts, collections, savedPostIds, openViewer } = useStore();
+  const initialTab = searchParams.get('tab') || 'posts';
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [patterns, setPatternsState] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam) setActiveTab(tabParam);
+  }, [searchParams]);
 
   React.useEffect(() => {
     if (activeTab === 'experiences') {
@@ -24,9 +42,9 @@ export function Profile() {
     }
   }, [activeTab]);
 
-  const profileId = id === 'me' ? currentUser.id : id;
-  const user = users.find(u => u.id === profileId) || currentUser;
-  const userPosts = posts.filter(p => p.creatorId === user.id);
+  const profileId = (!id || id === 'me') ? (currentUser?.id || 'u-demo') : id;
+  const user = users.find(u => u.id === profileId) || currentUser || FALLBACK_USER;
+  const userPosts = posts.filter(p => p.creatorId === user?.id || !user?.id);
 
   const tabs = [
     { id: 'posts', label: 'Archive' },
@@ -167,7 +185,56 @@ export function Profile() {
               )}
             </motion.div>
           )}
-          {activeTab !== 'posts' && activeTab !== 'experiences' && activeTab !== 'patterns' && (
+          {activeTab === 'collections' && (
+            <motion.div
+              key="collections"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-12"
+            >
+              {collections.map(col => (
+                <div 
+                  key={col.id}
+                  onClick={() => openViewer({ id: col.id, type: 'collection', data: col })}
+                  className="group cursor-pointer flex flex-col"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-surface rounded-sm shadow-md">
+                    <img 
+                      src={col.coverImage || 'https://images.unsplash.com/photo-1513694203232-719a280e022f'} 
+                      alt={col.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                    {col.isPrivate && (
+                      <div className="absolute top-3 left-3 bg-bg-elevated/90 p-1.5 rounded-full">
+                        <Lock className="w-3 h-3 text-text-primary" />
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="font-serif text-xl text-text-primary mb-1">{col.title}</h3>
+                  <p className="text-[10px] uppercase tracking-widest text-text-secondary">{col.itemCount || 0} items</p>
+                </div>
+              ))}
+              {collections.length === 0 && (
+                <div className="col-span-full py-20 text-center text-text-secondary italic font-serif">
+                  No collections created yet.
+                </div>
+              )}
+            </motion.div>
+          )}
+          {(activeTab === 'likes' || activeTab === 'library') && (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <MasonryFeed posts={posts.filter(p => savedPostIds.includes(p.id))} />
+            </motion.div>
+          )}
+          {activeTab !== 'posts' && activeTab !== 'experiences' && activeTab !== 'patterns' && activeTab !== 'collections' && activeTab !== 'likes' && activeTab !== 'library' && (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}

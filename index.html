@@ -1,38 +1,62 @@
 <!doctype html>
-<html lang="en" class="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IMuse</title>
+    <title>iMuse — Personal Cultural Universe</title>
     <meta name="description" content="Your personal universe of things worth remembering." />
-    <meta property="og:title" content="IMuse" />
+    <meta property="og:title" content="iMuse" />
     <meta property="og:description" content="Your personal universe of things worth remembering." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-  </head>
-  <body>
+
+    <!-- Google Fonts Preconnect & Stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <!-- Zero-Flash Theme & Typography Pre-Hydration -->
     <script>
       (function() {
         try {
           var state = localStorage.getItem('imuse-settings');
+          var appearance = 'default';
+          var typography = 'neutral';
+          var shape = 'rounded';
+          var density = 'balanced';
+          var nav = 'floating';
+          
           if (state) {
             var parsed = JSON.parse(state);
-            if (parsed && parsed.state && parsed.state.appearance) {
-              var appearance = parsed.state.appearance;
-              var isDark = false;
-              var darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory'];
-              if (appearance === 'default') {
-                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-              } else {
-                isDark = darkThemes.includes(appearance);
-              }
-              document.documentElement.classList.add(isDark ? 'dark' : 'light');
-              document.documentElement.classList.add('theme-' + appearance);
+            if (parsed && parsed.state) {
+              if (parsed.state.appearance) appearance = parsed.state.appearance;
+              if (parsed.state.typography) typography = parsed.state.typography;
+              if (parsed.state.shapeLanguage) shape = parsed.state.shapeLanguage;
+              if (parsed.state.feedDensity) density = parsed.state.feedDensity;
+              if (parsed.state.navStyle) nav = parsed.state.navStyle;
             }
           }
+
+          var darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory', 'sunset', 'ocean', 'forest', 'twilight', 'aurora'];
+          var isDark = false;
+          if (appearance === 'default') {
+            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          } else {
+            isDark = darkThemes.indexOf(appearance) !== -1;
+          }
+
+          var root = document.documentElement;
+          root.classList.add(isDark ? 'dark' : 'light');
+          root.classList.add('theme-' + appearance);
+          root.classList.add('typo-' + typography);
+          root.classList.add('shape-' + shape);
+          root.classList.add('density-' + density);
+          root.classList.add('nav-' + nav);
         } catch (e) {}
       })();
     </script>
+  </head>
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -2,7 +2,7 @@ import express from 'express';
 import { DiscoveryGraphService } from '../services/discoveryGraphService.js';
 import { SerendipityService } from '../services/serendipityService.js';
 import { ColorMemoryService } from '../services/colorMemoryService.js';
-import { requireAuth } from '../middleware/auth.js';
+import { optionalAuth, requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -17,23 +17,25 @@ router.get('/universe/:id', async (req, res) => {
 });
 
 // 2. Serendipity Mode
-router.get('/serendipity', requireAuth, async (req, res) => {
+router.get('/serendipity', optionalAuth, async (req, res) => {
   try {
     const { from, level } = req.query;
     if (!from) {
       return res.status(400).json({ error: { message: 'Missing "from" content ID query parameter' } });
     }
-    const leap = await SerendipityService.getLeap(req.user.id, from, level || 'unexpected');
+    const userId = req.user ? req.user.id : 'u-demo';
+    const leap = await SerendipityService.getLeap(userId, from, level || 'unexpected');
     res.json(leap);
   } catch (error) {
     res.status(500).json({ error: { message: error.message } });
   }
 });
 
-router.post('/serendipity/save', requireAuth, async (req, res) => {
+router.post('/serendipity/save', optionalAuth, async (req, res) => {
   try {
     const { thread } = req.body;
-    const result = await SerendipityService.saveHistory(req.user.id, thread);
+    const userId = req.user ? req.user.id : 'u-demo';
+    const result = await SerendipityService.saveHistory(userId, thread);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: { message: error.message } });
@@ -41,10 +43,11 @@ router.post('/serendipity/save', requireAuth, async (req, res) => {
 });
 
 // 3. Color Memory
-router.get('/color-memory', requireAuth, async (req, res) => {
+router.get('/color-memory', optionalAuth, async (req, res) => {
   try {
     const { period } = req.query;
-    const memory = await ColorMemoryService.getMemory(req.user.id, period);
+    const userId = req.user ? req.user.id : 'u-demo';
+    const memory = await ColorMemoryService.getMemory(userId, period);
     res.json(memory);
   } catch (error) {
     res.status(500).json({ error: { message: error.message } });

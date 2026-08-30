@@ -28,26 +28,30 @@ export const useInitializeApp = () => {
           console.error("Failed to load preferences", e);
         }
 
-        // Fetch collections and saves in parallel
-        Promise.all([
-          collectionsApi.getAll().catch(e => { console.error(e); return []; }),
-          contentApi.getSaved().catch(e => { console.error(e); return []; })
-        ]).then(([collections, saves]) => {
-          useStore.setState({ collections });
-          useStore.setState(state => {
-            const existingIds = new Set(state.posts.map(p => p.id));
-            const newPosts = saves.filter(s => !existingIds.has(s.id));
-            return {
-              savedPostIds: saves.map(s => s.id),
-              posts: [...state.posts, ...newPosts] as any
-            };
-          });
-        });
-
       } catch (e) {
         // Not logged in or guest mode
         useStore.setState({ isAuthenticated: false });
       } finally {
+        // Load collections and saves for both authenticated and demo guest session
+        Promise.all([
+          collectionsApi.getAll().catch(() => []),
+          contentApi.getSaved().catch(() => [])
+        ]).then(([collections, saves]) => {
+          if (collections && collections.length > 0) {
+            useStore.setState({ collections });
+          }
+          if (saves && saves.length > 0) {
+            useStore.setState(state => {
+              const existingIds = new Set(state.posts.map(p => p.id));
+              const newPosts = saves.filter(s => !existingIds.has(s.id));
+              return {
+                savedPostIds: saves.map(s => s.id),
+                posts: [...state.posts, ...newPosts] as any
+              };
+            });
+          }
+        });
+
         setIsInitializing(false);
 
         // Background Idle Prefetch: Warm cache and store silently without blocking the UI

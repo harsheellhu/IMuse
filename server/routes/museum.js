@@ -1,13 +1,13 @@
 import express from 'express';
 import { MuseumService } from '../services/museumService.js';
-import { requireAuth } from '../middleware/auth.js';
+import { optionalAuth, requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // GET /api/me/museum
-router.get('/', requireAuth, (req, res) => {
+router.get('/', optionalAuth, (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user ? req.user.id : 'u-demo';
     const museum = MuseumService.getMuseum(userId);
     res.json(museum);
   } catch (err) {
@@ -17,9 +17,9 @@ router.get('/', requireAuth, (req, res) => {
 });
 
 // PATCH /api/me/museum
-router.patch('/', requireAuth, (req, res) => {
+router.patch('/', optionalAuth, (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user ? req.user.id : 'u-demo';
     const museum = MuseumService.updateMuseum(userId, req.body);
     res.json(museum);
   } catch (err) {
@@ -28,9 +28,9 @@ router.patch('/', requireAuth, (req, res) => {
 });
 
 // GET /api/me/museum/rooms
-router.get('/rooms', requireAuth, (req, res) => {
+router.get('/rooms', optionalAuth, (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user ? req.user.id : 'u-demo';
     const museum = MuseumService.getMuseum(userId);
     const rooms = MuseumService.getRooms(museum.id);
     res.json(rooms);
@@ -40,7 +40,7 @@ router.get('/rooms', requireAuth, (req, res) => {
 });
 
 // POST /api/me/museum/rooms/:collectionId/canvas
-router.post('/rooms/:collectionId/canvas', requireAuth, (req, res) => {
+router.post('/rooms/:collectionId/canvas', optionalAuth, (req, res) => {
   try {
     const { collectionId } = req.params;
     const { items } = req.body;

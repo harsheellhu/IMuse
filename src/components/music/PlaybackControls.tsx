@@ -66,23 +66,19 @@ export function PlaybackControls() {
         <div 
           ref={progressRef}
           className="h-2 w-full bg-bg-secondary rounded-full cursor-pointer relative group"
-          onMouseDown={(e) => {
+          onPointerDown={(e) => {
+            try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch(err){}
             setIsDragging(true);
             handleProgressScrub(e);
           }}
-          onMouseMove={(e) => {
+          onPointerMove={(e) => {
             if (isDragging) handleProgressScrub(e);
           }}
-          onMouseUp={commitScrub}
-          onMouseLeave={commitScrub}
-          onTouchStart={(e) => {
-            setIsDragging(true);
-            handleProgressScrub(e);
+          onPointerUp={(e) => {
+            try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch(err){}
+            commitScrub();
           }}
-          onTouchMove={(e) => {
-            if (isDragging) handleProgressScrub(e);
-          }}
-          onTouchEnd={commitScrub}
+          onPointerCancel={commitScrub}
         >
           <div 
             className={clsx(

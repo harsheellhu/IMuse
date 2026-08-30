@@ -262,8 +262,9 @@ export function TurntableUnit() {
       {/* Interactive Tonearm (Scaled relative to @container) */}
       <div 
         ref={armRef}
+        data-cursor="grab"
         onPointerDown={handlePointerDown}
-        className="absolute z-30 group cursor-pointer drop-shadow-2xl"
+        className="absolute z-30 group cursor-grab active:cursor-grabbing drop-shadow-2xl turntable-tonearm"
         style={{ 
           width: '8cqmin', // Base width is 8% of the container
           height: '60cqmin', // Properly scaled length to reach the center of the record

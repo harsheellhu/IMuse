@@ -1,13 +1,13 @@
 import express from 'express';
 import { CulturalDNAService } from '../services/culturalDNAService.js';
-import { requireAuth } from '../middleware/auth.js';
+import { optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // GET /api/me/dna
-router.get('/', requireAuth, (req, res) => {
+router.get('/', optionalAuth, (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user ? req.user.id : 'u-demo';
     const profile = CulturalDNAService.getProfile(userId);
     res.json(profile);
   } catch (err) {

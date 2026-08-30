@@ -84,7 +84,7 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
   };
 
   const activeItem = items[activeIndex];
-  const activeImage = activeItem?.imageUrl || activeItem?.coverImage || activeItem?.posterImage || collection.coverImage;
+  const activeImage = activeItem?.imageUrl || activeItem?.coverImage || activeItem?.posterImage || (activeItem as any)?.image_url || collection.coverImage || (collection as any)?.cover_image || 'https://images.unsplash.com/photo-1513694203232-719a280e022f';
   const { palette } = useImagePalette(activeImage);
 
   // Background interpolation logic

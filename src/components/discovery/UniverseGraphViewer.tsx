@@ -671,7 +671,8 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
               stiffness: 200,
               mass: 0.5
             }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-auto"
+            className="absolute inset-0 flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing"
+            data-cursor="grab"
           >
             {/* SVG Relationship Connection Lines Layer */}
             <UniverseConnections

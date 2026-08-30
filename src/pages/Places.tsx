@@ -68,7 +68,7 @@ export function Places() {
               >
                 <div className="relative aspect-[16/10] overflow-hidden mb-5 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:-translate-y-1">
                   <img 
-                    src={place.imageUrl} 
+                    src={place.imageUrl || (place as any).image_url || place.coverImage || 'https://images.unsplash.com/photo-1555993539-1732b0258235'} 
                     alt={place.title} 
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
                     loading="lazy"

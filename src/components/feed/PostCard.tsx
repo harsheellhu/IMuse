@@ -10,9 +10,17 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
   const { users, savedPostIds, toggleSavePost, openViewer, isAuthenticated, setAuthModalOpen } = useStore();
   const creator = users.find(u => u.id === post.creatorId);
   const isSaved = savedPostIds.includes(post.id);
-  const [imgSrc, setImgSrc] = React.useState(post.imageUrl);
+  const resolvedImg = post.imageUrl || (post as any).image_url || (post as any).coverImage || (post as any).posterImage;
+  const [imgSrc, setImgSrc] = React.useState(resolvedImg);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
+
+  React.useEffect(() => {
+    const src = post.imageUrl || (post as any).image_url || (post as any).coverImage || (post as any).posterImage;
+    setImgSrc(src);
+    setHasError(false);
+    setIsLoaded(false);
+  }, [post.id, post.imageUrl]);
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();

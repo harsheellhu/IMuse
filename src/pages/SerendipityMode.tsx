@@ -5,9 +5,12 @@ import { Sparkles, ArrowRight, Save, X } from 'lucide-react';
 import { engineApi } from '../api/engine';
 import { useSettingsStore } from '../store/useSettingsStore';
 
+import { useStore } from '../store/useStore';
+
 export function SerendipityMode() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { posts } = useStore();
   const [level, setLevel] = useState('unexpected'); // gentle, unexpected, wild
   const [history, setHistory] = useState<any[]>([]);
   const [currentLeap, setCurrentLeap] = useState<any>(null);
@@ -15,8 +18,8 @@ export function SerendipityMode() {
   const [isSaving, setIsSaving] = useState(false);
   const { typography, motion: motionMode } = useSettingsStore();
 
-  // Try to grab a starting point from location state, else we fallback
-  const startId = location.state?.fromContentId || 'p1';
+  // Grab a starting point from location state, posts, or fallback to seeded architecture item
+  const startId = location.state?.fromContentId || posts[0]?.id || 'architecture-0';
 
   const fetchNextLeap = (fromId: string) => {
     setIsLoading(true);

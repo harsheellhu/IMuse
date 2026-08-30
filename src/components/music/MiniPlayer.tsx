@@ -50,7 +50,7 @@ export function MiniPlayer() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
         className={clsx(
-          "fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[60] w-72 md:w-80 rounded-2xl shadow-2xl border overflow-hidden backdrop-blur-xl transition-colors duration-500",
+          "fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[60] w-72 md:w-80 rounded-2xl shadow-2xl border overflow-hidden backdrop-blur-xl transition-colors duration-500",
           isTron 
             ? "bg-black/80 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]" 
             : "bg-bg-elevated/90 border-border-subtle"

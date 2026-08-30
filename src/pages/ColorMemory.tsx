@@ -31,20 +31,32 @@ export function ColorMemory() {
     );
   }
 
-  if (!memory) return null;
+  if (!memory) {
+    return (
+      <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typography-${typography}`}>
+        <h2 className="text-2xl font-serif text-text-primary">No Color Memory Extracted Yet</h2>
+        <p className="text-sm text-text-secondary max-w-md">Save books, films, and imagery to let iMuse map your aesthetic spectrum over time.</p>
+        <Link to="/home" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all">
+          Explore Feed
+        </Link>
+      </div>
+    );
+  }
 
   // Render a full year strip (12 months), filling in gaps if user didn't save anything that month
+  const timeline = memory.timeline || [];
+  const topPalettes = memory.topPalettes || [];
+
   const yearStrip = MONTHS.map((m, index) => {
     const monthIndexStr = (index + 1).toString().padStart(2, '0');
-    // Find if we have a palette for this month
-    const timelineEntry = memory.timeline.find((t: any) => t.monthKey.endsWith(`-${monthIndexStr}`));
+    const timelineEntry = timeline.find((t: any) => t.monthKey && t.monthKey.endsWith(`-${monthIndexStr}`));
     return {
       month: m,
-      palette: timelineEntry?.dominantPalette || { primary: 'rgba(255,255,255,0.05)' } // Fallback transparent/grey
+      palette: timelineEntry?.dominantPalette || { primary: 'rgba(255,255,255,0.05)' }
     };
   });
 
-  const activeColorGroup = memory.topPalettes.find((p: any) => p.palette.primary === activeColor);
+  const activeColorGroup = topPalettes.find((p: any) => p.palette?.primary === activeColor) || topPalettes[0];
 
   return (
     <div className={`min-h-screen bg-[#FDFCF8] dark:bg-[#050505] text-[#1A1A1A] dark:text-[#FDFCF8] pb-24 typography-${typography}`}>
@@ -110,10 +122,10 @@ export function ColorMemory() {
                     exit={{ opacity: 0, y: -10 }}
                     className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                   >
-                    {activeColorGroup.items.map((item: any) => (
+                    {(activeColorGroup?.items || []).map((item: any) => (
                       <div key={item.id} className="aspect-[3/4] rounded-sm overflow-hidden bg-black/5 dark:bg-white/5 group relative cursor-pointer">
-                        {item.image_url ? (
-                          <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        {item.image_url || item.imageUrl ? (
+                          <img src={item.image_url || item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
                             <span className="text-[9px] uppercase tracking-widest opacity-50 mb-2">{item.type}</span>
@@ -125,6 +137,11 @@ export function ColorMemory() {
                         </div>
                       </div>
                     ))}
+                    {(!activeColorGroup || !activeColorGroup.items || activeColorGroup.items.length === 0) && (
+                      <div className="col-span-full py-12 text-center text-text-secondary text-sm italic font-serif">
+                        No saved items match this palette tone.
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -36,7 +36,17 @@ export function MuseumPage() {
     );
   }
 
-  if (!museum) return null;
+  if (!museum) {
+    return (
+      <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typography-${typography}`}>
+        <h2 className="text-2xl font-serif text-text-primary">Museum Under Curation</h2>
+        <p className="text-sm text-text-secondary max-w-md">Your personal museum is being organized from your saved collections and cultural tastes.</p>
+        <Link to="/home" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all">
+          Return to Feed
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen bg-[#FDFCF8] dark:bg-[#050505] text-[#1A1A1A] dark:text-[#FDFCF8] typography-${typography}`}>

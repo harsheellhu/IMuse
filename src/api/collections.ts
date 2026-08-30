@@ -12,6 +12,15 @@ export const collectionsApi = {
     
   delete: (id: string) => apiClient<{success: boolean}>(`/api/me/collections/${id}`, { method: 'DELETE' }),
   
+  update: (id: string, data: any) =>
+    apiClient<Collection>(`/api/me/collections/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+  
   addItem: (id: string, contentId: string) => 
-    apiClient<{success: boolean}>(`/api/me/collections/${id}/items/${contentId}`, { method: 'POST' })
+    apiClient<{success: boolean}>(`/api/me/collections/${id}/items/${contentId}`, { method: 'POST' }),
+
+  removeItem: (id: string, contentId: string) =>
+    apiClient<{success: boolean}>(`/api/me/collections/${id}/items/${contentId}`, { method: 'DELETE' })
 };

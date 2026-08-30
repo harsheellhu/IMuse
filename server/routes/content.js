@@ -39,8 +39,15 @@ router.get('/', (req, res) => {
       if (row.metadata) {
         try { meta = typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata; } catch(e){}
       }
+      const img = row.image_url || '';
       return {
         ...row,
+        imageUrl: img,
+        coverImage: img,
+        posterImage: img,
+        author: row.creator || '',
+        director: row.creator || '',
+        creatorId: row.creator || 'u-demo',
         metadata: meta,
         tags: tagMap.get(row.id) || []
       };
@@ -60,10 +67,17 @@ router.get('/:id', (req, res) => {
     }
     
     const tags = db.prepare('SELECT tag FROM content_tags WHERE content_id = ?').all(row.id).map(t => t.tag);
+    const img = row.image_url || '';
     
     res.json({
       ...row,
-      metadata: row.metadata ? JSON.parse(row.metadata) : null,
+      imageUrl: img,
+      coverImage: img,
+      posterImage: img,
+      author: row.creator || '',
+      director: row.creator || '',
+      creatorId: row.creator || 'u-demo',
+      metadata: row.metadata ? (typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata) : null,
       tags
     });
   } catch (err) {

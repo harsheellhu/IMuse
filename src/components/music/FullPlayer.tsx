@@ -133,7 +133,7 @@ export function FullPlayer() {
             </div>
             
             {/* Lyrics Section */}
-            <div className="w-full max-w-[480px] mx-auto lg:mx-0 mb-auto lg:mb-0">
+            <div className="w-full max-w-[480px] mx-auto lg:mx-0 h-44 md:h-52 lg:h-64 overflow-hidden flex flex-col mb-auto lg:mb-0">
               <Lyrics />
             </div>
           </div>

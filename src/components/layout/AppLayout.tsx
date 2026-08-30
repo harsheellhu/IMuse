@@ -20,7 +20,7 @@ export function AppLayout() {
 
   return (
     <div 
-      className="min-h-screen text-text-primary font-sans antialiased selection:bg-text-primary selection:text-bg-base transition-all duration-700 ease-in-out"
+      className="min-h-screen text-text-primary antialiased selection:bg-text-primary selection:text-bg-base transition-all duration-700 ease-in-out"
       style={{ backgroundImage: bgGradient || 'none' }}
     >
       <Navbar />

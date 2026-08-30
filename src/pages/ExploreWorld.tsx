@@ -37,13 +37,25 @@ export function ExploreWorld() {
 
   // Generate organic spatial coordinates
   useEffect(() => {
+    const { tvShows, places } = useStore.getState();
+    const allAvailable = [
+      ...posts.map(d => ({ type: 'post' as WorldItemType, data: d, scale: 0.85 })),
+      ...books.map(d => ({ type: 'book' as WorldItemType, data: d, scale: 0.8 })),
+      ...films.map(d => ({ type: 'film' as WorldItemType, data: d, scale: 0.9 })),
+      ...tvShows.map(d => ({ type: 'tv_show' as WorldItemType, data: d, scale: 0.9 })),
+      ...places.map(d => ({ type: 'place' as WorldItemType, data: d, scale: 1.1 })),
+      ...collections.map(d => ({ type: 'collection' as WorldItemType, data: d, scale: 1.2 }))
+    ].filter(item => item.data && item.data.id);
+
+    if (allAvailable.length === 0) return;
+
     const items: WorldItem[] = [];
-    const radius = 3000; // Large 6000x6000 canvas roughly
+    const radius = 3000;
+    const totalItems = Math.min(200, Math.max(allAvailable.length, 60));
     
     const generatePoint = (i: number, total: number) => {
-      // Golden spiral distribution for organic but even spacing
       const golden_ratio = (Math.sqrt(5) + 1) / 2 - 1;
-      const r = Math.sqrt(i + 0.5) / Math.sqrt(total) * radius;
+      const r = (Math.sqrt(i + 0.5) / Math.sqrt(total)) * radius;
       const theta = 2 * Math.PI * golden_ratio * i;
       return {
         x: r * Math.cos(theta),
@@ -51,55 +63,22 @@ export function ExploreWorld() {
       };
     };
 
-    const totalItems = 200; // Use subset for performance in canvas
-    
-    // Mix items
-    for(let i=0; i<totalItems; i++) {
-      const typeChance = Math.random();
-      let type: WorldItemType = 'post';
-      let data: Post | Book | Film | Collection | TvShow | Place = posts[i % (posts.length || 1)];
-      let scale = 1;
-      const { tvShows, places } = useStore.getState();
-
-      if (typeChance > 0.85 && collections.length > 0) {
-        type = 'collection';
-        data = collections[i % collections.length];
-        scale = 1.2;
-      } else if (typeChance > 0.7 && tvShows.length > 0) {
-        type = 'tv_show';
-        data = tvShows[i % tvShows.length];
-        scale = 0.9;
-      } else if (typeChance > 0.55 && places.length > 0) {
-        type = 'place';
-        data = places[i % places.length];
-        scale = 1.1;
-      } else if (typeChance > 0.4 && books.length > 0) {
-        type = 'book';
-        data = books[i % books.length];
-        scale = 0.8;
-      } else if (typeChance > 0.25 && films.length > 0) {
-        type = 'film';
-        data = films[i % films.length];
-        scale = 0.9;
-      } else if (posts.length > 0) {
-        // Post scales vary
-        type = 'post';
-        data = posts[i % posts.length];
-        scale = 0.7 + Math.random() * 0.8;
-      }
+    for (let i = 0; i < totalItems; i++) {
+      const sample = allAvailable[i % allAvailable.length];
+      if (!sample || !sample.data) continue;
 
       const { x, y } = generatePoint(i, totalItems);
 
-      // Add a little organic noise
       items.push({
-        id: `world-${type}-${data.id}-${i}`,
-        type,
+        id: `world-${sample.type}-${sample.data.id}-${i}`,
+        type: sample.type,
         x: x + (Math.random() - 0.5) * 200,
         y: y + (Math.random() - 0.5) * 200,
-        scale,
-        data
+        scale: sample.scale * (0.8 + Math.random() * 0.4),
+        data: sample.data
       });
     }
+
     setWorldItems(items);
   }, [posts, books, films, collections]);
 

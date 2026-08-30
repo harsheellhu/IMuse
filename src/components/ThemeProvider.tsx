@@ -19,8 +19,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     // Base theme handling (dark/light) based on appearance
     let isDark = false;
-    const darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory'];
-    const lightThemes = ['paper', 'ivory', 'monochrome', 'ash']; // Default system/others handled conditionally
+    const darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory', 'sunset', 'ocean', 'forest', 'twilight', 'aurora'];
+    const lightThemes = ['paper', 'ivory', 'monochrome', 'ash'];
 
     if (settings.appearance === 'default') {
       isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

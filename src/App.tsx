@@ -18,6 +18,7 @@ import { ColorMemory } from './pages/ColorMemory';
 import { MuseumPage } from './pages/Museum';
 import { MuseumRoomPage } from './pages/MuseumRoom';
 import { CulturalDNAPage } from './pages/CulturalDNA';
+import { CustomCursor } from './components/ui/CustomCursor';
 
 // Lazy Load heavy secondary routes
 const ExploreWorld = React.lazy(() => import('./pages/ExploreWorld').then(module => ({ default: module.ExploreWorld })));
@@ -44,6 +45,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <CustomCursor />
         <SettingsOverlay />
         <ImportProgress />
         <CreateCollectionModal />
@@ -60,10 +62,13 @@ export default function App() {
             <Route path="collections" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Collections /></React.Suspense>} />
             <Route path="library" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Library /></React.Suspense>} />
             <Route path="music" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Music /></React.Suspense>} />
+            <Route path="experiences" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
             <Route path="experience/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><ExperiencePage /></React.Suspense>} />
             <Route path="patterns/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><PatternThreadViewer /></React.Suspense>} />
             <Route path="replay" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><CulturalReplay /></React.Suspense>} />
+            <Route path="profile" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
             <Route path="profile/:id" element={<React.Suspense fallback={<div className="p-8 text-center text-text-muted">Loading...</div>}><Profile /></React.Suspense>} />
+            <Route path="settings" element={<Home />} />
             <Route path="serendipity" element={<SerendipityMode />} />
             <Route path="color-memory" element={<ColorMemory />} />
             <Route path="museum" element={<MuseumPage />} />
