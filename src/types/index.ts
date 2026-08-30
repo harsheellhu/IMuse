@@ -99,14 +99,33 @@ export interface Song {
   albumArtist?: string;
   genre?: string;
   year?: number;
-  duration: number;
+  trackNumber?: number;
+  discNumber?: number;
+  duration: number | null;
   artworkUrl?: string;
+  audioSource?: string;
+  isLocal?: boolean;
+  sourceType?: 'local' | 'imported' | 'stream';
   addedAt: string;
   playCount: number;
   lastPlayed?: string;
   isFavorite: boolean;
+  isAvailable?: boolean;
   blobId?: string; // Reference to the actual audio blob in IndexedDB
   lyrics?: { time: number; text: string }[];
+}
+
+export interface Album {
+  id: string;
+  title: string;
+  artist: string;
+  type: string;
+  year: number;
+  genre: string;
+  description: string;
+  coverImage: string;
+  tracks: Song[];
+  isLocal: boolean;
 }
 
 export interface LocalTrack extends Song {

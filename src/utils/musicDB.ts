@@ -1,5 +1,5 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
-import { Song } from '../types';
+import { Song, Album } from '../types';
 
 interface MusicDBSchema extends DBSchema {
   songs: {
@@ -99,23 +99,81 @@ export const musicDB = {
     await tx.done;
   },
 
-  async getSong(id: string): Promise<{ song: Song; blob: Blob } | null> {
+  async getSong(id: string): Promise<{ song: Song; blob: Blob | null } | null> {
     const db = await getDB();
     const tx = db.transaction(['songs', 'blobs'], 'readonly');
     
     const song = await tx.objectStore('songs').get(id);
-    if (!song) return null;
-    
     const blob = await tx.objectStore('blobs').get(id);
-    if (!blob) return null;
     
-    return { song, blob };
+    if (song && blob) {
+      return { song, blob };
+    }
+
+    // Check if this is a canonical Purple Rain track
+    const prData = await musicDB.loadPurpleRainMetadata();
+    if (prData) {
+      const prTrack = prData.tracks.find(t => t.id === id);
+      if (prTrack) {
+        return {
+          song: song ? { ...prTrack, ...song } : prTrack,
+          blob: blob || null
+        };
+      }
+    }
+
+    if (song) {
+      return { song, blob: null };
+    }
+    
+    return null;
+  },
+
+  async loadPurpleRainMetadata(): Promise<{ album: Album; tracks: Song[] } | null> {
+    try {
+      const res = await fetch('/music/purple-rain-2017/metadata.json');
+      if (!res.ok) return null;
+      const data = await res.json();
+      const album: Album = {
+        id: data.album.id,
+        title: data.album.title,
+        artist: data.album.artist,
+        type: data.album.type || 'Album',
+        year: data.album.year,
+        genre: data.album.genre,
+        description: data.album.description,
+        coverImage: data.album.coverArtwork,
+        tracks: data.tracks,
+        isLocal: true
+      };
+      return { album, tracks: data.tracks };
+    } catch (e) {
+      console.warn('Could not load Purple Rain metadata:', e);
+      return null;
+    }
+  },
+
+  async getAlbums(): Promise<Album[]> {
+    const prData = await musicDB.loadPurpleRainMetadata();
+    const albums: Album[] = [];
+    if (prData) {
+      albums.push(prData.album);
+    }
+    return albums;
+  },
+
+  async getAlbum(id: string): Promise<Album | null> {
+    if (id === 'purple-rain-2017') {
+      const prData = await musicDB.loadPurpleRainMetadata();
+      return prData ? prData.album : null;
+    }
+    return null;
   },
 
   async getAllSongs(): Promise<Song[]> {
     const db = await getDB();
-    let songs = await db.getAll('songs');
-    if (!songs || songs.length === 0) {
+    let idbSongs = await db.getAll('songs');
+    if (!idbSongs || idbSongs.length === 0) {
       const demoSong: Song = {
         id: 'demo-ambient-reverie',
         title: 'Ambient Reverie',
@@ -136,9 +194,33 @@ export const musicDB = {
       };
       const blob = generateDemoWavBlob();
       await musicDB.saveSong(demoSong, blob);
-      return [demoSong];
+      idbSongs = [demoSong];
     }
-    return songs;
+
+    // Integrate local album tracks
+    const prData = await musicDB.loadPurpleRainMetadata();
+    if (!prData) return idbSongs;
+
+    // Merge IDB metadata with canonical tracks
+    const idbMap = new Map(idbSongs.map(s => [s.id, s]));
+    const canonicalTracks = prData.tracks.map(track => {
+      const existing = idbMap.get(track.id);
+      if (existing) {
+        return {
+          ...track,
+          ...existing,
+          artworkUrl: existing.artworkUrl || track.artworkUrl,
+          audioSource: track.audioSource,
+          isLocal: true,
+          sourceType: 'local' as const
+        };
+      }
+      return track;
+    });
+
+    // Combine canonical tracks with non-Purple Rain custom songs
+    const otherSongs = idbSongs.filter(s => !s.id.startsWith('purple-rain-2017'));
+    return [...canonicalTracks, ...otherSongs];
   },
 
   async deleteSong(id: string): Promise<void> {
@@ -156,6 +238,13 @@ export const musicDB = {
     const song = await db.get('songs', id);
     if (song) {
       await db.put('songs', { ...song, ...updates });
+    } else {
+      // If it's a Purple Rain track not yet in IDB, save updates to IDB
+      const prData = await musicDB.loadPurpleRainMetadata();
+      const track = prData?.tracks.find(t => t.id === id);
+      if (track) {
+        await db.put('songs', { ...track, ...updates });
+      }
     }
   }
 };

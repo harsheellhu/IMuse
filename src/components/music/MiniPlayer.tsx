@@ -13,7 +13,7 @@ function formatTime(seconds: number) {
 }
 
 export function MiniPlayer() {
-  const { currentSong, isPlaying, togglePlay, closePlayer, progress, currentTime, duration, setMaximized, isMaximized } = useMusicStore(useShallow(s => ({
+  const { currentSong, isPlaying, togglePlay, closePlayer, progress, currentTime, duration, setMaximized, isMaximized, fileUnavailableMessage } = useMusicStore(useShallow(s => ({
     currentSong: s.currentSong,
     isPlaying: s.isPlaying,
     togglePlay: s.togglePlay,
@@ -22,7 +22,8 @@ export function MiniPlayer() {
     currentTime: s.currentTime,
     duration: s.duration,
     setMaximized: s.setMaximized,
-    isMaximized: s.isMaximized
+    isMaximized: s.isMaximized,
+    fileUnavailableMessage: s.fileUnavailableMessage
   })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
@@ -165,8 +166,14 @@ export function MiniPlayer() {
             )}
             style={{ width: `${progress * 100}%` }}
           />
-          {/* Time popup on hover could be added here */}
         </div>
+
+        {/* Unavailable Audio Alert */}
+        {fileUnavailableMessage && (
+          <div className="px-3 py-1.5 bg-amber-500/15 border-t border-amber-500/30 text-[11px] text-amber-200 truncate flex items-center gap-1.5">
+            <span className="truncate">{fileUnavailableMessage}</span>
+          </div>
+        )}
       </motion.div>
     </AnimatePresence>
   );

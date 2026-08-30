@@ -1,0 +1,54 @@
+{
+  "album": {
+    "id": "purple-rain-2017",
+    "title": "Purple Rain (2017 Remaster)",
+    "artist": "Prince and The Revolution",
+    "albumArtist": "Prince and The Revolution",
+    "type": "Album",
+    "year": 2017,
+    "releaseDate": "2017-06-23",
+    "originalReleaseYear": 1984,
+    "genre": "Rock / Gospel / Power Ballad",
+    "description": "The official 2017 Paisley Park remaster of Prince and The Revolution's landmark title anthem, transferred from the original multi-track master tapes under Prince's direct supervision.",
+    "coverArtwork": "/music/purple-rain-2017/cover.svg",
+    "isLocal": true,
+    "sourceType": "local",
+    "discCount": 1,
+    "trackCount": 1
+  },
+  "tracks": [
+    {
+      "id": "purple-rain-2017-01",
+      "trackNumber": 1,
+      "discNumber": 1,
+      "title": "Purple Rain",
+      "artist": "Prince and The Revolution",
+      "album": "Purple Rain (2017 Remaster)",
+      "albumArtist": "Prince and The Revolution",
+      "year": 2017,
+      "genre": "Rock / Gospel / Power Ballad",
+      "duration": 88,
+      "artworkUrl": "/music/purple-rain-2017/cover.svg",
+      "audioSource": "/music/purple-rain-2017/01-purple-rain.mp3",
+      "fileName": "01-purple-rain.mp3",
+      "isLocal": true,
+      "sourceType": "local",
+      "lyrics": [
+        { "time": 0, "text": "(Acoustic guitar and delicate Rhodes piano intro)" },
+        { "time": 5, "text": "I never meant to cause you any sorrow" },
+        { "time": 12, "text": "I never meant to cause you any pain" },
+        { "time": 19, "text": "I only wanted one time to see you laughing" },
+        { "time": 26, "text": "I only want to see you laughing in the purple rain" },
+        { "time": 33, "text": "Purple rain, purple rain" },
+        { "time": 40, "text": "Purple rain, purple rain" },
+        { "time": 47, "text": "Purple rain, purple rain" },
+        { "time": 54, "text": "I only want to see you bathing in the purple rain" },
+        { "time": 61, "text": "Honey, I know, I know, I know times are changing" },
+        { "time": 67, "text": "It's time we all reach out for something new, that means you too" },
+        { "time": 74, "text": "(Guitar solo rises into soaring harmonics)" },
+        { "time": 80, "text": "Purple rain, purple rain..." },
+        { "time": 85, "text": "(Echoes softly fading in purple light)" }
+      ]
+    }
+  ]
+}

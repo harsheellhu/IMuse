@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 
-type CursorState = 'default' | 'link' | 'button' | 'view' | 'grab' | 'grabbing' | 'text';
+type CursorState = 'default' | 'link' | 'button' | 'grab' | 'grabbing' | 'text';
 
 export function CustomCursor() {
   const { appearance, motion: motionSetting } = useSettingsStore();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     // 1. Check if device supports fine pointer (mouse/trackpad). Do NOT display on touch devices.
@@ -20,9 +19,8 @@ export function CustomCursor() {
     const wrapper = wrapperRef.current;
     const dot = dotRef.current;
     const ring = ringRef.current;
-    const label = labelRef.current;
 
-    if (!wrapper || !dot || !ring || !label) return;
+    if (!wrapper || !dot || !ring) return;
 
     // Add scoped class to html document to hide browser cursor on desktop
     document.documentElement.classList.add('has-custom-cursor');
@@ -39,19 +37,14 @@ export function CustomCursor() {
     let isVisible = false;
     let isPressed = false;
     let currentState: CursorState = 'default';
-    let labelText = '';
     let rafId: number | null = null;
     let initialized = false;
 
     // Helper to update cursor state directly via dataset
-    const updateState = (newState: CursorState, customLabel: string = '') => {
-      if (currentState !== newState || labelText !== customLabel) {
+    const updateState = (newState: CursorState) => {
+      if (currentState !== newState) {
         currentState = newState;
-        labelText = customLabel;
         wrapper.dataset.state = newState;
-        if (label) {
-          label.textContent = customLabel;
-        }
       }
     };
 
@@ -63,16 +56,12 @@ export function CustomCursor() {
         return;
       }
 
-      // Check for explicit data-cursor overrides first
+      // Check for explicit data-cursor overrides
       const explicit = el.closest('[data-cursor]') as HTMLElement | null;
       if (explicit) {
         const val = explicit.dataset.cursor;
         if (val === 'ignore') {
           updateState('default');
-          return;
-        }
-        if (val === 'view' || val === 'open') {
-          updateState('view', val === 'open' ? 'OPEN' : 'VIEW');
           return;
         }
         if (val === 'drag' || val === 'grab') {
@@ -89,7 +78,7 @@ export function CustomCursor() {
         }
       }
 
-      // Inputs & editable text: show native text caret, hide custom cursor
+      // 1. Inputs & editable text: allow normal browser text caret, hide custom cursor
       if (
         el.closest(
           'input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, [contenteditable="true"], select'
@@ -99,44 +88,45 @@ export function CustomCursor() {
         return;
       }
 
-      // Draggable items, spatial canvas, and turntable tonearm
+      // 2. Genuine Draggable items, spatial canvas, and turntable tonearm
       if (
         el.closest(
-          '[data-canvas-item], .cursor-grab, .cursor-grabbing, [data-draggable], [drag], .turntable-tonearm'
+          '[data-canvas-item], .cursor-grab, .cursor-grabbing, [data-draggable], .turntable-tonearm'
         )
       ) {
         updateState(isPressed ? 'grabbing' : 'grab');
         return;
       }
 
-      // Viewable cards, galleries, and image containers
+      // 3. Posts, images, cards, books, films, places, collections, landing slideshow
+      // MUST use DEFAULT CURSOR (no enlargement, no ring expansion, no label)
       if (
         el.closest(
-          '[data-viewer], .group:has(img), .aspect-\\[4\\/3\\], .aspect-\\[2\\/3\\], .aspect-\\[16\\/10\\]'
+          'img, video, .group:has(img), [data-post], [data-viewer], .aspect-\\[4\\/3\\], .aspect-\\[2\\/3\\], .aspect-\\[16\\/10\\], .aspect-\\[1\\/1\\], article'
         ) ||
-        (el.tagName === 'IMG' && el.closest('.group, [onClick]'))
+        el.tagName === 'IMG'
       ) {
-        updateState('view', 'VIEW');
+        updateState('default');
         return;
       }
 
-      // Buttons & action controls
+      // 4. Standalone Buttons & action controls (Navbar controls, settings buttons, close icons)
       if (
         el.closest(
-          'button, [role="button"], input[type="button"], input[type="submit"], .cursor-pointer:not(a)'
+          'button, [role="button"], input[type="button"], input[type="submit"]'
         )
       ) {
         updateState('button');
         return;
       }
 
-      // Links & navigations
+      // 5. Links & navigations
       if (el.closest('a, [role="link"]')) {
         updateState('link');
         return;
       }
 
-      // Default state
+      // 6. Default state everywhere else
       updateState('default');
     };
 
@@ -156,6 +146,17 @@ export function CustomCursor() {
       if (!isVisible) {
         isVisible = true;
         wrapper.dataset.visible = 'true';
+      }
+
+      // Fast, lightweight adaptive contrast detection
+      const el = e.target as HTMLElement | null;
+      if (el) {
+        const isMediaOrDark = Boolean(
+          el.closest(
+            'img, video, [data-contrast="dark"], .aspect-\\[4\\/3\\], .aspect-\\[2\\/3\\], .aspect-\\[16\\/10\\], .bg-black, .bg-\\[\\#0a0a0a\\], .bg-\\[\\#050505\\], .theme-dark'
+          ) || el.tagName === 'IMG'
+        );
+        wrapper.dataset.contrast = isMediaOrDark ? 'dark' : 'normal';
       }
 
       inspectTarget(e);
@@ -200,7 +201,7 @@ export function CustomCursor() {
         dot.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0)`;
 
         // Ring: subtle interpolation (approx 50-70ms lag) or instant if reduced motion
-        const lerpFactor = isReduced ? 1 : 0.18;
+        const lerpFactor = isReduced ? 1 : 0.2;
         ringPos.x += (target.x - ringPos.x) * lerpFactor;
         ringPos.y += (target.y - ringPos.y) * lerpFactor;
         ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0)`;
@@ -228,26 +229,22 @@ export function CustomCursor() {
       id="imuse-custom-cursor"
       data-visible="false"
       data-state="default"
+      data-contrast="normal"
       data-pressed="false"
-      className="imuse-cursor-wrapper pointer-events-none fixed inset-0 z-[999999] overflow-hidden select-none"
+      className="imuse-cursor-wrapper pointer-events-none fixed inset-0 z-[100000] overflow-hidden select-none"
       aria-hidden="true"
     >
-      {/* Precision Core Dot */}
+      {/* Precision Core Dot with Dual-Tone Contrast Boundary */}
       <div
         ref={dotRef}
         className="imuse-cursor-dot absolute top-0 left-0 -ml-[3.5px] -mt-[3.5px] rounded-full will-change-transform pointer-events-none"
       />
 
-      {/* Subtle Responsive Outer Ring */}
+      {/* Subtle Restrained Outer Ring */}
       <div
         ref={ringRef}
-        className="imuse-cursor-ring absolute top-0 left-0 -ml-3 -mt-3 rounded-full flex items-center justify-center will-change-transform pointer-events-none"
-      >
-        <span
-          ref={labelRef}
-          className="imuse-cursor-label text-[7px] font-mono tracking-widest uppercase opacity-0 transition-opacity duration-150 pointer-events-none select-none font-bold"
-        />
-      </div>
+        className="imuse-cursor-ring absolute top-0 left-0 -ml-2.5 -mt-2.5 rounded-full flex items-center justify-center will-change-transform pointer-events-none"
+      />
     </div>
   );
 }

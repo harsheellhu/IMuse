@@ -64,7 +64,45 @@ export function Navbar() {
         console.warn('Metadata parsing failed, using fallback', metaErr);
       }
 
-      const newSong: Song = {
+      // Check if file matches a Purple Rain (2017 Remaster) track
+      const prData = await musicDB.loadPurpleRainMetadata();
+      let matchedTrack: Song | undefined;
+
+      if (prData) {
+        const fileTitle = (metadata?.common.title || file.name.replace(/\.[^/.]+$/, "")).toLowerCase().trim();
+        const fileAlbum = (metadata?.common.album || "").toLowerCase().trim();
+        const fileArtist = (metadata?.common.artist || "").toLowerCase().trim();
+        const trackNo = metadata?.common.track?.no;
+
+        matchedTrack = prData.tracks.find(t => {
+          const isPurpleRainAlbum = fileAlbum.includes('purple rain');
+          const isPrince = fileArtist.includes('prince');
+
+          if (trackNo && trackNo === t.trackNumber && (isPurpleRainAlbum || isPrince)) {
+            return true;
+          }
+
+          const canonicalTitle = t.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+          const cleanFileTitle = fileTitle.replace(/[^a-z0-9]/g, '');
+          if (cleanFileTitle && (cleanFileTitle.includes(canonicalTitle) || canonicalTitle.includes(cleanFileTitle))) {
+            if (isPurpleRainAlbum || isPrince || file.name.toLowerCase().includes('purple')) {
+              return true;
+            }
+          }
+
+          return false;
+        });
+      }
+
+      const newSong: Song = matchedTrack ? {
+        ...matchedTrack,
+        duration: metadata?.format?.duration || matchedTrack.duration,
+        artworkUrl: matchedTrack.artworkUrl || artworkUrl,
+        addedAt: new Date().toISOString(),
+        isAvailable: true,
+        isLocal: true,
+        sourceType: 'local'
+      } : {
         id: `song-${Date.now()}`,
         title: metadata?.common.title || file.name.replace(/\.[^/.]+$/, ""),
         artist: metadata?.common.artist || 'Unknown Artist',

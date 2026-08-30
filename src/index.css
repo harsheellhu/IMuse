@@ -527,30 +527,47 @@ body::after {
   opacity: 0 !important;
 }
 
-/* 1:1 Precision Core Dot */
+/* 1:1 Precision Core Dot with Dual-Tone Contrast Boundary */
 .imuse-cursor-dot {
   width: 7px;
   height: 7px;
-  background-color: var(--text-primary, #111111);
-  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease, background-color 200ms ease;
+  border-radius: 9999px;
+  background-color: var(--text-primary, #FFFFFF);
+  border: 1px solid rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.65);
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease, background-color 200ms ease;
   pointer-events: none;
 }
 
-.imuse-cursor-wrapper[data-state="link"] .imuse-cursor-dot {
-  transform: scale(1.2);
+/* Light theme default on clean surfaces: dark center with crisp white halo & shadow */
+:root:not(.dark):not(.theme-obsidian):not(.theme-midnight):not(.theme-tron) .imuse-cursor-dot {
+  background-color: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
+/* Adaptive contrast: when hovering over dark content / images / media in any theme */
+.imuse-cursor-wrapper[data-contrast="dark"] .imuse-cursor-dot {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* TRON Theme Specific Adaptation */
+.theme-tron .imuse-cursor-dot {
+  background-color: var(--accent-primary, #00ffff) !important;
+  border: 1px solid rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.5), 0 0 6px rgba(0, 255, 255, 0.75) !important;
+}
+
+/* Interactive subtle control adjustments */
+.imuse-cursor-wrapper[data-state="link"] .imuse-cursor-dot,
 .imuse-cursor-wrapper[data-state="button"] .imuse-cursor-dot {
-  transform: scale(1.3);
-}
-
-.imuse-cursor-wrapper[data-state="view"] .imuse-cursor-dot {
-  opacity: 0;
-  transform: scale(0.3);
+  transform: scale(1.18);
 }
 
 .imuse-cursor-wrapper[data-state="grab"] .imuse-cursor-dot {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .imuse-cursor-wrapper[data-state="grabbing"] .imuse-cursor-dot {
@@ -558,111 +575,74 @@ body::after {
 }
 
 .imuse-cursor-wrapper[data-pressed="true"] .imuse-cursor-dot {
-  transform: scale(0.75);
+  transform: scale(0.8);
 }
 
-/* Subtle Outer Ring */
+/* Subtle Restrained Outer Ring - Consistent 20px */
 .imuse-cursor-ring {
-  width: 24px;
-  height: 24px;
-  border-radius: 9999px;
-  border: 1px solid var(--text-primary, #111111);
-  opacity: 0.22;
-  transition: width 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              height 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              margin 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 160ms ease,
-              border-color 200ms ease,
-              background-color 160ms ease;
-  pointer-events: none;
-}
-
-.imuse-cursor-wrapper[data-state="default"] .imuse-cursor-ring {
-  opacity: 0.2;
-}
-
-.imuse-cursor-wrapper[data-state="link"] .imuse-cursor-ring {
-  width: 28px;
-  height: 28px;
-  margin-left: -14px;
-  margin-top: -14px;
-  opacity: 0.36;
-}
-
-.imuse-cursor-wrapper[data-state="button"] .imuse-cursor-ring {
-  width: 32px;
-  height: 32px;
-  margin-left: -16px;
-  margin-top: -16px;
-  opacity: 0.42;
-  background-color: var(--accent-soft, rgba(0, 0, 0, 0.03));
-}
-
-.imuse-cursor-wrapper[data-state="view"] .imuse-cursor-ring {
-  width: 44px;
-  height: 44px;
-  margin-left: -22px;
-  margin-top: -22px;
-  opacity: 0.95;
-  border-width: 1px;
-  border-color: var(--text-primary, #111111);
-  background-color: var(--overlay, rgba(255, 255, 255, 0.75));
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-.imuse-cursor-wrapper[data-state="view"] .imuse-cursor-label {
-  opacity: 1;
-  color: var(--text-primary, #111111);
-}
-
-.imuse-cursor-wrapper[data-state="grab"] .imuse-cursor-ring {
-  width: 26px;
-  height: 26px;
-  margin-left: -13px;
-  margin-top: -13px;
-  opacity: 0.45;
-  border-style: dashed;
-}
-
-.imuse-cursor-wrapper[data-state="grabbing"] .imuse-cursor-ring {
   width: 20px;
   height: 20px;
   margin-left: -10px;
   margin-top: -10px;
-  opacity: 0.65;
+  border-radius: 9999px;
+  border: 1px solid var(--text-primary, #111111);
+  opacity: 0.2;
+  transition: width 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              height 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              margin 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 140ms ease,
+              border-color 200ms ease;
+  pointer-events: none;
+}
+
+/* Default / Posts / Images / Cards: NEVER expands! Stays 20px! */
+.imuse-cursor-wrapper[data-state="default"] .imuse-cursor-ring {
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  opacity: 0.2;
+}
+
+/* Buttons & Links: Subtle 24px halo */
+.imuse-cursor-wrapper[data-state="link"] .imuse-cursor-ring,
+.imuse-cursor-wrapper[data-state="button"] .imuse-cursor-ring {
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  margin-top: -12px;
+  opacity: 0.32;
+}
+
+/* Grab state (canvas & tonearm) */
+.imuse-cursor-wrapper[data-state="grab"] .imuse-cursor-ring {
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -11px;
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+/* Grabbing state */
+.imuse-cursor-wrapper[data-state="grabbing"] .imuse-cursor-ring {
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  opacity: 0.55;
   border-style: solid;
 }
 
-.imuse-cursor-wrapper[data-pressed="true"] .imuse-cursor-ring {
-  opacity: 0.55;
-}
-
-/* TRON Theme Specific Adaptation */
-.theme-tron .imuse-cursor-dot {
-  background-color: var(--accent-primary, #00ffff);
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
-}
-
+/* TRON ring */
 .theme-tron .imuse-cursor-ring {
-  border-color: rgba(0, 255, 255, 0.45);
-}
-
-.theme-tron .imuse-cursor-wrapper[data-state="view"] .imuse-cursor-ring {
-  border-color: #00ffff;
-  background-color: rgba(1, 4, 9, 0.88);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.25);
-}
-
-.theme-tron .imuse-cursor-wrapper[data-state="view"] .imuse-cursor-label {
-  color: #00ffff;
+  border-color: rgba(0, 255, 255, 0.4);
 }
 
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   .imuse-cursor-dot,
-  .imuse-cursor-ring,
-  .imuse-cursor-label {
+  .imuse-cursor-ring {
     transition: none !important;
   }
 }
