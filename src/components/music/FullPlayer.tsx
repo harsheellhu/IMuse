@@ -11,11 +11,10 @@ import { PlaybackControls } from './PlaybackControls';
 import { Lyrics } from './Lyrics';
 
 export function FullPlayer() {
-  const { currentSong, isMaximized, setMaximized, fileUnavailableMessage } = useMusicStore(useShallow(s => ({
+  const { currentSong, isMaximized, setMaximized } = useMusicStore(useShallow(s => ({
     currentSong: s.currentSong,
     isMaximized: s.isMaximized,
-    setMaximized: s.setMaximized,
-    fileUnavailableMessage: s.fileUnavailableMessage
+    setMaximized: s.setMaximized
   })));
   const { appearance } = useSettingsStore();
   const isTron = appearance === 'tron';
@@ -124,13 +123,6 @@ export function FullPlayer() {
                   {currentSong.album && <span>{currentSong.album}</span>}
                   {currentSong.album && currentSong.genre && <span>•</span>}
                   {currentSong.genre && <span>{currentSong.genre}</span>}
-                </div>
-              )}
-
-              {/* Graceful Missing Audio Notice */}
-              {fileUnavailableMessage && (
-                <div className="mt-3 px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-center lg:justify-start gap-2 backdrop-blur-md">
-                  <span className="font-medium">{fileUnavailableMessage}</span>
                 </div>
               )}
             </div>

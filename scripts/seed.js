@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
-import { seedPurpleRain } from './seed-purple-rain.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -208,8 +207,5 @@ const insertSaved = db.prepare(`INSERT OR IGNORE INTO saved_items (user_id, cont
 
 // 6. Seed demo user preferences
 db.prepare(`INSERT OR IGNORE INTO preferences (user_id) VALUES (?)`).run('u-demo');
-
-// 7. Seed Purple Rain (2017 Remaster) Local Album and Tracks
-seedPurpleRain();
 
 console.log('Database seeding completed successfully.');

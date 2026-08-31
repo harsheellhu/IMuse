@@ -14,7 +14,6 @@ interface MusicStoreState {
   isMiniPlayerVisible: boolean;
   isMaximized: boolean;
   audioElement: HTMLAudioElement | null;
-  fileUnavailableMessage: string | null;
   
   // Actions
   setAudioElement: (el: HTMLAudioElement | null) => void;
@@ -22,7 +21,6 @@ interface MusicStoreState {
   playNext: () => void;
   playPrev: () => void;
   playSong: (song: Song, newQueue?: Song[]) => Promise<void>;
-  playAlbum: (albumTracks: Song[]) => Promise<void>;
   togglePlay: () => void;
   setVolume: (vol: number) => void;
   setProgress: (prog: number) => void;
@@ -44,104 +42,56 @@ export const useMusicStore = create<MusicStoreState>((set, get) => ({
   isMiniPlayerVisible: false,
   isMaximized: false,
   audioElement: null,
-  fileUnavailableMessage: null,
   
   setAudioElement: (el) => set({ audioElement: el }),
   
   setMaximized: (val) => set({ isMaximized: val }),
 
-  playAlbum: async (albumTracks) => {
-    if (!albumTracks || albumTracks.length === 0) return;
-    await get().playSong(albumTracks[0], albumTracks);
-  },
-
   playSong: async (song, newQueue) => {
-    // Revoke previous url if it was an object URL
+    // Revoke previous url to prevent memory leaks
     const currentUrl = get().currentBlobUrl;
-    if (currentUrl && currentUrl.startsWith('blob:')) {
+    if (currentUrl) {
       URL.revokeObjectURL(currentUrl);
     }
     
-    let playableUrl: string | null = null;
-    let isFileAvailable = false;
-
-    // 1. Direct local file check (HEAD request to verify file existence in public/)
-    if (song.audioSource) {
-      try {
-        const headRes = await fetch(song.audioSource, { method: 'HEAD' });
-        if (headRes.ok) {
-          playableUrl = song.audioSource;
-          isFileAvailable = true;
-        }
-      } catch (err) {
-        // File not placed yet or network offline
-      }
+    // Fetch blob from IDB
+    const record = await musicDB.getSong(song.id);
+    if (!record || !record.blob) {
+      console.error('Song not found in IDB');
+      return;
     }
-
-    // 2. Check IndexedDB if user imported audio blob locally
-    if (!playableUrl) {
-      const record = await musicDB.getSong(song.id);
-      if (record && record.blob) {
-        playableUrl = URL.createObjectURL(record.blob);
-        isFileAvailable = true;
-      }
-    }
-
-    // Ensure lyrics from canonical metadata are present
-    let songLyrics = song.lyrics;
-    if (!songLyrics || songLyrics.length <= 1) {
-      const prData = await musicDB.loadPurpleRainMetadata();
-      const prTrack = prData?.tracks.find(t => t.id === song.id);
-      if (prTrack?.lyrics) {
-        songLyrics = prTrack.lyrics;
-      }
-    }
-
+    
+    const blobUrl = URL.createObjectURL(record.blob);
+    
+    // Inject mock lyrics for testing if none exist
     const songWithLyrics = {
       ...song,
-      isAvailable: isFileAvailable,
-      lyrics: songLyrics || [
-        { time: 0, text: "(Instrumental)" }
+      lyrics: song.lyrics || [
+        { time: 0, text: "(Instrumental intro)" },
+        { time: 5, text: "I've been looking at the turntable" },
+        { time: 10, text: "Watching the record spin around" },
+        { time: 15, text: "The needle drops, the music plays" },
+        { time: 20, text: "Lost inside this giant sound" },
+        { time: 30, text: "(Guitar Solo)" },
+        { time: 45, text: "And the colors fill the room" },
+        { time: 50, text: "Fading from the cover art" },
+        { time: 55, text: "Synchronized with every beat" },
+        { time: 60, text: "Playing right inside my heart" }
       ]
     };
 
-    const targetQueue = newQueue || get().queue;
-    const finalQueue = targetQueue.length > 0 ? targetQueue : [songWithLyrics];
-
-    if (isFileAvailable && playableUrl) {
-      set({
-        currentSong: songWithLyrics,
-        currentBlobUrl: playableUrl,
-        isPlaying: true,
-        progress: 0,
-        currentTime: 0,
-        duration: song.duration || 0,
-        isMiniPlayerVisible: true,
-        fileUnavailableMessage: null,
-        queue: finalQueue
-      });
-      
-      // Update play count in DB
-      await musicDB.updateSong(song.id, {
-        playCount: (song.playCount || 0) + 1,
-        lastPlayed: new Date().toISOString()
-      });
-    } else {
-      // Missing file handling: DO NOT crash!
-      // Render full player, vinyl turntable with center artwork, artist, and status message
-      const fileName = song.audioSource ? song.audioSource.split('/').pop() : `${song.title}.mp3`;
-      set({
-        currentSong: songWithLyrics,
-        currentBlobUrl: null,
-        isPlaying: false,
-        progress: 0,
-        currentTime: 0,
-        duration: song.duration || 0,
-        isMiniPlayerVisible: true,
-        fileUnavailableMessage: `Audio file unavailable. Place '${fileName}' in /public/music/purple-rain-2017/ to enable playback.`,
-        queue: finalQueue
-      });
-    }
+    set({
+      currentSong: songWithLyrics,
+      currentBlobUrl: blobUrl,
+      isPlaying: true,
+      progress: 0,
+      currentTime: 0,
+      isMiniPlayerVisible: true,
+      queue: newQueue || get().queue
+    });
+    
+    // Update play count in DB
+    await musicDB.updateSong(song.id, { playCount: song.playCount + 1, lastPlayed: new Date().toISOString() });
   },
   
   togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),

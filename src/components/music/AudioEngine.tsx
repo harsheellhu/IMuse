@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useMusicStore } from '../../store/useMusicStore';
 import { useShallow } from 'zustand/react/shallow';
-import { musicDB } from '../../utils/musicDB';
 
 export function AudioEngine() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -64,16 +63,8 @@ export function AudioEngine() {
   };
   
   const handleLoadedMetadata = () => {
-    if (audioRef.current && Number.isFinite(audioRef.current.duration)) {
-      const dur = audioRef.current.duration;
-      setDuration(dur);
-      const current = useMusicStore.getState().currentSong;
-      if (current && (!current.duration || current.duration === 0)) {
-        useMusicStore.setState({
-          currentSong: { ...current, duration: dur }
-        });
-        musicDB.updateSong(current.id, { duration: dur });
-      }
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
     }
   };
 
