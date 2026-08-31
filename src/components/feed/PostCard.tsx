@@ -1,26 +1,19 @@
-import React from 'react';
-import { Bookmark, Heart, MoreHorizontal, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bookmark, Heart, MoreHorizontal, Plus, Download } from 'lucide-react';
 import { Post } from '../../types';
 import { useStore } from '../../store/useStore';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { OptimizedImage } from '../ui/OptimizedImage';
+import { ImageDownloadModal } from '../ui/ImageDownloadModal';
 
 export function PostCard({ post, className }: { key?: React.Key; post: Post; className?: string }) {
   const { users, savedPostIds, toggleSavePost, openViewer, isAuthenticated, setAuthModalOpen } = useStore();
   const creator = users.find(u => u.id === post.creatorId);
   const isSaved = savedPostIds.includes(post.id);
   const resolvedImg = post.imageUrl || (post as any).image_url || (post as any).coverImage || (post as any).posterImage;
-  const [imgSrc, setImgSrc] = React.useState(resolvedImg);
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const [hasError, setHasError] = React.useState(false);
-
-  React.useEffect(() => {
-    const src = post.imageUrl || (post as any).image_url || (post as any).coverImage || (post as any).posterImage;
-    setImgSrc(src);
-    setHasError(false);
-    setIsLoaded(false);
-  }, [post.id, post.imageUrl]);
+  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -43,35 +36,13 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
     >
       <div className="relative overflow-hidden bg-bg-secondary rounded-[var(--radius-base)] shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.01)] group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] dark:group-hover:shadow-[0_12px_40px_rgba(255,255,255,0.03)] transition-shadow duration-500">
         
-        {/* Loading Shimmer */}
-        {!isLoaded && !hasError && (
-          <div className="absolute inset-0 bg-bg-secondary animate-pulse" />
-        )}
-        
-        {/* Broken Image Fallback */}
-        {hasError && (
-          <div className="w-full aspect-[4/5] bg-bg-secondary flex flex-col items-center justify-center p-6 text-center border border-border-subtle">
-            <div className="w-12 h-12 rounded-full bg-bg-elevated flex items-center justify-center mb-4">
-              <span className="text-text-muted text-xs font-serif italic">Missing</span>
-            </div>
-            <span className="text-xs text-text-secondary uppercase tracking-widest">{post.category || 'Visual'}</span>
-          </div>
-        )}
-
-        {!hasError && (
-          <img 
-            src={imgSrc} 
-            alt={post.title} 
-            loading="lazy"
-            onLoad={() => setIsLoaded(true)}
-            onError={() => { setHasError(true); setIsLoaded(true); }}
-            className={clsx(
-              "w-full h-auto object-cover transform transition-all duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.015]",
-              isLoaded ? "opacity-100" : "opacity-0"
-            )}
-            decoding="async"
-          />
-        )}
+        <OptimizedImage
+          src={resolvedImg}
+          alt={post.title || 'Artwork'}
+          optimizeOptions={{ width: 600, quality: 80, format: 'webp' }}
+          fallbackText={post.title}
+          className="w-full h-auto object-cover transform transition-all duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.015]"
+        />
         
         {/* Minimal Hover Overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 dark:group-hover:bg-black/20 transition-colors duration-500 flex flex-col justify-between p-4 pointer-events-none">
@@ -79,15 +50,31 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
             <div className="bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-medium tracking-widest uppercase text-text-primary border border-border-subtle shadow-sm pointer-events-auto">
               {post.category || 'Visual'}
             </div>
-            <button 
-              onClick={handleSave}
-              className={clsx(
-                "w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-sm pointer-events-auto",
-                isSaved ? "bg-text-primary text-bg-base border border-transparent" : "bg-bg-elevated/90 text-text-primary hover:bg-text-primary hover:text-bg-base border border-border-subtle"
-              )}
-            >
-              {isSaved ? <Bookmark className="w-4 h-4" fill="currentColor" /> : <Plus className="w-4 h-4" />}
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setDownloadModalOpen(true);
+                }}
+                title="Download image"
+                aria-label="Download image"
+                className="w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-sm pointer-events-auto bg-bg-elevated/90 text-text-primary hover:bg-text-primary hover:text-bg-base border border-border-subtle cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={handleSave}
+                title={isSaved ? "Saved" : "Save post"}
+                aria-label={isSaved ? "Saved" : "Save post"}
+                className={clsx(
+                  "w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-sm pointer-events-auto cursor-pointer",
+                  isSaved ? "bg-text-primary text-bg-base border border-transparent" : "bg-bg-elevated/90 text-text-primary hover:bg-text-primary hover:text-bg-base border border-border-subtle"
+                )}
+              >
+                {isSaved ? <Bookmark className="w-4 h-4" fill="currentColor" /> : <Plus className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -98,6 +85,16 @@ export function PostCard({ post, className }: { key?: React.Key; post: Post; cla
           {creator ? `by ${creator.name}` : (post.creatorId === 'discovery-bot' ? 'Discovery' : 'Curator')}
         </span>
       </div>
+
+      {resolvedImg && (
+        <ImageDownloadModal
+          isOpen={downloadModalOpen}
+          onClose={() => setDownloadModalOpen(false)}
+          imageUrl={resolvedImg}
+          title={post.title || 'Artwork'}
+          creator={creator?.name}
+        />
+      )}
     </motion.div>
   );
 }

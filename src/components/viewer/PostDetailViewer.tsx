@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, type ReactNode, type ErrorInfo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft } from 'lucide-react';
+import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft, Download } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
@@ -9,6 +9,8 @@ import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { ExperienceLogModal } from '../ui/ExperienceLogModal';
 import { ConnectedExperienceTeaser } from './ConnectedExperienceTeaser';
 import { contentApi } from '../../api/content';
+import { ImageDownloadModal } from '../ui/ImageDownloadModal';
+import { OptimizedImage } from '../ui/OptimizedImage';
 import clsx from 'clsx';
 
 interface ErrorBoundaryProps {
@@ -310,6 +312,7 @@ export function PostDetailViewer() {
 function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () => void }) {
   const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen, expandToUniverse } = useStore();
   const [isExperienceModalOpen, setExperienceModalOpen] = React.useState(false);
+  const [isDownloadModalOpen, setDownloadModalOpen] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
   const { data, type } = item;
 
@@ -497,11 +500,13 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
               style={{ aspectRatio }}
             >
               {imageUrl && !imageError ? (
-                <img
+                <OptimizedImage
                   src={imageUrl}
                   alt={title}
                   onError={() => setImageError(true)}
                   className="w-full h-full object-contain"
+                  optimizeOptions={{ width: 1600, quality: 90, format: 'webp', fit: 'scale' }}
+                  priority={true}
                   crossOrigin="anonymous"
                 />
               ) : (
@@ -613,6 +618,20 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Share</span>
                 </button>
+
+                {imageUrl && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDownloadModalOpen(true);
+                    }}
+                    className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2 px-3 rounded-full bg-bg-secondary hover:bg-bg-secondary-hover border border-border-subtle"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download</span>
+                  </button>
+                )}
               </div>
 
               {/* Connected Experience Section (Optional & Non-blocking) */}
@@ -635,6 +654,16 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
           isOpen={isExperienceModalOpen}
           onClose={() => setExperienceModalOpen(false)}
           content={data as any}
+        />
+      )}
+
+      {imageUrl && (
+        <ImageDownloadModal
+          isOpen={isDownloadModalOpen}
+          onClose={() => setDownloadModalOpen(false)}
+          imageUrl={imageUrl}
+          title={title}
+          creator={creatorInfo}
         />
       )}
     </motion.div>

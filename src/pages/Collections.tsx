@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Lock, LayoutGrid, Layout } from 'lucide-react';
 import clsx from 'clsx';
 import { contentApi } from '../api/content';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 export function Collections() {
   const { collections, openViewer, isAuthenticated } = useStore();
@@ -120,13 +121,15 @@ export function Collections() {
                       onClick={() => openViewer({ id: collection.id, type: 'collection', data: collection })}
                     >
                       <div className="relative aspect-[4/3] overflow-hidden bg-surface">
-                        <img 
+                        <OptimizedImage 
                           src={collection.coverImage || 'https://images.unsplash.com/photo-1513694203232-719a280e022f'} 
                           alt={collection.title}
+                          optimizeOptions={{ width: 600, quality: 85, format: 'webp' }}
+                          fallbackText={collection.title}
                           className="w-full h-full object-cover pointer-events-none"
                         />
                         {collection.isPrivate && (
-                          <div className="absolute top-2.5 left-2.5 bg-bg-elevated/90 backdrop-blur-md p-1.5 rounded-full shadow-sm">
+                          <div className="absolute top-2.5 left-2.5 bg-bg-elevated/90 backdrop-blur-md p-1.5 rounded-full shadow-sm pointer-events-none">
                             <Lock className="w-3 h-3 text-text-primary" />
                           </div>
                         )}
@@ -164,17 +167,17 @@ export function Collections() {
                     layoutId={`collection-image-${collection.id}`}
                     className="relative aspect-[4/3] overflow-hidden mb-6 bg-surface shadow-[0_8px_30px_var(--color-shadow)] rounded-sm"
                   >
-                    <img 
+                    <OptimizedImage 
                       src={collection.coverImage} 
                       alt={collection.title}
+                      optimizeOptions={{ width: 800, quality: 85, format: 'webp' }}
+                      fallbackText={collection.title}
                       className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
-                      loading="lazy"
-                      decoding="async"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
                     
                     {collection.isPrivate && (
-                      <div className="absolute top-4 left-4 bg-bg-elevated/90 backdrop-blur-md p-2 rounded-full">
+                      <div className="absolute top-4 left-4 bg-bg-elevated/90 backdrop-blur-md p-2 rounded-full pointer-events-none">
                         <Lock className="w-3 h-3 text-text-primary" />
                       </div>
                     )}

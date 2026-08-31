@@ -4,6 +4,7 @@ import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star } from 'lucide-react';
 import clsx from 'clsx';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 export function Books() {
   const { books, savedPostIds, openViewer } = useStore();
@@ -72,19 +73,14 @@ export function Books() {
                     onClick={() => openViewer({ id: book.id, type: 'book', data: book })}
                   >
                     <div className="relative aspect-[2/3] overflow-hidden mb-4 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:scale-[1.02]">
-                      {cover ? (
-                        <img 
-                          src={cover} 
-                          alt={book.title} 
-                          className="w-full h-full object-cover transition-opacity duration-700"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center p-4 text-center bg-bg-secondary">
-                          <span className="font-serif italic text-xs">{book.title}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+                      <OptimizedImage 
+                        src={cover} 
+                        alt={book.title} 
+                        optimizeOptions={{ width: 600, quality: 85, format: 'webp' }}
+                        fallbackText={book.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
                     </div>
                     <h3 className="font-serif text-lg leading-snug text-text-primary group-hover:opacity-80 transition-opacity line-clamp-1">{book.title}</h3>
                     <p className="text-xs text-text-secondary font-sans mt-1 line-clamp-1">{book.author || 'Author'}</p>

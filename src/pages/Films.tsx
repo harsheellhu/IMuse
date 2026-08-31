@@ -4,6 +4,7 @@ import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star } from 'lucide-react';
 import clsx from 'clsx';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 export function Films() {
   const { films, savedPostIds, openViewer } = useStore();
@@ -71,19 +72,14 @@ export function Films() {
                     onClick={() => openViewer({ id: film.id, type: 'film', data: film })}
                   >
                     <div className="relative aspect-[2/3] overflow-hidden mb-4 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:scale-[1.02]">
-                      {poster ? (
-                        <img 
-                          src={poster} 
-                          alt={film.title} 
-                          className="w-full h-full object-cover transition-opacity duration-700"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center p-4 text-center bg-bg-secondary">
-                          <span className="font-serif italic text-xs">{film.title}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
+                      <OptimizedImage 
+                        src={poster} 
+                        alt={film.title} 
+                        optimizeOptions={{ width: 600, quality: 85, format: 'webp' }}
+                        fallbackText={film.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
                     </div>
                     
                     <h3 className="font-serif text-lg leading-snug text-text-primary group-hover:opacity-80 transition-opacity line-clamp-1">{film.title}</h3>

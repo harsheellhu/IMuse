@@ -4,6 +4,7 @@ import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Navigation } from 'lucide-react';
 import clsx from 'clsx';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 export function Places() {
   const { places, openViewer } = useStore();
@@ -67,16 +68,16 @@ export function Places() {
                 onClick={() => openViewer({ id: place.id, type: 'place', data: place })}
               >
                 <div className="relative aspect-[16/10] overflow-hidden mb-5 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:-translate-y-1">
-                  <img 
+                  <OptimizedImage 
                     src={place.imageUrl || (place as any).image_url || place.coverImage || 'https://images.unsplash.com/photo-1555993539-1732b0258235'} 
                     alt={place.title} 
+                    optimizeOptions={{ width: 800, quality: 85, format: 'webp' }}
+                    fallbackText={place.title}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
-                    loading="lazy"
-                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   
-                  <div className="absolute bottom-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
                     <Navigation className="w-3.5 h-3.5 text-white" />
                     <span className="text-xs font-medium tracking-wide text-white">Explore</span>
                   </div>

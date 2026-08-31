@@ -3,7 +3,7 @@
     "id": "books-0",
     "title": "Dune",
     "description": "a white box sitting on top of a blue sheet",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1718303728423-507cbf6d7df4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1718303728423-507cbf6d7df4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -24,7 +24,7 @@
     "id": "books-1",
     "title": "1984",
     "description": "Milk and Honey by Rupi Kaur book on side table",
-    "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -45,7 +45,7 @@
     "id": "books-2",
     "title": "The Great Gatsby",
     "description": "flowers beside yellow wall",
-    "imageUrl": "https://images.unsplash.com/photo-1487147264018-f937fba0c817?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1487147264018-f937fba0c817?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -66,7 +66,7 @@
     "id": "books-3",
     "title": "To Kill A Mockingbird",
     "description": "A book sitting on top of a tree trunk",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731906-2163a06f3022?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731906-2163a06f3022?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -87,7 +87,7 @@
     "id": "books-4",
     "title": "Pride And Prejudice",
     "description": "a stack of three books sitting on top of each other",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758769-398dca4d5f1c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758769-398dca4d5f1c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -108,7 +108,7 @@
     "id": "books-5",
     "title": "The Catcher In The Rye",
     "description": "a book sitting on top of a wooden table next to a laptop",
-    "imageUrl": "https://images.unsplash.com/photo-1612969308146-066d55f37ccb?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1612969308146-066d55f37ccb?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -129,7 +129,7 @@
     "id": "books-6",
     "title": "Fahrenheit 451",
     "description": "a yellow book with a picture of a man's face on it",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001657-722e6e14ae29?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001657-722e6e14ae29?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -150,7 +150,7 @@
     "id": "books-7",
     "title": "Brave New World",
     "description": "a yellow book with a drawing of a man and a woman's face",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001555-c05f13f4362a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001555-c05f13f4362a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OHx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -171,7 +171,7 @@
     "id": "books-8",
     "title": "The Hobbit",
     "description": "a white piece of paper sitting on top of a table",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749904043-c9470c31cd48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749904043-c9470c31cd48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8OXx8Ym9vayUyMGNvdmVyJTIwZGVzaWdufGVufDB8fHx8MTc4NzgzNDU2M3ww&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -192,7 +192,7 @@
     "id": "books-9",
     "title": "Moby Dick",
     "description": "a yellow book cover with a drawing of a man and a woman's face",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001590-79a5b6207662?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001590-79a5b6207662?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -213,7 +213,7 @@
     "id": "books-10",
     "title": "Frankenstein",
     "description": "a yellow book sitting on top of a marble surface",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001560-935f123683f4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001560-935f123683f4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -234,7 +234,7 @@
     "id": "books-11",
     "title": "Dracula",
     "description": "A white notebook and dried flowers on a table",
-    "imageUrl": "https://images.unsplash.com/photo-1753526667964-72e724f41780?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1753526667964-72e724f41780?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -255,7 +255,7 @@
     "id": "books-12",
     "title": "The Odyssey",
     "description": "A book with a pen flying out of it",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1731951687922-1bb9d7722a49?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1731951687922-1bb9d7722a49?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -276,7 +276,7 @@
     "id": "books-13",
     "title": "Jane Eyre",
     "description": "two yellow books with red lettering on them",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001559-dfaad6ac3ca4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001559-dfaad6ac3ca4?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -297,7 +297,7 @@
     "id": "books-14",
     "title": "Wuthering Heights",
     "description": "a book sitting on top of a wooden table",
-    "imageUrl": "https://images.unsplash.com/photo-1647529735054-9b68c881fdc9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1647529735054-9b68c881fdc9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -318,7 +318,7 @@
     "id": "books-15",
     "title": "Crime And Punishment",
     "description": "A book sitting on top of a tree stump",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731912-dde6e451e59f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731912-dde6e451e59f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -339,7 +339,7 @@
     "id": "books-16",
     "title": "The Brothers Karamazov",
     "description": "A dried tree against the background of a red-hot sun disc. Vertical format",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1711987494491-e2d3add52ff2?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1711987494491-e2d3add52ff2?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -360,7 +360,7 @@
     "id": "books-17",
     "title": "Anna Karenina",
     "description": "A row of books on a shelf",
-    "imageUrl": "https://images.unsplash.com/photo-1760688352677-7808917e2a10?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1760688352677-7808917e2a10?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -381,7 +381,7 @@
     "id": "books-18",
     "title": "War And Peace",
     "description": "white and red book on black textile",
-    "imageUrl": "https://images.unsplash.com/photo-1613643708215-e3a0b5e5cd8e?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1613643708215-e3a0b5e5cd8e?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -400,9 +400,9 @@
   },
   {
     "id": "books-19",
-    "title": "Les Misérables",
+    "title": "Les Mis\u00e9rables",
     "description": "A book with the word \"look\" on a table",
-    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjN8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -423,7 +423,7 @@
     "id": "books-20",
     "title": "The Lord Of The Rings",
     "description": "a white book sitting on top of a table next to a plant",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1718290535214-0349997ec615?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1718290535214-0349997ec615?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -444,7 +444,7 @@
     "id": "books-21",
     "title": "The Hitchhiker's Guide To The Galaxy",
     "description": "A book with the word \"look\" on a table",
-    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1753526456624-9c3cadd6760d?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -465,7 +465,7 @@
     "id": "books-22",
     "title": "Neuromancer",
     "description": "A book sitting on top of a table next to a cup of tea",
-    "imageUrl": "https://images.unsplash.com/photo-1722974611253-d9ecd8d03b48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722974611253-d9ecd8d03b48?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -486,7 +486,7 @@
     "id": "books-23",
     "title": "Snow Crash",
     "description": "A book sitting on top of a tree stump",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731885-81d24c57f8ac?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731885-81d24c57f8ac?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -507,7 +507,7 @@
     "id": "books-24",
     "title": "Foundation",
     "description": "a stack of white books on a gray background",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985580-68558bafe97c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985580-68558bafe97c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -528,7 +528,7 @@
     "id": "books-25",
     "title": "I, Robot",
     "description": "A book sitting on top of a sidewalk next to a pair of shoes",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731808-b116102d7004?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731808-b116102d7004?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -549,7 +549,7 @@
     "id": "books-26",
     "title": "The Martian Chronicles",
     "description": "an open book with numbers on it",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001565-09a2d461982f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001565-09a2d461982f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -570,7 +570,7 @@
     "id": "books-27",
     "title": "Slaughterhouse-Five",
     "description": "a person holding a book in their hand",
-    "imageUrl": "https://images.unsplash.com/photo-1710799885122-428e63eff691?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1710799885122-428e63eff691?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -591,7 +591,7 @@
     "id": "books-28",
     "title": "Catch-22",
     "description": "a stack of three books sitting on top of each other",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1677187301430-f72321664a74?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1677187301430-f72321664a74?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -612,7 +612,7 @@
     "id": "books-29",
     "title": "One Hundred Years Of Solitude",
     "description": "Pride and prejudice book cover with peacock design",
-    "imageUrl": "https://images.unsplash.com/photo-1763768861268-cb6b54173dbf?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1763768861268-cb6b54173dbf?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -633,7 +633,7 @@
     "id": "books-30",
     "title": "The Bell Jar",
     "description": "A book sitting on top of a bag in the grass",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731941-8fab381f4523?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731941-8fab381f4523?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -654,7 +654,7 @@
     "id": "books-31",
     "title": "Beloved",
     "description": "A person holding up a book in front of a lake",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731848-f459363a6552?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731848-f459363a6552?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -675,7 +675,7 @@
     "id": "books-32",
     "title": "Invisible Man",
     "description": "a row of old books sitting next to each other",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1674727219390-5953cefb3cd9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1674727219390-5953cefb3cd9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -696,7 +696,7 @@
     "id": "books-33",
     "title": "The Color Purple",
     "description": "A person holding a book in their hand",
-    "imageUrl": "https://images.unsplash.com/photo-1722706732139-5e3d11cee2c9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706732139-5e3d11cee2c9?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -717,7 +717,7 @@
     "id": "books-34",
     "title": "The Handmaid's Tale",
     "description": "A person holding up a book in a park",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731901-d263f929a100?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731901-d263f929a100?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -738,7 +738,7 @@
     "id": "books-35",
     "title": "The Alchemist",
     "description": "A book sitting on top of a chair in a room",
-    "imageUrl": "https://images.unsplash.com/photo-1722706731979-f478967c868c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1722706731979-f478967c868c?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MzZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -759,7 +759,7 @@
     "id": "books-36",
     "title": "The Little Prince",
     "description": "a white box with three sides on a gray background",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985615-ad90c28c83c5?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1681749985615-ad90c28c83c5?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -780,7 +780,7 @@
     "id": "books-37",
     "title": "The Kite Runner",
     "description": "a yellow book with a drawing of a woman's face",
-    "imageUrl": "https://images.unsplash.com/photo-1716892001554-71153626ea22?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1716892001554-71153626ea22?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -801,7 +801,7 @@
     "id": "books-38",
     "title": "Life Of Pi",
     "description": "A stack of books sitting on top of each other",
-    "imageUrl": "https://images.unsplash.com/photo-1732714403349-05fc43b67042?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1732714403349-05fc43b67042?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mzl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -822,7 +822,7 @@
     "id": "books-39",
     "title": "The Book Thief",
     "description": "The remains of the day book on wooden table",
-    "imageUrl": "https://images.unsplash.com/photo-1758279771969-2cc6bcac3fd1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1758279771969-2cc6bcac3fd1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1NjV8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -843,7 +843,7 @@
     "id": "books-40",
     "title": "The Hunger Games",
     "description": "a close up of a yellow object with a yellow background",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1667354155822-33bfbdfbe834?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667354155822-33bfbdfbe834?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDF8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -864,7 +864,7 @@
     "id": "books-41",
     "title": "Harry Potter And The Sorcerer's Stone",
     "description": "a shelf with books on it",
-    "imageUrl": "https://images.unsplash.com/photo-1657630399502-c56a39bed97a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1657630399502-c56a39bed97a?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDJ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -885,7 +885,7 @@
     "id": "books-42",
     "title": "A Game Of Thrones",
     "description": "A book titled \"change by design.\"",
-    "imageUrl": "https://images.unsplash.com/photo-1752243724485-6faf936bfa7f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1752243724485-6faf936bfa7f?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDN8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -906,7 +906,7 @@
     "id": "books-43",
     "title": "Outlander",
     "description": "A light green book with a small image on top",
-    "imageUrl": "https://images.unsplash.com/photo-1769490315625-6e669d53e698?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1769490315625-6e669d53e698?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDR8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -927,7 +927,7 @@
     "id": "books-44",
     "title": "The Girl With The Dragon Tattoo",
     "description": "a stack of three books sitting on top of each other",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758927-e49fcf04f862?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1667251758927-e49fcf04f862?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDV8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -948,7 +948,7 @@
     "id": "books-45",
     "title": "Gone Girl",
     "description": "Grayscale book cover titled 'russian poets' with illustration",
-    "imageUrl": "https://images.unsplash.com/photo-1784922903603-dee82c17a9f1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1784922903603-dee82c17a9f1?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDZ8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -969,7 +969,7 @@
     "id": "books-46",
     "title": "The Fault In Our Stars",
     "description": "A row of books behind a chain link fence",
-    "imageUrl": "https://images.unsplash.com/photo-1726951354883-7501b272a14b?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1726951354883-7501b272a14b?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDd8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -990,7 +990,7 @@
     "id": "books-47",
     "title": "The Martian",
     "description": "a picture of a brown and white design on a wall",
-    "imageUrl": "https://images.unsplash.com/photo-1694636771662-6e7f034ca927?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1694636771662-6e7f034ca927?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDh8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -1011,7 +1011,7 @@
     "id": "books-48",
     "title": "Ready Player One",
     "description": "A blue book with the bible written on it",
-    "imageUrl": "https://plus.unsplash.com/premium_photo-1725075087236-e32a71552098?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1725075087236-e32a71552098?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NDl8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",
@@ -1032,7 +1032,7 @@
     "id": "books-49",
     "title": "Sapiens",
     "description": "A bookshelf filled with lots of books behind a chain link fence",
-    "imageUrl": "https://images.unsplash.com/photo-1726951352977-7260c3eaec70?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&auto=format&fit=crop",
+    "imageUrl": "https://images.unsplash.com/photo-1726951352977-7260c3eaec70?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NTB8fGJvb2slMjBjb3ZlciUyMGRlc2lnbnxlbnwwfHx8fDE3ODc4MzQ1Njd8MA&ixlib=rb-4.1.0&q=80&w=2000&fm=webp&fit=crop",
     "category": "Literature",
     "tags": [
       "books",

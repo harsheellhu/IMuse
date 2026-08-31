@@ -4,6 +4,7 @@ import { contentApi } from '../api/content';
 import { motion, AnimatePresence } from 'motion/react';
 import { Tv, Play } from 'lucide-react';
 import clsx from 'clsx';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 export function TvShows() {
   const { tvShows, openViewer } = useStore();
@@ -67,16 +68,16 @@ export function TvShows() {
                 onClick={() => openViewer({ id: show.id, type: 'tv_show', data: show })}
               >
                 <div className="relative aspect-[4/5] overflow-hidden mb-5 bg-surface rounded-sm shadow-[0_8px_30px_var(--color-shadow)] transform transition-transform duration-700 ease-out group-hover:-translate-y-1">
-                  <img 
+                  <OptimizedImage 
                     src={show.imageUrl} 
                     alt={show.title} 
+                    optimizeOptions={{ width: 600, quality: 85, format: 'webp' }}
+                    fallbackText={show.title}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]"
-                    loading="lazy"
-                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
                   
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
                     <Play className="w-3 h-3 fill-text-primary text-text-primary" />
                     <span className="text-[10px] font-medium tracking-widest text-text-primary">View</span>
                   </div>
