@@ -8,24 +8,47 @@
   --font-body: var(--font-body), var(--font-primary), sans-serif;
   --font-mono: var(--font-mono), monospace;
   
-  --color-background: var(--bg-base);
-  --color-background-elevated: var(--bg-elevated);
-  --color-surface: var(--bg-secondary);
-  --color-surface-hover: var(--bg-secondary-hover);
-  --color-surface-active: var(--bg-secondary-active);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-text-subtle: var(--text-subtle);
-  --color-border-subtle: var(--border-subtle);
-  --color-border-strong: var(--border-strong);
-  --color-accent-primary: var(--accent-primary);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-contrast: var(--accent-contrast);
-  --color-overlay: var(--overlay);
-  --color-shadow: var(--shadow-color);
-  --color-error: var(--color-error);
-  --color-success: var(--color-success);
+  --color-background: var(--color-background, var(--bg-base));
+  --color-background-elevated: var(--color-background-elevated, var(--bg-elevated));
+  --color-surface: var(--color-surface, var(--bg-secondary));
+  --color-surface-hover: var(--color-surface-hover, var(--bg-secondary-hover));
+  --color-surface-active: var(--color-surface-active, var(--bg-secondary-active));
+
+  --color-text: var(--color-text, var(--text-primary));
+  --color-text-primary: var(--color-text, var(--text-primary));
+  --color-text-secondary: var(--color-text-muted, var(--text-secondary));
+  --color-text-muted: var(--color-text-muted, var(--text-muted));
+  --color-text-subtle: var(--color-text-subtle, var(--text-subtle));
+  --color-text-inverse: var(--color-text-inverse, #ffffff);
+
+  --color-border: var(--color-border, var(--border-subtle));
+  --color-border-subtle: var(--color-border-subtle, var(--border-subtle));
+  --color-border-strong: var(--color-border-strong, var(--border-strong));
+
+  --color-accent: var(--color-accent, var(--accent-primary));
+  --color-accent-primary: var(--color-accent, var(--accent-primary));
+  --color-accent-hover: var(--color-accent-hover, var(--accent-primary));
+  --color-accent-active: var(--color-accent-active, var(--accent-primary));
+  --color-accent-soft: var(--color-accent-soft, var(--accent-soft));
+  --color-accent-contrast: var(--color-accent-contrast, var(--accent-contrast));
+
+  --color-focus: var(--color-focus, var(--accent-primary));
+  --color-selection: var(--color-selection, var(--accent-soft));
+
+  --color-overlay: var(--color-overlay, var(--overlay));
+  --color-shadow: var(--color-shadow, var(--shadow-color));
+
+  --color-error: var(--color-error, #EF4444);
+  --color-warning: var(--color-warning, #F59E0B);
+  --color-success: var(--color-success, #10B981);
+  --color-info: var(--color-info, #3B82F6);
+
+  /* Backward compatibility aliases */
+  --color-bg-base: var(--color-background, var(--bg-base));
+  --color-bg-secondary: var(--color-surface, var(--bg-secondary));
+  --color-bg-secondary-hover: var(--color-surface-hover, var(--bg-secondary-hover));
+  --color-bg-secondary-active: var(--color-surface-active, var(--bg-secondary-active));
+  --color-bg-elevated: var(--color-background-elevated, var(--bg-elevated));
 
   --radius-sm: calc(var(--radius-base) * 0.5);
   --radius-md: var(--radius-base);
@@ -36,6 +59,11 @@
 
 @layer base {
   :root {
+    /* Theme Transition Rule (150-250ms smooth color morphing) */
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
     /* Default spacing/density */
     --grid-gap: 1.5rem;
     --card-padding: 1rem;
@@ -69,49 +97,85 @@
     --weight-heading: 600;
     --transform-meta: uppercase;
     
-    /* Default Colors (Neutral Light) */
-    --bg-base: #FDFCFB;
-    --bg-secondary: #F5F4F1;
-    --bg-secondary-hover: #EBEAE7;
-    --bg-secondary-active: #E0DFDC;
-    --bg-elevated: #FFFFFF;
-    --text-primary: #111111;
-    --text-secondary: #666666;
-    --text-muted: #999999;
-    --text-subtle: #CCCCCC;
-    --border-subtle: rgba(0, 0, 0, 0.05);
-    --border-strong: rgba(0, 0, 0, 0.15);
-    --accent-primary: #111111;
-    --accent-soft: rgba(17, 17, 17, 0.1);
-    --accent-contrast: #FFFFFF;
-    --overlay: rgba(255, 255, 255, 0.8);
-    --shadow-color: rgba(0, 0, 0, 0.04);
+    /* Semantic Token Defaults (Fallback Light) */
+    --color-background: #FDFCFB;
+    --color-background-elevated: #FFFFFF;
+    --color-surface: #F5F4F1;
+    --color-surface-hover: #EBEAE7;
+    --color-surface-active: #E0DFDC;
+    --color-text: #111111;
+    --color-text-muted: #666666;
+    --color-text-subtle: #999999;
+    --color-text-inverse: #FFFFFF;
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-border-subtle: rgba(0, 0, 0, 0.05);
+    --color-border-strong: rgba(0, 0, 0, 0.15);
+    --color-accent: #111111;
+    --color-accent-hover: #2A2A2A;
+    --color-accent-active: #000000;
+    --color-accent-soft: rgba(17, 17, 17, 0.08);
+    --color-accent-contrast: #FFFFFF;
+    --color-focus: #111111;
+    --color-selection: rgba(17, 17, 17, 0.12);
+    --color-overlay: rgba(255, 255, 255, 0.85);
+    --color-shadow: rgba(0, 0, 0, 0.06);
     --color-error: #EF4444;
+    --color-warning: #F59E0B;
     --color-success: #10B981;
+    --color-info: #3B82F6;
+
+    /* Backward compatibility aliases */
+    --bg-base: var(--color-background);
+    --bg-secondary: var(--color-surface);
+    --bg-secondary-hover: var(--color-surface-hover);
+    --bg-secondary-active: var(--color-surface-active);
+    --bg-elevated: var(--color-background-elevated);
+    --text-primary: var(--color-text);
+    --text-secondary: var(--color-text-muted);
+    --text-muted: var(--color-text-muted);
+    --text-subtle: var(--color-text-subtle);
+    --border-subtle: var(--color-border-subtle);
+    --border-strong: var(--color-border-strong);
+    --accent-primary: var(--color-accent);
+    --accent-soft: var(--color-accent-soft);
+    --accent-contrast: var(--color-accent-contrast);
+    --overlay: var(--color-overlay);
+    --shadow-color: var(--color-shadow);
     
-    /* TRON / Effects */
+    /* TRON / Effects Defaults */
     --glow-intensity: 0;
     --glow-color: transparent;
     --shadow-accent: transparent;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    :root, * {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   .dark {
-    --bg-base: #0A0A0A;
-    --bg-secondary: #111111;
-    --bg-secondary-hover: #1A1A1A;
-    --bg-secondary-active: #222222;
-    --bg-elevated: #171717;
-    --text-primary: #F3F3F3;
-    --text-secondary: #A5A5A5;
-    --text-muted: #6F6F6F;
-    --text-subtle: #444444;
-    --border-subtle: rgba(255, 255, 255, 0.05);
-    --border-strong: rgba(255, 255, 255, 0.15);
-    --accent-primary: #F3F3F3;
-    --accent-soft: rgba(243, 243, 243, 0.1);
-    --accent-contrast: #0A0A0A;
-    --overlay: rgba(0, 0, 0, 0.8);
-    --shadow-color: rgba(0, 0, 0, 0.2);
+    --color-background: #050505;
+    --color-background-elevated: #121212;
+    --color-surface: #0E0E0E;
+    --color-surface-hover: #181818;
+    --color-surface-active: #222222;
+    --color-text: #EDEDED;
+    --color-text-muted: #888888;
+    --color-text-subtle: #555555;
+    --color-text-inverse: #050505;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-strong: rgba(255, 255, 255, 0.2);
+    --color-accent: #E0E0E0;
+    --color-accent-hover: #FFFFFF;
+    --color-accent-active: #CCCCCC;
+    --color-accent-soft: rgba(255, 255, 255, 0.1);
+    --color-accent-contrast: #050505;
+    --color-focus: #E0E0E0;
+    --color-selection: rgba(255, 255, 255, 0.15);
+    --color-overlay: rgba(5, 5, 5, 0.88);
+    --color-shadow: rgba(0, 0, 0, 0.6);
   }
 
   /* --- APPEARANCE THEMES --- */

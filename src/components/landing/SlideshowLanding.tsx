@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { useStore } from '../../store/useStore';
 import { useImagePalette } from '../../hooks/useImagePalette';
 import { LandingFeature } from '../../types';
-import { ImageDownloadModal } from '../ui/ImageDownloadModal';
 import clsx from 'clsx';
 
 export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
@@ -14,7 +12,6 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const isTron = appearance === 'tron';
 
   // Filter features
@@ -259,26 +256,6 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
 
           {/* Bottom Right Area */}
           <div className="flex items-end gap-4 md:gap-6 pointer-events-auto pr-2 pb-2">
-            {currentFeature?.image?.fullUrl && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsDownloadModalOpen(true);
-                }}
-                className={clsx(
-                  "flex items-center gap-2 px-3.5 py-2 rounded-full backdrop-blur-md text-xs uppercase tracking-widest transition-all duration-300 shadow-md cursor-pointer",
-                  isTron 
-                    ? "bg-cyan-950/80 text-cyan-200 border border-cyan-500/30 hover:border-cyan-400 hover:text-cyan-100" 
-                    : "bg-black/30 hover:bg-black/50 text-white border border-white/20 hover:border-white/40"
-                )}
-                title="Download this wallpaper"
-                aria-label="Download this wallpaper"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline font-light">Download</span>
-              </button>
-            )}
             {slideshowConfig.captionPosition === 'bottom-right' && (
               <Caption feature={currentFeature} isTron={isTron} alignRight />
             )}
@@ -286,16 +263,6 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         </div>
 
       </div>
-
-      {currentFeature?.image?.fullUrl && (
-        <ImageDownloadModal
-          isOpen={isDownloadModalOpen}
-          onClose={() => setIsDownloadModalOpen(false)}
-          imageUrl={currentFeature.image.fullUrl}
-          title={currentFeature.title}
-          creator={currentFeature.category}
-        />
-      )}
     </div>
   );
 }

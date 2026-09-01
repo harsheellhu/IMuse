@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { preferencesApi } from '../api/preferences';
+import { CustomPalette, BUILTIN_THEMES, deriveCompleteThemeTokens } from '../theme/tokens';
+import { applyTheme } from '../theme/applyTheme';
 
-export type AppearanceMode = 'default' | 'obsidian' | 'paper' | 'midnight' | 'graphite' | 'ash' | 'ivory' | 'monochrome' | 'aurora' | 'sunset' | 'ocean' | 'forest' | 'twilight' | 'electric' | 'tron';
+export type AppearanceMode = string;
 export type LandingStyle = 'minimal' | 'editorial' | 'observatory' | 'archive' | 'gallery' | 'cosmic' | 'tron' | 'monolith' | 'paper' | 'terminal' | 'slideshow';
 export type TronIntensity = 'subtle' | 'balanced' | 'neon' | 'extreme';
 export type MotionMode = 'static' | 'minimal' | 'smooth' | 'cinematic' | 'fluid' | 'experimental' | 'reduced';
@@ -35,6 +37,11 @@ export interface SettingsState {
   interfaceSounds: InterfaceSounds;
   skipLandingPage: boolean;
 
+  // Custom Color Palettes & Preferences
+  customPalettes: CustomPalette[];
+  favoritePalettes: string[];
+  recentPalettes: string[];
+
   // Slideshow Config
   slideshowConfig: {
     mode: 'curated' | 'shuffle';
@@ -63,7 +70,14 @@ export interface SettingsState {
   };
 
   // Actions
-  setSettings: (settings: Partial<Omit<SettingsState, 'presets' | 'isSettingsOpen' | 'setSettings' | 'applyPreset' | 'savePreset' | 'deletePreset' | 'randomize' | 'resetToDefault' | 'discoveryTask' | 'updateDiscoveryTask'>>) => void;
+  setSettings: (settings: Partial<Omit<SettingsState, 'presets' | 'isSettingsOpen' | 'setSettings' | 'applyPreset' | 'savePreset' | 'deletePreset' | 'randomize' | 'resetToDefault' | 'discoveryTask' | 'updateDiscoveryTask' | 'createCustomPalette' | 'updateCustomPalette' | 'deleteCustomPalette' | 'duplicatePalette' | 'toggleFavoritePalette' | 'addRecentPalette'>>) => void;
+  setAppearance: (themeId: string) => void;
+  createCustomPalette: (palette: Omit<CustomPalette, 'id' | 'createdAt' | 'updatedAt'>) => CustomPalette;
+  updateCustomPalette: (id: string, updates: Partial<CustomPalette>) => void;
+  deleteCustomPalette: (id: string) => void;
+  duplicatePalette: (themeId: string, newName?: string) => CustomPalette;
+  toggleFavoritePalette: (themeId: string) => void;
+  addRecentPalette: (themeId: string) => void;
   setSettingsOpen: (isOpen: boolean) => void;
   savePreset: (name: string) => void;
   applyPreset: (name: string) => void;
@@ -89,6 +103,9 @@ const defaultSettings = {
   homeLayout: 'masonry' as HomeLayout,
   interfaceSounds: 'balanced' as InterfaceSounds,
   skipLandingPage: false,
+  customPalettes: [] as CustomPalette[],
+  favoritePalettes: ['default', 'obsidian', 'paper', 'tron'] as string[],
+  recentPalettes: [] as string[],
   slideshowConfig: {
     mode: 'shuffle' as const,
     autoplay: 'slow' as const,
@@ -101,123 +118,265 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set, get) => ({
       ...defaultSettings,
-  presets: {},
-  isSettingsOpen: false,
-  discoveryTask: {
-    isActive: false,
-    packName: null,
-    stage: null,
-    progress: 0,
-    itemsProcessed: 0,
-    totalItems: 0,
-    elapsedTime: 0,
-    isPaused: false,
-    error: null,
-  },
+      presets: {},
+      isSettingsOpen: false,
+      discoveryTask: {
+        isActive: false,
+        packName: null,
+        stage: null,
+        progress: 0,
+        itemsProcessed: 0,
+        totalItems: 0,
+        elapsedTime: 0,
+        isPaused: false,
+        error: null,
+      },
 
-  setSettings: (newSettings) => {
-    set((state) => ({ ...state, ...newSettings }));
-    preferencesApi.update(newSettings).catch(console.error);
-  },
-  setSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
-  updateDiscoveryTask: (taskUpdate) => set((state) => ({ discoveryTask: { ...state.discoveryTask, ...taskUpdate } })),
-  
-  savePreset: (name) => {
-    const state = get();
-    const presetData = {
-      appearance: state.appearance,
-      landingStyle: state.landingStyle,
-      universeLayout: state.universeLayout,
-      tronIntensity: state.tronIntensity,
-      motion: state.motion,
-      ambientMode: state.ambientMode,
-      feedDensity: state.feedDensity,
-      imageStyle: state.imageStyle,
-      typography: state.typography,
-      shapeLanguage: state.shapeLanguage,
-      texture: state.texture,
-      navStyle: state.navStyle,
-      homeLayout: state.homeLayout,
-      interfaceSounds: state.interfaceSounds,
-      slideshowConfig: state.slideshowConfig,
-      skipLandingPage: state.skipLandingPage,
-    };
-    set((s) => ({
-      presets: { ...s.presets, [name]: presetData }
-    }));
-  },
+      setSettings: (newSettings) => {
+        set((state) => ({ ...state, ...newSettings }));
+        preferencesApi.update(newSettings).catch(console.error);
+      },
 
-  applyPreset: (name) => {
-    const state = get();
-    if (state.presets[name]) {
-      set({ ...state.presets[name] });
-    }
-  },
+      setAppearance: (themeId: string) => {
+        const state = get();
+        state.addRecentPalette(themeId);
+        set({ appearance: themeId });
+        applyTheme(themeId, state.customPalettes);
+        preferencesApi.update({ appearance: themeId }).catch(console.error);
+      },
 
-  deletePreset: (name) => {
-    set((state) => {
-      const newPresets = { ...state.presets };
-      delete newPresets[name];
-      return { presets: newPresets };
-    });
-  },
+      createCustomPalette: (paletteData) => {
+        const id = `custom-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+        const newPalette: CustomPalette = {
+          ...paletteData,
+          id,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        };
 
-  randomize: () => {
-    const themes: AppearanceMode[] = ['default', 'obsidian', 'paper', 'midnight', 'electric', 'tron'];
-    const layouts: LandingStyle[] = ['minimal', 'editorial', 'gallery', 'tron', 'paper', 'slideshow'];
-    const universeLayouts: UniverseLayoutMode[] = ['orbit', 'flow', 'stack', 'gallery', 'constellation', 'cinematic', 'auto'];
-    const dens: FeedDensity[] = ['spacious', 'relaxed', 'balanced', 'dense'];
-    const typo: TypographyStyle[] = ['neutral', 'editorial', 'modern', 'humanist', 'classical', 'newspaper', 'brutalist', 'technical', 'cinema', 'minimal', 'luxury'];
-    const shapes: ShapeLanguage[] = ['sharp', 'subtle', 'rounded', 'editorial'];
-    const textures: BackgroundTexture[] = ['none', 'fine-grain', 'dust', 'noise'];
-    
-    // Pick a theme and align related settings for coherence
-    const theme = themes[Math.floor(Math.random() * themes.length)];
-    let layout: LandingStyle = 'minimal';
-    let t: TypographyStyle = 'neutral';
-    let shape: ShapeLanguage = 'rounded';
-    
-    if (theme === 'tron' || theme === 'electric') {
-      layout = 'tron';
-      t = 'futuristic';
-      shape = 'sharp';
-    } else if (theme === 'paper') {
-      layout = 'paper';
-      t = 'editorial';
-      shape = 'editorial';
-    } else if (theme === 'obsidian' || theme === 'midnight') {
-      layout = 'observatory';
-      t = 'modern';
-      shape = 'subtle';
-    } else {
-      layout = layouts[Math.floor(Math.random() * layouts.length)];
-      t = typo[Math.floor(Math.random() * typo.length)];
-      shape = shapes[Math.floor(Math.random() * shapes.length)];
-    }
+        set((state) => ({
+          customPalettes: [...state.customPalettes, newPalette],
+          appearance: id,
+        }));
 
-    set({
-      appearance: theme,
-      landingStyle: layout,
-      universeLayout: universeLayouts[Math.floor(Math.random() * universeLayouts.length)],
-      typography: t,
-      shapeLanguage: shape,
-      feedDensity: dens[Math.floor(Math.random() * dens.length)],
-      texture: textures[Math.floor(Math.random() * textures.length)],
-      motion: 'smooth',
-      ambientMode: 'balanced',
-      imageStyle: 'original',
-      navStyle: theme === 'tron' ? 'tron' : 'floating',
-      homeLayout: 'masonry',
-      interfaceSounds: 'balanced',
-    });
-  },
+        const state = get();
+        state.addRecentPalette(id);
+        applyTheme(newPalette, state.customPalettes);
+        preferencesApi.update({ appearance: id, customPalettes: state.customPalettes } as any).catch(console.error);
 
-      resetToDefault: () => set(defaultSettings),
+        return newPalette;
+      },
+
+      updateCustomPalette: (id, updates) => {
+        set((state) => {
+          const updatedPalettes = state.customPalettes.map((p) =>
+            p.id === id ? { ...p, ...updates, updatedAt: Date.now() } : p
+          );
+          return { customPalettes: updatedPalettes };
+        });
+
+        const state = get();
+        if (state.appearance === id) {
+          const current = state.customPalettes.find((p) => p.id === id);
+          if (current) applyTheme(current, state.customPalettes);
+        }
+        preferencesApi.update({ customPalettes: state.customPalettes } as any).catch(console.error);
+      },
+
+      deleteCustomPalette: (id) => {
+        set((state) => {
+          const updatedPalettes = state.customPalettes.filter((p) => p.id !== id);
+          const nextAppearance = state.appearance === id ? 'default' : state.appearance;
+          const nextFavorites = state.favoritePalettes.filter((fid) => fid !== id);
+          const nextRecents = state.recentPalettes.filter((rid) => rid !== id);
+          return {
+            customPalettes: updatedPalettes,
+            appearance: nextAppearance,
+            favoritePalettes: nextFavorites,
+            recentPalettes: nextRecents,
+          };
+        });
+
+        const state = get();
+        applyTheme(state.appearance, state.customPalettes);
+        preferencesApi.update({ appearance: state.appearance, customPalettes: state.customPalettes } as any).catch(console.error);
+      },
+
+      duplicatePalette: (themeId, newName) => {
+        const state = get();
+        let baseTokens = BUILTIN_THEMES.default.tokens;
+        let isDark = false;
+        let sourceName = 'Custom';
+
+        if (BUILTIN_THEMES[themeId]) {
+          const theme = BUILTIN_THEMES[themeId];
+          baseTokens = { ...theme.tokens };
+          isDark = theme.isDark;
+          sourceName = theme.name;
+        } else {
+          const custom = state.customPalettes.find((p) => p.id === themeId);
+          if (custom) {
+            baseTokens = { ...custom.tokens };
+            isDark = custom.isDark;
+            sourceName = custom.name;
+          }
+        }
+
+        const id = `custom-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+        const duplicated: CustomPalette = {
+          id,
+          name: newName || `${sourceName} Copy`,
+          baseThemeId: themeId,
+          isDark,
+          tokens: { ...baseTokens },
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        };
+
+        set((s) => ({
+          customPalettes: [...s.customPalettes, duplicated],
+          appearance: id,
+        }));
+
+        const updatedState = get();
+        updatedState.addRecentPalette(id);
+        applyTheme(duplicated, updatedState.customPalettes);
+        preferencesApi.update({ appearance: id, customPalettes: updatedState.customPalettes } as any).catch(console.error);
+
+        return duplicated;
+      },
+
+      toggleFavoritePalette: (themeId) => {
+        set((state) => {
+          const isFav = state.favoritePalettes.includes(themeId);
+          const favoritePalettes = isFav
+            ? state.favoritePalettes.filter((id) => id !== themeId)
+            : [themeId, ...state.favoritePalettes];
+          return { favoritePalettes };
+        });
+        preferencesApi.update({ favoritePalettes: get().favoritePalettes } as any).catch(console.error);
+      },
+
+      addRecentPalette: (themeId) => {
+        set((state) => {
+          const filtered = state.recentPalettes.filter((id) => id !== themeId);
+          return { recentPalettes: [themeId, ...filtered].slice(0, 6) };
+        });
+      },
+
+      setSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
+      updateDiscoveryTask: (taskUpdate) => set((state) => ({ discoveryTask: { ...state.discoveryTask, ...taskUpdate } })),
+      
+      savePreset: (name) => {
+        const state = get();
+        const presetData = {
+          appearance: state.appearance,
+          landingStyle: state.landingStyle,
+          universeLayout: state.universeLayout,
+          tronIntensity: state.tronIntensity,
+          motion: state.motion,
+          ambientMode: state.ambientMode,
+          feedDensity: state.feedDensity,
+          imageStyle: state.imageStyle,
+          typography: state.typography,
+          shapeLanguage: state.shapeLanguage,
+          texture: state.texture,
+          navStyle: state.navStyle,
+          homeLayout: state.homeLayout,
+          interfaceSounds: state.interfaceSounds,
+          slideshowConfig: state.slideshowConfig,
+          skipLandingPage: state.skipLandingPage,
+        };
+        set((s) => ({
+          presets: { ...s.presets, [name]: presetData }
+        }));
+      },
+
+      applyPreset: (name) => {
+        const state = get();
+        if (state.presets[name]) {
+          const target = state.presets[name];
+          set({ ...target });
+          if (target.appearance) {
+            applyTheme(target.appearance, state.customPalettes);
+          }
+        }
+      },
+
+      deletePreset: (name) => {
+        set((state) => {
+          const newPresets = { ...state.presets };
+          delete newPresets[name];
+          return { presets: newPresets };
+        });
+      },
+
+      randomize: () => {
+        const allThemeIds = Object.keys(BUILTIN_THEMES);
+        const layouts: LandingStyle[] = ['minimal', 'editorial', 'gallery', 'tron', 'paper', 'slideshow'];
+        const universeLayouts: UniverseLayoutMode[] = ['orbit', 'flow', 'stack', 'gallery', 'constellation', 'cinematic', 'auto'];
+        const dens: FeedDensity[] = ['spacious', 'relaxed', 'balanced', 'dense'];
+        const typo: TypographyStyle[] = ['neutral', 'editorial', 'modern', 'humanist', 'classical', 'newspaper', 'brutalist', 'technical', 'cinema', 'minimal', 'luxury'];
+        const shapes: ShapeLanguage[] = ['sharp', 'subtle', 'rounded', 'editorial'];
+        const textures: BackgroundTexture[] = ['none', 'fine-grain', 'dust', 'noise'];
+        
+        // Pick a theme and align related settings for coherence
+        const themeId = allThemeIds[Math.floor(Math.random() * allThemeIds.length)];
+        let layout: LandingStyle = 'minimal';
+        let t: TypographyStyle = 'neutral';
+        let shape: ShapeLanguage = 'rounded';
+        
+        if (themeId === 'tron') {
+          layout = 'tron';
+          t = 'futuristic';
+          shape = 'sharp';
+        } else if (themeId === 'paper' || themeId === 'ivory') {
+          layout = 'paper';
+          t = 'editorial';
+          shape = 'editorial';
+        } else if (themeId === 'obsidian' || themeId === 'midnight' || themeId === 'cosmic') {
+          layout = 'observatory';
+          t = 'modern';
+          shape = 'subtle';
+        } else {
+          layout = layouts[Math.floor(Math.random() * layouts.length)];
+          t = typo[Math.floor(Math.random() * typo.length)];
+          shape = shapes[Math.floor(Math.random() * shapes.length)];
+        }
+
+        set({
+          appearance: themeId,
+          landingStyle: layout,
+          universeLayout: universeLayouts[Math.floor(Math.random() * universeLayouts.length)],
+          typography: t,
+          shapeLanguage: shape,
+          feedDensity: dens[Math.floor(Math.random() * dens.length)],
+          texture: textures[Math.floor(Math.random() * textures.length)],
+          motion: 'smooth',
+          ambientMode: 'balanced',
+          imageStyle: 'original',
+          navStyle: themeId === 'tron' ? 'tron' : 'floating',
+          homeLayout: 'masonry',
+          interfaceSounds: 'balanced',
+        });
+
+        const state = get();
+        state.addRecentPalette(themeId);
+        applyTheme(themeId, state.customPalettes);
+      },
+
+      resetToDefault: () => {
+        set(defaultSettings);
+        applyTheme('default', []);
+      },
     }),
     {
       name: 'imuse-settings',
       partialize: (state) => ({ 
         appearance: state.appearance,
+        customPalettes: state.customPalettes,
+        favoritePalettes: state.favoritePalettes,
+        recentPalettes: state.recentPalettes,
         landingStyle: state.landingStyle,
         universeLayout: state.universeLayout,
         tronIntensity: state.tronIntensity,
@@ -232,7 +391,8 @@ export const useSettingsStore = create<SettingsState>()(
         homeLayout: state.homeLayout,
         interfaceSounds: state.interfaceSounds,
         skipLandingPage: state.skipLandingPage,
-        slideshowConfig: state.slideshowConfig
+        slideshowConfig: state.slideshowConfig,
+        presets: state.presets,
       }),
     }
   )

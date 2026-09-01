@@ -8,6 +8,8 @@ import clsx from 'clsx';
 
 import { DiscoveryPackCarousel } from './DiscoveryPackCarousel';
 
+import { ThemePaletteCarousel } from './ThemePaletteCarousel';
+
 function getThemeIcon(mode: AppearanceMode) {
   switch (mode) {
     case 'default': return <Palette className="w-6 h-6 opacity-70" />;
@@ -52,29 +54,41 @@ export function SettingsOverlay() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => settings.randomize()}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface text-text-primary text-sm hover:bg-background-elevated border border-border-subtle transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface text-text-primary text-sm hover:bg-background-elevated border border-border-subtle transition-all cursor-pointer"
             >
               <Wand2 className="w-4 h-4" />
               <span className="hidden md:inline">Surprise Me</span>
             </button>
             <button 
               onClick={() => settings.resetToDefault()}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-text-secondary hover:text-text-primary text-sm transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-text-secondary hover:text-text-primary text-sm transition-all cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
               <span className="hidden md:inline">Reset</span>
             </button>
             <button 
               onClick={() => settings.setSettingsOpen(false)}
-              className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-text-primary hover:bg-text-primary hover:text-background transition-all"
+              className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-text-primary hover:bg-text-primary hover:text-background transition-all cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        <div className="py-12 max-w-[1600px] mx-auto space-y-4">
+        <div className="py-12 max-w-[1600px] mx-auto px-4 md:px-8 space-y-8">
           
+          {/* Theme & Palette System */}
+          <div className="bg-surface/30 rounded-3xl p-6 md:p-8 space-y-6 border border-border-subtle">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <div>
+                <h2 className="text-heading text-xl font-serif text-text-primary">Color Atmosphere & Palettes</h2>
+                <p className="text-xs text-text-muted mt-0.5">Explore 28+ curated aesthetics or design your own custom color palette.</p>
+              </div>
+            </div>
+
+            <ThemePaletteCarousel />
+          </div>
+
           <SettingCarousel title="Your Presets" description="Save and load your favorite configurations.">
             <div className="relative flex-shrink-0 w-48 h-32 rounded-xl border border-border-subtle bg-surface flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-background-elevated transition-colors"
                  onClick={() => {
@@ -95,7 +109,7 @@ export function SettingsOverlay() {
                 </div>
                 <button 
                   onClick={(e) => { e.stopPropagation(); settings.deletePreset(name); }}
-                  className="absolute top-2 right-2 w-6 h-6 bg-background-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                  className="absolute top-2 right-2 w-6 h-6 bg-background-elevated/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 cursor-pointer"
                 >
                   <X className="w-3 h-3 text-text-secondary hover:text-text-primary" />
                 </button>
@@ -117,21 +131,6 @@ export function SettingsOverlay() {
                   <span className="text-meta text-text-muted z-10 mt-2">Built-in Preset</span>
                 </div>
               </div>
-            ))}
-          </SettingCarousel>
-
-          <SettingCarousel title="Appearance" description="The foundational color atmosphere of the application.">
-            {(['default', 'obsidian', 'paper', 'midnight', 'graphite', 'ash', 'ivory', 'monochrome', 'aurora', 'sunset', 'ocean', 'forest', 'twilight', 'electric', 'tron'] as AppearanceMode[]).map(mode => (
-              <SettingCard 
-                key={mode} id={mode} title={mode.charAt(0).toUpperCase() + mode.slice(1)} 
-                isSelected={settings.appearance === mode}
-                onClick={() => settings.setSettings({ appearance: mode })}
-                previewNode={
-                  <div className={`w-full h-full bg-background theme-${mode} flex items-center justify-center p-4 text-text-primary transition-colors`}>
-                    {getThemeIcon(mode)}
-                  </div>
-                }
-              />
             ))}
           </SettingCarousel>
 

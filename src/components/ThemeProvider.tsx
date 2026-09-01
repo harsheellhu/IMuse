@@ -1,41 +1,26 @@
 import React, { useEffect } from 'react';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { applyTheme } from '../theme/applyTheme';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const settings = useSettingsStore();
 
   useEffect(() => {
+    // 1. Apply semantic theme tokens, custom properties, and dark/light classes
+    applyTheme(settings.appearance, settings.customPalettes);
+
     const root = window.document.documentElement;
     
-    // Remove previous theme-related classes cleanly
+    // 2. Remove previous non-theme settings classes
     const classesToRemove = Array.from(root.classList).filter(c => 
-      c.startsWith('theme-') || c === 'dark' || c === 'light' || 
-      c.startsWith('landing-') || c.startsWith('tron-') || c.startsWith('motion-') ||
+      c.startsWith('landing-') || c.startsWith('tron-intensity-') || c.startsWith('motion-') ||
       c.startsWith('ambient-') || c.startsWith('density-') || c.startsWith('img-') ||
       c.startsWith('typo-') || c.startsWith('shape-') || c.startsWith('texture-') ||
       c.startsWith('nav-')
     );
     root.classList.remove(...classesToRemove);
-    
-    // Base theme handling (dark/light) based on appearance
-    let isDark = false;
-    const darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory', 'sunset', 'ocean', 'forest', 'twilight', 'aurora'];
-    const lightThemes = ['paper', 'ivory', 'monochrome', 'ash'];
 
-    if (settings.appearance === 'default') {
-      isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    } else {
-      isDark = darkThemes.includes(settings.appearance);
-    }
-
-    if (isDark) {
-      root.classList.add('dark');
-    } else {
-      root.classList.add('light');
-    }
-
-    // Add specific settings classes
-    root.classList.add(`theme-${settings.appearance}`);
+    // 3. Add current experience settings classes
     root.classList.add(`landing-${settings.landingStyle}`);
     root.classList.add(`tron-intensity-${settings.tronIntensity}`);
     root.classList.add(`motion-${settings.motion}`);
@@ -47,11 +32,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.add(`texture-${settings.texture}`);
     root.classList.add(`nav-${settings.navStyle}`);
 
-    // We can also apply global styles directly to the body or root via CSS variables if needed,
-    // but relying on tailwind/css variables in index.css is cleaner.
-
   }, [
     settings.appearance,
+    settings.customPalettes,
     settings.landingStyle,
     settings.tronIntensity,
     settings.motion,

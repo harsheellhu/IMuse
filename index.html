@@ -25,6 +25,7 @@
           var shape = 'rounded';
           var density = 'balanced';
           var nav = 'floating';
+          var customPalettes = [];
           
           if (state) {
             var parsed = JSON.parse(state);
@@ -34,15 +35,20 @@
               if (parsed.state.shapeLanguage) shape = parsed.state.shapeLanguage;
               if (parsed.state.feedDensity) density = parsed.state.feedDensity;
               if (parsed.state.navStyle) nav = parsed.state.navStyle;
+              if (parsed.state.customPalettes) customPalettes = parsed.state.customPalettes;
             }
           }
 
-          var darkThemes = ['obsidian', 'midnight', 'graphite', 'electric', 'tron', 'monolith', 'observatory', 'sunset', 'ocean', 'forest', 'twilight', 'aurora'];
-          var isDark = false;
+          var lightThemes = ['default', 'paper', 'ivory', 'sand', 'concrete', 'ash'];
+          var isDark = true;
+          
           if (appearance === 'default') {
-            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          } else {
-            isDark = darkThemes.indexOf(appearance) !== -1;
+            isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          } else if (lightThemes.indexOf(appearance) !== -1) {
+            isDark = false;
+          } else if (customPalettes && customPalettes.length) {
+            var custom = customPalettes.find(function(p) { return p.id === appearance; });
+            if (custom) isDark = !!custom.isDark;
           }
 
           var root = document.documentElement;
