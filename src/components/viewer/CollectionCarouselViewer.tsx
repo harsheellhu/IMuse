@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'motion/react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
@@ -7,6 +7,7 @@ import { uiAudio } from '../../utils/audio';
 import { contentApi } from '../../api/content';
 import { useImagePalette } from '../../hooks/useImagePalette';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import { useDirectDragScroll } from '../../hooks/useDirectDragScroll';
 import clsx from 'clsx';
 
 export function CollectionCarouselViewer() {
@@ -17,29 +18,49 @@ export function CollectionCarouselViewer() {
 
   return (
     <AnimatePresence>
-      <CarouselContent key="viewer" item={activeViewerItem} onClose={closeViewer} appearance={appearance} motionSetting={motionSetting} />
+      <CarouselContent 
+        key="collection-carousel-content" 
+        item={activeViewerItem} 
+        onClose={closeViewer} 
+        appearance={appearance} 
+        motionSetting={motionSetting} 
+      />
     </AnimatePresence>
   );
 }
 
-const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; appearance: string; motionSetting: string }> = ({ item, onClose, appearance, motionSetting }) => {
+const CarouselContent: React.FC<{ 
+  item: ActiveViewerItem; 
+  onClose: () => void; 
+  appearance: string; 
+  motionSetting: string 
+}> = ({ item, onClose, appearance, motionSetting }) => {
   useBodyScrollLock(true);
-  const collection = item.data;
+  const collection = item.data || {};
   const [items, setItems] = useState<any[]>(collection.items || []);
   const [isLoading, setIsLoading] = useState(!collection.items);
   const [activeIndex, setActiveIndex] = useState(0);
   const isTron = appearance === 'tron';
   const isDark = document.documentElement.classList.contains('dark') || isTron;
 
+  // Thumbnail strip drag scroll
+  const {
+    containerRef: thumbContainerRef,
+    bind: thumbBind
+  } = useDirectDragScroll<HTMLElement>({
+    inertia: true,
+    dragThreshold: 6
+  });
+
   // Load items if not provided (i.e. not a virtual collection)
   useEffect(() => {
     let mounted = true;
-    if (!collection.items) {
+    if (!collection.items && collection.id) {
       setIsLoading(true);
       contentApi.getCollectionItems(collection.id)
         .then((fetchedItems) => {
           if (mounted) {
-            setItems(fetchedItems);
+            setItems(fetchedItems || []);
             setIsLoading(false);
           }
         })
@@ -56,6 +77,26 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
     uiAudio.playCollectionOpen();
   }, []);
 
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev < items.length - 1) {
+        uiAudio.playCarouselMove();
+        return prev + 1;
+      }
+      return prev;
+    });
+  }, [items.length]);
+
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev > 0) {
+        uiAudio.playCarouselMove();
+        return prev - 1;
+      }
+      return prev;
+    });
+  }, []);
+
   // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -65,23 +106,7 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [items.length]);
-
-  const handleNext = () => {
-    setActiveIndex((prev) => {
-      const next = prev < items.length - 1 ? prev + 1 : prev;
-      if (next !== prev) uiAudio.playCarouselMove();
-      return next;
-    });
-  };
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => {
-      const next = prev > 0 ? prev - 1 : prev;
-      if (next !== prev) uiAudio.playCarouselMove();
-      return next;
-    });
-  };
+  }, [handleNext, handlePrev, onClose]);
 
   const activeItem = items[activeIndex];
   const activeImage = activeItem?.imageUrl || activeItem?.coverImage || activeItem?.posterImage || (activeItem as any)?.image_url || collection.coverImage || (collection as any)?.cover_image || 'https://images.unsplash.com/photo-1513694203232-719a280e022f';
@@ -89,9 +114,7 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
 
   // Background interpolation logic
   const baseBg = isTron ? '#010409' : (isDark ? '#080808' : '#FAF9F6');
-
-  // Motion reduced handling
-  const transitionDuration = motionSetting === 'reduced' ? 0 : (motionSetting === 'cinematic' ? 0.8 : 0.5);
+  const transitionDuration = motionSetting === 'reduced' ? 0.05 : (motionSetting === 'cinematic' ? 0.6 : 0.4);
 
   return (
     <motion.div
@@ -102,63 +125,41 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
       className="fixed inset-0 z-[1000] flex flex-col justify-between select-none overflow-hidden"
     >
       {/* Base Background */}
-      <div className="absolute inset-0 transition-colors duration-1000" style={{ backgroundColor: baseBg }} />
+      <div className="absolute inset-0 transition-colors duration-700" style={{ backgroundColor: baseBg }} />
 
-      {/* Ambient Bloom */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeImage}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isDark ? 0.2 : 0.15 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-0 pointer-events-none mix-blend-normal dark:mix-blend-screen"
-          style={{
-            backgroundImage: `url(${activeImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'blur(100px) saturate(120%)',
-            transform: 'scale(1.1)',
-          }}
-        />
-      </AnimatePresence>
+      {/* Optimized Ambient Radial Bloom from Extracted Palette (GPU-friendly, no heavy full-page convolution filters) */}
+      <div 
+        className="absolute inset-0 pointer-events-none transition-all duration-700 opacity-30 mix-blend-screen"
+        style={{
+          background: palette 
+            ? `radial-gradient(circle 700px at 50% 50%, ${palette.primary}40, transparent 70%)`
+            : isTron 
+              ? 'radial-gradient(circle 700px at 50% 50%, rgba(0, 240, 255, 0.15), transparent 70%)'
+              : 'radial-gradient(circle 700px at 50% 50%, rgba(255, 255, 255, 0.05), transparent 70%)'
+        }}
+      />
 
-      {/* Extracted Palette Ambient Overlay */}
-      <AnimatePresence>
-        {palette && (
-          <motion.div
-            key={palette.primary}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
-            className="absolute inset-0 pointer-events-none mix-blend-multiply dark:mix-blend-screen"
-            style={{
-              background: `radial-gradient(circle at 50% 50%, ${palette.primary}15, transparent 70%)`
-            }}
-          />
-        )}
-      </AnimatePresence>
-
-      <div className={clsx("absolute inset-0 pointer-events-none", isTron ? "bg-black/60" : "bg-black/20")} />
+      <div className={clsx("absolute inset-0 pointer-events-none", isTron ? "bg-black/60" : "bg-black/15")} />
 
       {/* Header */}
-      <header className="relative z-10 w-full px-6 md:px-12 py-6 flex items-center justify-between">
+      <header className="relative z-20 w-full px-6 md:px-12 py-5 flex items-center justify-between pointer-events-auto">
         <div className="flex flex-col">
-          <motion.h2 layoutId={`collection-meta-${collection.id}`} className={clsx(
+          <h2 className={clsx(
             "text-lg md:text-xl font-serif tracking-tight",
             isTron ? "text-cyan-400 font-mono uppercase" : "text-text-primary"
           )}>
-            {collection.title}
-          </motion.h2>
+            {collection.title || 'Collection'}
+          </h2>
           <span className="text-[10px] tracking-widest uppercase text-text-secondary">
-            {items.length} Items {activeIndex + 1 > 0 ? `· ${activeIndex + 1} of ${items.length}` : ''}
+            {items.length} Items {items.length > 0 ? `· ${activeIndex + 1} of ${items.length}` : ''}
           </span>
         </div>
         
         <button
+          type="button"
+          aria-label="Close collection viewer"
           onClick={onClose}
-          className="w-11 h-11 rounded-full flex items-center justify-center text-text-primary bg-bg-elevated/40 hover:bg-bg-elevated/80 backdrop-blur-md border border-border-subtle/50 transition-all z-20 cursor-pointer"
+          className="w-10 h-10 rounded-full flex items-center justify-center text-text-primary bg-bg-elevated/70 hover:bg-bg-elevated backdrop-blur-md border border-border-subtle transition-all cursor-pointer shadow-sm active:scale-95"
         >
           <X className="w-5 h-5" />
         </button>
@@ -169,51 +170,61 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
         {isLoading ? (
           <Loader2 className="w-8 h-8 animate-spin text-text-muted" />
         ) : items.length === 0 ? (
-          <p className="text-text-muted font-serif italic">This collection is empty.</p>
+          <p className="text-text-muted font-serif italic text-sm">This collection is empty.</p>
         ) : (
           <div className="relative w-full h-full flex items-center justify-center">
             {/* Left Nav */}
             <button 
+              type="button"
+              aria-label="Previous item"
               className={clsx(
-                "absolute left-4 md:left-12 z-20 w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all",
+                "absolute left-4 md:left-12 z-20 w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md transition-all cursor-pointer",
                 activeIndex === 0 ? "opacity-0 pointer-events-none" : "opacity-100 hover:scale-105",
-                isTron ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30" : "bg-white/10 text-white hover:bg-white/20"
+                isTron ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30" : "bg-bg-elevated/80 text-text-primary hover:bg-bg-elevated border border-border-subtle"
               )}
               onClick={handlePrev}
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             {/* Active Item */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
-                initial={{ opacity: 0, x: 50, scale: 0.98 }}
+                initial={{ opacity: 0, x: 40, scale: 0.98 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -50, scale: 0.98 }}
+                exit={{ opacity: 0, x: -40, scale: 0.98 }}
                 transition={{ duration: transitionDuration, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center justify-center gap-6 max-h-[70vh] w-full max-w-4xl px-16"
+                className="flex flex-col items-center justify-center gap-5 max-h-[72vh] w-full max-w-4xl px-12 md:px-16"
               >
-                {/* layoutId links to the original card's image for seamless morphing */}
-                <motion.div 
-                  layoutId={activeIndex === 0 ? `collection-image-${collection.id}` : undefined}
+                <div 
                   className={clsx(
-                    "relative overflow-hidden rounded-sm shadow-2xl",
-                    isTron && "border border-cyan-500/20 shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+                    "relative overflow-hidden rounded-sm shadow-2xl bg-surface",
+                    isTron && "border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)]"
                   )}
-                  style={{ maxHeight: '60vh', aspectRatio: activeItem.type === 'place' ? '16/10' : (activeItem.type === 'book' || activeItem.type === 'film' ? '2/3' : '4/5') }}
+                  style={{ 
+                    maxHeight: '58vh', 
+                    aspectRatio: activeItem?.type === 'place' ? '16/10' : (activeItem?.type === 'book' || activeItem?.type === 'film' ? '2/3' : '4/5') 
+                  }}
                 >
-                  <img src={activeImage} alt={activeItem.title} className="w-full h-full object-cover" />
-                </motion.div>
+                  <img 
+                    src={activeImage} 
+                    alt={activeItem?.title || ''} 
+                    decoding="async"
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
                 
                 {/* Metadata */}
                 <div className="text-center w-full max-w-lg">
                   <h3 className={clsx(
-                    "text-2xl md:text-3xl font-serif tracking-tight mb-2 truncate",
-                    isTron ? "text-cyan-400" : "text-white"
-                  )}>{activeItem.title || activeItem.name || 'Untitled'}</h3>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                    {activeItem.author || activeItem.director || activeItem.creator || activeItem.artist || activeItem.category || activeItem.type || 'Item'}
+                    "text-xl md:text-2xl font-serif tracking-tight mb-1 truncate",
+                    isTron ? "text-cyan-400" : "text-text-primary"
+                  )}>
+                    {activeItem?.title || activeItem?.name || 'Untitled'}
+                  </h3>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-text-secondary">
+                    {activeItem?.author || activeItem?.director || activeItem?.creator || activeItem?.artist || activeItem?.category || activeItem?.type || 'Item'}
                   </p>
                 </div>
               </motion.div>
@@ -221,38 +232,55 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
 
             {/* Right Nav */}
             <button 
+              type="button"
+              aria-label="Next item"
               className={clsx(
-                "absolute right-4 md:right-12 z-20 w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all",
+                "absolute right-4 md:right-12 z-20 w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md transition-all cursor-pointer",
                 activeIndex === items.length - 1 ? "opacity-0 pointer-events-none" : "opacity-100 hover:scale-105",
-                isTron ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30" : "bg-white/10 text-white hover:bg-white/20"
+                isTron ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30" : "bg-bg-elevated/80 text-text-primary hover:bg-bg-elevated border border-border-subtle"
               )}
               onClick={handleNext}
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         )}
       </main>
 
-      {/* Thumbnail Strip */}
+      {/* Thumbnail Strip with direct horizontal drag scroll */}
       {items.length > 0 && (
-        <footer className="relative z-10 w-full h-24 mb-6 px-6 overflow-x-auto no-scrollbar flex items-center justify-center gap-2">
-          {items.map((item, idx) => (
+        <footer 
+          ref={thumbContainerRef}
+          {...thumbBind}
+          tabIndex={0}
+          role="region"
+          aria-label="Collection thumbnails"
+          className="relative z-20 w-full h-20 mb-4 px-6 overflow-x-auto scrollbar-hide flex items-center justify-center gap-2 select-none focus:outline-none"
+        >
+          {items.map((thumbItem, idx) => (
             <button
-              key={item.id}
+              key={`thumb-${thumbItem.id || idx}`}
+              type="button"
               onClick={() => {
-                if (idx !== activeIndex) uiAudio.playCarouselMove();
-                setActiveIndex(idx);
+                if (idx !== activeIndex) {
+                  uiAudio.playCarouselMove();
+                  setActiveIndex(idx);
+                }
               }}
               className={clsx(
-                "relative h-16 w-12 shrink-0 rounded-sm overflow-hidden transition-all duration-300 cursor-pointer",
-                activeIndex === idx ? "opacity-100 ring-2 ring-offset-2 ring-offset-transparent " + (isTron ? "ring-cyan-400 scale-110" : "ring-white scale-110") : "opacity-40 hover:opacity-75"
+                "relative h-14 w-11 shrink-0 rounded-sm overflow-hidden transition-all duration-300 cursor-pointer",
+                activeIndex === idx 
+                  ? (isTron ? "opacity-100 ring-2 ring-cyan-400 scale-105 shadow-md" : "opacity-100 ring-2 ring-text-primary scale-105 shadow-md") 
+                  : "opacity-40 hover:opacity-80"
               )}
+              aria-label={`Go to slide ${idx + 1}`}
             >
               <img 
-                src={item.imageUrl || item.coverImage || item.posterImage} 
+                src={thumbItem.imageUrl || thumbItem.coverImage || thumbItem.posterImage || thumbItem.image_url} 
                 alt="" 
-                className="w-full h-full object-cover"
+                decoding="async"
+                loading="lazy"
+                className="w-full h-full object-cover pointer-events-none"
               />
             </button>
           ))}
@@ -260,4 +288,4 @@ const CarouselContent: React.FC<{ item: ActiveViewerItem; onClose: () => void; a
       )}
     </motion.div>
   );
-}
+};

@@ -22,7 +22,6 @@ const CANONICAL_ROUTES = [
   '/experiences'
 ];
 
-// Helper to extract the base route (e.g. "/profile/me" -> "/profile")
 function getBaseRoute(pathname: string) {
   if (pathname === '/') return '/';
   const parts = pathname.split('/');
@@ -33,7 +32,7 @@ type Direction = 'forward' | 'backward' | 'neutral';
 
 export function RouteTransition({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const { motion: motionMode, appearance } = useSettingsStore();
+  const { motion: motionMode } = useSettingsStore();
   const [direction, setDirection] = useState<Direction>('neutral');
   const prevPathRef = useRef<string>(location.pathname);
 
@@ -73,11 +72,11 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
         return { duration: 0.15, ease: 'easeOut' };
       case 'smooth':
       default:
-        return { duration: 0.3, ease: [0.22, 1, 0.36, 1] }; // Smooth custom easing
+        return { duration: 0.25, ease: [0.22, 1, 0.36, 1] };
       case 'fluid':
-        return { type: 'spring', stiffness: 200, damping: 25 };
+        return { type: 'spring', stiffness: 220, damping: 26 };
       case 'cinematic':
-        return { duration: 0.4, ease: [0.25, 1, 0.5, 1] };
+        return { duration: 0.35, ease: [0.25, 1, 0.5, 1] };
     }
   };
 
@@ -91,36 +90,32 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
       };
     }
 
-    const offset = motionMode === 'minimal' ? 4 : (motionMode === 'cinematic' ? 12 : 8);
-    const isTron = appearance === 'tron';
-
-    // Base neutral animation
-    const neutral = {
-      initial: { opacity: 0, scale: 0.99 },
-      animate: { opacity: 1, scale: 1 },
-      exit: { opacity: 0, scale: 1.01 },
-    };
+    const offset = motionMode === 'minimal' ? 4 : (motionMode === 'cinematic' ? 10 : 6);
 
     if (direction === 'forward') {
       return {
         initial: { opacity: 0, x: offset },
         animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: -offset, filter: isTron ? 'brightness(0.5) hue-rotate(-10deg)' : 'none' },
+        exit: { opacity: 0, x: -offset },
       };
     } else if (direction === 'backward') {
       return {
         initial: { opacity: 0, x: -offset },
         animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: offset, filter: isTron ? 'brightness(0.5) hue-rotate(10deg)' : 'none' },
+        exit: { opacity: 0, x: offset },
       };
     }
 
     // Default neutral
-    return neutral;
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+    };
   };
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
         variants={getVariants()}

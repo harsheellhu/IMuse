@@ -10,6 +10,8 @@ import { DiscoveryPackCarousel } from './DiscoveryPackCarousel';
 
 import { ThemePaletteCarousel } from './ThemePaletteCarousel';
 
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+
 function getThemeIcon(mode: AppearanceMode) {
   switch (mode) {
     case 'default': return <Palette className="w-6 h-6 opacity-70" />;
@@ -33,18 +35,18 @@ function getThemeIcon(mode: AppearanceMode) {
 
 export function SettingsOverlay() {
   const settings = useSettingsStore();
-
-  if (!settings.isSettingsOpen) return null;
+  useBodyScrollLock(settings.isSettingsOpen);
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, y: '100%' }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="fixed inset-0 z-[100] bg-background overflow-y-auto"
-      >
+      {settings.isSettingsOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: '100%' }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: '100%' }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="fixed inset-0 z-[100] bg-background overflow-y-auto"
+        >
         <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border-subtle px-6 md:px-12 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Sliders className="w-5 h-5 text-text-primary" />
@@ -369,7 +371,8 @@ export function SettingsOverlay() {
           <DiscoveryPackCarousel />
 
         </div>
-      </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

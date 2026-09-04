@@ -4,7 +4,7 @@ import { useStore, ActiveViewerItem } from '../store/useStore';
 import clsx from 'clsx';
 import { Post, Book, Film, Collection, TvShow, Place } from '../types';
 import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Compass } from 'lucide-react';
 
 type WorldItemType = 'post' | 'book' | 'film' | 'collection' | 'tv_show' | 'place';
 
@@ -21,6 +21,7 @@ export function ExploreWorld() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { posts, books, films, collections, activeViewerItem, openViewer } = useStore();
   const [worldItems, setWorldItems] = useState<WorldItem[]>([]);
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     import('../api/content').then(({ contentApi }) => {
@@ -51,7 +52,7 @@ export function ExploreWorld() {
 
     const items: WorldItem[] = [];
     const radius = 3000;
-    const totalItems = Math.min(200, Math.max(allAvailable.length, 60));
+    const totalItems = Math.min(160, Math.max(allAvailable.length, 60));
     
     const generatePoint = (i: number, total: number) => {
       const golden_ratio = (Math.sqrt(5) + 1) / 2 - 1;
@@ -83,6 +84,7 @@ export function ExploreWorld() {
   }, [posts, books, films, collections]);
 
   const handleItemClick = (item: WorldItem) => {
+    if (isDraggingRef.current) return;
     openViewer({
       id: item.id,
       type: item.type,
@@ -92,14 +94,24 @@ export function ExploreWorld() {
 
   return (
     <div className="fixed inset-0 pt-20 z-0 bg-bg-base overflow-hidden selection:bg-transparent">
+      {/* HUD Info */}
+      <div className="absolute top-24 left-6 md:left-12 z-20 flex items-center gap-2.5 px-4 py-2 rounded-full bg-bg-elevated/80 backdrop-blur-md border border-border-subtle text-xs text-text-secondary pointer-events-none shadow-sm">
+        <Compass className="w-3.5 h-3.5 text-text-primary" />
+        <span className="font-medium text-text-primary">Infinite Spatial Canvas</span>
+        <span className="opacity-40">·</span>
+        <span>Drag to explore</span>
+      </div>
+
       {/* Drag Canvas */}
       <motion.div 
         ref={containerRef}
         className="w-[10000px] h-[10000px] absolute left-1/2 top-1/2 -ml-[5000px] -mt-[5000px] cursor-grab active:cursor-grabbing"
         drag
         dragConstraints={{ left: -3000, right: 3000, top: -3000, bottom: 3000 }}
-        dragElastic={0.1}
+        dragElastic={0.08}
         dragTransition={{ power: 0.1, timeConstant: 300 }}
+        onDragStart={() => { isDraggingRef.current = true; }}
+        onDragEnd={() => { setTimeout(() => { isDraggingRef.current = false; }, 50); }}
       >
         {worldItems.map(item => (
           <WorldItemNode 
@@ -111,20 +123,21 @@ export function ExploreWorld() {
           />
         ))}
       </motion.div>
+      
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50">
         <Link 
           to="/serendipity" 
-          className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white border border-white/20 hover:border-white/60 hover:bg-black/80 transition-colors shadow-2xl backdrop-blur-md"
+          className="flex items-center gap-2 px-6 py-3 rounded-full bg-text-primary text-bg-base border border-border-subtle hover:scale-105 transition-transform shadow-2xl backdrop-blur-md font-medium text-xs uppercase tracking-widest"
         >
           <Sparkles className="w-4 h-4" />
-          <span className="text-xs uppercase tracking-widest font-medium">Lose Me</span>
+          <span>Lose Me</span>
         </Link>
       </div>
     </div>
   );
 }
 
-function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Key, item: WorldItem, onClick: () => void, isSelected: boolean, isDimmed: boolean }) {
+function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Key; item: WorldItem; onClick: () => void; isSelected: boolean; isDimmed: boolean }) {
   const { data, type, x, y, scale } = item;
 
   let imageUrl = '';
@@ -154,33 +167,26 @@ function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Ke
   let width = 300;
   let height = 400;
 
-  // Render differently based on aspect ratio clues
   if (type === 'book') { width = 250; height = 380; }
   if (type === 'film' || type === 'tv_show') { width = 280; height = 420; }
   if (type === 'collection') { width = 400; height = 300; }
   if (type === 'place') { width = 480; height = 300; }
 
   return (
-    <motion.div
-      layoutId={`item-${item.id}`}
-      className="absolute flex flex-col items-center group origin-center cursor-pointer"
+    <div
+      onClick={onClick}
+      className="absolute flex flex-col items-center group origin-center cursor-pointer will-change-transform"
       style={{ 
         left: '50%', top: '50%', 
-        x, y,
+        transform: `translate3d(${x}px, ${y}px, 0) scale(${isSelected ? 1 : scale})`,
         width, height,
         zIndex: isSelected ? 50 : Math.floor(scale * 10),
+        opacity: isDimmed ? 0.2 : 1,
+        transition: 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
       }}
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ 
-        opacity: isDimmed ? 0.2 : 1, 
-        scale: isSelected ? 1 : scale 
-      }}
-      whileHover={!isSelected ? { scale: scale * 1.05, zIndex: 40 } : undefined}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      onClick={onClick}
     >
       <div className={clsx(
-        "relative w-full h-full overflow-hidden shadow-[0_12px_40px_var(--color-shadow)]",
+        "relative w-full h-full overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.1)] group-hover:scale-105 transition-transform duration-500",
         type === 'collection' ? 'rounded-md' : 'rounded-sm'
       )}>
         <img 
@@ -188,18 +194,19 @@ function WorldItemNode({ item, onClick, isSelected, isDimmed }: { key?: React.Ke
           alt={title} 
           className="w-full h-full object-cover pointer-events-none"
           loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
         
         {/* Subtle hover metadata */}
         {!isSelected && (
           <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <span className="bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-medium tracking-widest uppercase text-text-primary shadow-sm">
+            <span className="bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-medium tracking-widest uppercase text-text-primary shadow-sm border border-border-subtle">
               {type}
             </span>
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

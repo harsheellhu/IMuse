@@ -3,79 +3,58 @@ import { useStore } from '../store/useStore';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { authApi } from '../api/auth';
 import { preferencesApi } from '../api/preferences';
-import { collectionsApi } from '../api/collections';
-import { contentApi } from '../api/content';
 
 export const useInitializeApp = () => {
-  const [isInitializing, setIsInitializing] = useState(true);
+  const [isInitializing, setIsInitializing] = useState(false);
   
   useEffect(() => {
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark('imuse-app-init-start');
+    }
+
+    // Dev Bootstrap Diagnostic: Detect if app rendering stalls
+    let stallDetector: number | null = null;
+    const isDev = Boolean((import.meta as any)?.env?.DEV ?? (process as any)?.env?.NODE_ENV === 'development');
+    if (isDev) {
+      stallDetector = window.setTimeout(() => {
+        const rootEl = document.getElementById('root');
+        const hasContent = rootEl && rootEl.childElementCount > 0;
+        if (!hasContent) {
+          console.warn('[iMUSE DEV] BOOTSTRAP DELAY DETECTED: App mounted but UI render took >1500ms.');
+        }
+      }, 1500);
+    }
+
+    // Parallel Non-Blocking Bootstrap
     const initialize = async () => {
       try {
-        // Attempt to fetch current user
-        const user = await authApi.me();
-        
-        // Setup initial user state
-        useStore.setState({ isAuthenticated: true, currentUser: user });
-        
-        // Fetch preferences
-        try {
-          const prefs = await preferencesApi.get();
-          if (prefs) {
-            useSettingsStore.setState(prefs);
-          }
-        } catch (e) {
-          console.error("Failed to load preferences", e);
+        const [userRes, prefsRes] = await Promise.allSettled([
+          authApi.me(),
+          preferencesApi.get()
+        ]);
+
+        // 1. Process Auth
+        if (userRes.status === 'fulfilled' && userRes.value) {
+          useStore.setState({ isAuthenticated: true, currentUser: userRes.value });
+        } else {
+          useStore.setState({ isAuthenticated: false });
         }
 
+        // 2. Process Preferences
+        if (prefsRes.status === 'fulfilled' && prefsRes.value) {
+          useSettingsStore.setState(prefsRes.value);
+        }
+
+        if (typeof performance !== 'undefined' && performance.mark) {
+          performance.mark('imuse-app-init-complete');
+          try {
+            performance.measure('imuse-bootstrap-duration', 'imuse-app-init-start', 'imuse-app-init-complete');
+          } catch (e) {}
+        }
       } catch (e) {
-        // Not logged in or guest mode
-        useStore.setState({ isAuthenticated: false });
+        console.warn('[iMUSE Startup Notice] Background init completed with fallbacks:', e);
       } finally {
-        // Load collections and saves for both authenticated and demo guest session
-        Promise.all([
-          collectionsApi.getAll().catch(() => []),
-          contentApi.getSaved().catch(() => [])
-        ]).then(([collections, saves]) => {
-          if (collections && collections.length > 0) {
-            useStore.setState({ collections });
-          }
-          if (saves && saves.length > 0) {
-            useStore.setState(state => {
-              const existingIds = new Set(state.posts.map(p => p.id));
-              const newPosts = saves.filter(s => !existingIds.has(s.id));
-              return {
-                savedPostIds: saves.map(s => s.id),
-                posts: [...state.posts, ...newPosts] as any
-              };
-            });
-          }
-        });
-
-        setIsInitializing(false);
-
-        // Background Idle Prefetch: Warm cache and store silently without blocking the UI
-        if (typeof window !== 'undefined') {
-          const runIdle = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 200));
-          runIdle(() => {
-            Promise.all([
-              contentApi.getAll('post', 50).catch(() => []),
-              contentApi.getAll('book', 50).catch(() => []),
-              contentApi.getAll('film', 50).catch(() => []),
-              contentApi.getAll('tv_show', 50).catch(() => []),
-              contentApi.getAll('place', 50).catch(() => []),
-              contentApi.getDiscoveryWorlds().catch(() => [])
-            ]).then(([posts, books, films, tvShows, places]) => {
-              useStore.setState(state => ({
-                posts: state.posts.length > 0 ? state.posts : posts as any,
-                books: state.books.length > 0 ? state.books : books as any,
-                films: state.films.length > 0 ? state.films : films as any,
-                tvShows: state.tvShows.length > 0 ? state.tvShows : tvShows as any,
-                places: state.places.length > 0 ? state.places : places as any
-              }));
-            });
-          });
-        }
+        if (stallDetector) clearTimeout(stallDetector);
       }
     };
 

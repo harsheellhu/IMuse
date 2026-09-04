@@ -1,10 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { Post } from '../../types';
-import { Bookmark, Plus } from 'lucide-react';
+import { Bookmark, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { useDirectDragScroll } from '../../hooks/useDirectDragScroll';
 
 interface CarouselProps {
   items: Post[];
@@ -12,163 +12,129 @@ interface CarouselProps {
 }
 
 export function Carousel({ items, title }: CarouselProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { savedPostIds, toggleSavePost } = useStore();
+  const { savedPostIds, toggleSavePost, openViewer } = useStore();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const {
+    containerRef,
+    isDragging,
+    canScrollLeft,
+    canScrollRight,
+    scrollBy,
+    shouldPreventClick,
+    bind
+  } = useDirectDragScroll<HTMLDivElement>({
+    inertia: true,
+    snap: true,
+    itemSelector: '[data-carousel-item]',
+    dragThreshold: 6,
+    onIndexChange: setActiveIndex
+  });
+
+  const handleItemClick = (item: Post) => {
+    if (shouldPreventClick()) return;
+    openViewer({ id: item.id, type: 'post', data: item });
+  };
 
   return (
-    <div className="w-full py-12 overflow-hidden flex flex-col">
+    <div className="w-full py-8 md:py-12 overflow-hidden flex flex-col relative group">
       {title && (
-        <div className="px-4 md:px-12 mb-8 flex justify-between items-end">
-          <h2 className="text-sm font-medium tracking-widest uppercase text-text-secondary">{title}</h2>
+        <div className="px-4 md:px-12 mb-6 flex justify-between items-end">
+          <h2 className="text-xs md:text-sm font-medium tracking-widest uppercase text-text-secondary">{title}</h2>
+          <div className="hidden md:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={() => scrollBy(-400)}
+              disabled={!canScrollLeft}
+              className="w-8 h-8 rounded-full border border-border-subtle bg-bg-elevated/80 backdrop-blur-md flex items-center justify-center text-text-primary disabled:opacity-30 hover:border-text-primary transition-all cursor-pointer"
+              aria-label="Previous items"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => scrollBy(400)}
+              disabled={!canScrollRight}
+              className="w-8 h-8 rounded-full border border-border-subtle bg-bg-elevated/80 backdrop-blur-md flex items-center justify-center text-text-primary disabled:opacity-30 hover:border-text-primary transition-all cursor-pointer"
+              aria-label="Next items"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
       
-      {/* Native scroll container with snapping */}
+      {/* Scroll container with direct 1:1 pointer drag */}
       <div 
         ref={containerRef}
-        className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory px-4 md:px-[10vw] pb-12 scrollbar-hide"
-        style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
+        {...bind}
+        tabIndex={0}
+        role="region"
+        aria-label={title || "Featured Carousel"}
+        className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory px-4 md:px-[10vw] pb-8 pt-2 scrollbar-hide focus:outline-none"
       >
         {items.map((item, index) => {
           const isSaved = savedPostIds.includes(item.id);
+          const isCenter = index === activeIndex;
+
           return (
-            <CarouselItem 
-              key={`${item.id}-${index}`} 
-              item={item} 
-              isSaved={isSaved} 
-              onSave={() => toggleSavePost(item.id)} 
-            />
+            <div
+              key={`${item.id}-${index}`}
+              data-carousel-item
+              onClick={() => handleItemClick(item)}
+              className="snap-center shrink-0 w-[75vw] sm:w-[50vw] md:w-[35vw] lg:w-[28vw] flex flex-col items-center justify-center relative group/item select-none cursor-pointer"
+            >
+              <motion.div 
+                className="w-full"
+                animate={{ 
+                  scale: isCenter ? 1 : 0.94,
+                  opacity: isCenter ? 1 : 0.75 
+                }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="relative w-full aspect-[4/5] overflow-hidden rounded-sm bg-bg-secondary shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)]">
+                  <img 
+                    src={item.imageUrl} 
+                    alt={item.title || 'Item'}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-105 pointer-events-none"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover/item:bg-black/10 transition-colors duration-300 pointer-events-none" />
+                  
+                  {/* Hover metadata & actions */}
+                  <div className="absolute inset-0 p-5 flex flex-col justify-between opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">
+                    <div className="flex justify-between items-start">
+                      <div className="bg-bg-elevated/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-medium tracking-widest uppercase text-text-primary border border-border-subtle shadow-sm pointer-events-none">
+                        {item.category || 'Visual'}
+                      </div>
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          if (!shouldPreventClick()) toggleSavePost(item.id); 
+                        }}
+                        className={clsx(
+                          "w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-md",
+                          isSaved ? "bg-text-primary text-bg-base" : "bg-bg-elevated/90 text-text-primary hover:bg-text-primary hover:text-bg-base border border-border-subtle"
+                        )}
+                        aria-label={isSaved ? "Saved" : "Save item"}
+                      >
+                        {isSaved ? <Bookmark className="w-4 h-4" fill="currentColor" /> : <Plus className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Metadata below */}
+                <div className="mt-3 text-center px-2">
+                  <h3 className="text-base font-serif font-medium tracking-tight text-text-primary truncate">{item.title}</h3>
+                  <p className="text-xs text-text-secondary mt-0.5">{item.category}</p>
+                </div>
+              </motion.div>
+            </div>
           );
         })}
       </div>
     </div>
-  );
-}
-
-function CarouselItem({ item, isSaved, onSave }: { key?: React.Key, item: Post, isSaved: boolean, onSave: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { openViewer } = useStore();
-  
-  const [isCenter, setIsCenter] = useState(false);
-
-  const pressTimer = useRef<NodeJS.Timeout | null>(null);
-  const startPos = useRef<{x: number, y: number} | null>(null);
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.button !== 0 && e.pointerType === 'mouse') return; // only left click for mouse
-    startPos.current = { x: e.clientX, y: e.clientY };
-    
-    // Clear any existing timer just in case
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-    
-    pressTimer.current = setTimeout(() => {
-      openViewer({ id: item.id, type: 'post', data: item });
-      startPos.current = null;
-    }, 250);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!startPos.current) return;
-    const dx = e.clientX - startPos.current.x;
-    const dy = e.clientY - startPos.current.y;
-    // If the cursor is used to browse (drag/swipe), cancel the timer
-    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-      if (pressTimer.current) {
-        clearTimeout(pressTimer.current);
-        pressTimer.current = null;
-      }
-    }
-  };
-
-  const handlePointerUp = () => {
-    if (pressTimer.current) {
-      clearTimeout(pressTimer.current);
-      pressTimer.current = null;
-    }
-    startPos.current = null;
-  };
-
-  const handlePointerLeave = () => {
-    if (pressTimer.current) {
-      clearTimeout(pressTimer.current);
-      pressTimer.current = null;
-    }
-    startPos.current = null;
-  };
-
-  useEffect(() => {
-    if (!ref.current) return;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // If it's intersecting near the center of the viewport
-        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-          setIsCenter(true);
-        } else {
-          setIsCenter(false);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px -20% 0px -20%', // look at the center 60% of the screen
-        threshold: [0, 0.4, 0.6, 0.8, 1]
-      }
-    );
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <motion.div 
-      ref={ref}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerLeave}
-      onPointerLeave={handlePointerLeave}
-      className="snap-center shrink-0 w-[80vw] md:w-[40vw] lg:w-[30vw] flex flex-col items-center justify-center relative group cursor-pointer"
-      animate={{ 
-        scale: isCenter ? 1 : 0.92,
-        opacity: isCenter ? 1 : 0.6 
-      }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="relative w-full aspect-[4/5] overflow-hidden rounded-sm bg-bg-secondary shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.01)]">
-        <img 
-          src={item.imageUrl} 
-          alt={item.title}
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-          loading="lazy"
-        />
-        
-        {/* Subtle overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
-        
-        {/* Hover metadata & actions */}
-        <div className="absolute inset-0 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="flex justify-between items-start">
-            <div className="bg-bg-elevated/80 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-medium tracking-widest uppercase text-text-primary">
-              {item.category}
-            </div>
-            <button 
-              onClick={(e) => { e.stopPropagation(); onSave(); }}
-              className={clsx(
-                "w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 transform translate-y-2 group-hover:translate-y-0",
-                isSaved ? "bg-text-primary text-bg-base" : "bg-bg-elevated/90 text-text-primary hover:bg-text-primary hover:text-bg-base"
-              )}
-            >
-              {isSaved ? <Bookmark className="w-4 h-4" fill="currentColor" /> : <Plus className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Floating metadata below */}
-      <div className="mt-4 text-center px-4 transition-opacity duration-500 opacity-0 group-hover:opacity-100">
-        <h3 className="text-lg font-medium tracking-tight text-text-primary">{item.title}</h3>
-        <p className="text-sm text-text-secondary mt-1">{item.category}</p>
-      </div>
-    </motion.div>
   );
 }

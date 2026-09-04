@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'motion/react';
-import { useStore, ActiveViewerItem } from '../../store/useStore';
+import { useStore } from '../../store/useStore';
 import { contentApi } from '../../api/content';
-import { PostDetailViewer } from './PostDetailViewer';
-import { UniverseGraphViewer } from '../discovery/UniverseGraphViewer';
-import { CollectionCarouselViewer } from './CollectionCarouselViewer';
+
+const PostDetailViewer = React.lazy(() => import('./PostDetailViewer').then(m => ({ default: m.PostDetailViewer })));
+const UniverseGraphViewer = React.lazy(() => import('../discovery/UniverseGraphViewer').then(m => ({ default: m.UniverseGraphViewer })));
+const CollectionCarouselViewer = React.lazy(() => import('./CollectionCarouselViewer').then(m => ({ default: m.CollectionCarouselViewer })));
 
 export function ImmersiveViewer() {
-  const { activeViewerItem, openViewer, expandToUniverse, closeViewer } = useStore();
+  const { activeViewerItem } = useStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -96,26 +97,28 @@ export function ImmersiveViewer() {
 
   return createPortal(
     <div id="immersive-overlay-root" className="relative z-[1000]">
-      <AnimatePresence mode="wait">
-        {activeViewerItem?.mode === 'universe' && (
-          <UniverseGraphViewer 
-            key="universe-graph-viewer" 
-            initialContentId={activeViewerItem.id} 
-          />
-        )}
+      <Suspense fallback={null}>
+        <AnimatePresence mode="wait">
+          {activeViewerItem?.mode === 'universe' && (
+            <UniverseGraphViewer 
+              key="universe-graph-viewer" 
+              initialContentId={activeViewerItem.id} 
+            />
+          )}
 
-        {activeViewerItem && (activeViewerItem.mode === 'collection' || activeViewerItem.type === 'collection') && activeViewerItem.mode !== 'universe' && (
-          <CollectionCarouselViewer 
-            key={`collection-${activeViewerItem.id}`} 
-          />
-        )}
+          {activeViewerItem && (activeViewerItem.mode === 'collection' || activeViewerItem.type === 'collection') && activeViewerItem.mode !== 'universe' && (
+            <CollectionCarouselViewer 
+              key={`collection-${activeViewerItem.id}`} 
+            />
+          )}
 
-        {activeViewerItem && activeViewerItem.mode === 'detail' && activeViewerItem.type !== 'collection' && (
-          <PostDetailViewer 
-            key={`detail-${activeViewerItem.id}`} 
-          />
-        )}
-      </AnimatePresence>
+          {activeViewerItem && activeViewerItem.mode === 'detail' && activeViewerItem.type !== 'collection' && (
+            <PostDetailViewer 
+              key={`detail-${activeViewerItem.id}`} 
+            />
+          )}
+        </AnimatePresence>
+      </Suspense>
     </div>,
     document.body
   );

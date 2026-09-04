@@ -37,7 +37,9 @@ export function CustomCursor() {
     let isVisible = false;
     let isPressed = false;
     let currentState: CursorState = 'default';
+    let isDarkContrast = false;
     let rafId: number | null = null;
+    let isRunning = false;
     let initialized = false;
 
     // Helper to update cursor state directly via dataset
@@ -48,9 +50,8 @@ export function CustomCursor() {
       }
     };
 
-    // 4. Semantic target inspection on pointer move
-    const inspectTarget = (e: PointerEvent) => {
-      const el = e.target as HTMLElement | null;
+    // Fast, lightweight semantic target inspection
+    const inspectTarget = (el: HTMLElement | null) => {
       if (!el) {
         updateState('default');
         return;
@@ -79,10 +80,13 @@ export function CustomCursor() {
       }
 
       // 1. Inputs & editable text: allow normal browser text caret, hide custom cursor
+      const tag = el.tagName;
       if (
-        el.closest(
-          'input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, [contenteditable="true"], select'
-        )
+        tag === 'INPUT' || 
+        tag === 'TEXTAREA' || 
+        tag === 'SELECT' || 
+        el.isContentEditable || 
+        el.closest('input:not([type="button"]):not([type="submit"]), textarea, select, [contenteditable="true"]')
       ) {
         updateState('text');
         return;
@@ -90,38 +94,35 @@ export function CustomCursor() {
 
       // 2. Genuine Draggable items, spatial canvas, and turntable tonearm
       if (
-        el.closest(
-          '[data-canvas-item], .cursor-grab, .cursor-grabbing, [data-draggable], .turntable-tonearm'
-        )
+        el.closest('[data-canvas-item], .cursor-grab, .cursor-grabbing, [data-draggable], .turntable-tonearm')
       ) {
         updateState(isPressed ? 'grabbing' : 'grab');
         return;
       }
 
-      // 3. Posts, images, cards, books, films, places, collections, landing slideshow
-      // MUST use DEFAULT CURSOR (no enlargement, no ring expansion, no label)
+      // 3. Media, cards, images, articles -> default cursor
       if (
-        el.closest(
-          'img, video, .group:has(img), [data-post], [data-viewer], .aspect-\\[4\\/3\\], .aspect-\\[2\\/3\\], .aspect-\\[16\\/10\\], .aspect-\\[1\\/1\\], article'
-        ) ||
-        el.tagName === 'IMG'
+        tag === 'IMG' || 
+        tag === 'VIDEO' || 
+        tag === 'ARTICLE' || 
+        el.closest('img, video, article, [data-post], [data-viewer], [data-carousel-item]')
       ) {
         updateState('default');
         return;
       }
 
-      // 4. Standalone Buttons & action controls (Navbar controls, settings buttons, close icons)
+      // 4. Standalone Buttons & action controls
       if (
-        el.closest(
-          'button, [role="button"], input[type="button"], input[type="submit"]'
-        )
+        tag === 'BUTTON' || 
+        el.getAttribute('role') === 'button' || 
+        el.closest('button, [role="button"]')
       ) {
         updateState('button');
         return;
       }
 
       // 5. Links & navigations
-      if (el.closest('a, [role="link"]')) {
+      if (tag === 'A' || el.getAttribute('role') === 'link' || el.closest('a, [role="link"]')) {
         updateState('link');
         return;
       }
@@ -130,7 +131,45 @@ export function CustomCursor() {
       updateState('default');
     };
 
-    // 5. Pointer event listeners
+    // Single demand-driven Animation Loop
+    const animate = () => {
+      if (initialized) {
+        // Dot: 1:1 instantaneous tracking
+        dotPos.x = target.x;
+        dotPos.y = target.y;
+        dot.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0)`;
+
+        // Ring: subtle interpolation or instant if reduced motion
+        const lerpFactor = isReduced ? 1 : 0.22;
+        const dx = target.x - ringPos.x;
+        const dy = target.y - ringPos.y;
+
+        ringPos.x += dx * lerpFactor;
+        ringPos.y += dy * lerpFactor;
+        ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0)`;
+
+        // If ring has converged within subpixel distance and mouse isn't moving, sleep the RAF loop!
+        if (!isPressed && Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+          ringPos.x = target.x;
+          ringPos.y = target.y;
+          ring.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+          isRunning = false;
+          rafId = null;
+          return;
+        }
+      }
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    const wakeLoop = () => {
+      if (!isRunning) {
+        isRunning = true;
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
+    // Pointer event listeners
     const onPointerMove = (e: PointerEvent) => {
       target.x = e.clientX;
       target.y = e.clientY;
@@ -148,18 +187,22 @@ export function CustomCursor() {
         wrapper.dataset.visible = 'true';
       }
 
-      // Fast, lightweight adaptive contrast detection
+      // Fast adaptive contrast detection
       const el = e.target as HTMLElement | null;
       if (el) {
         const isMediaOrDark = Boolean(
-          el.closest(
-            'img, video, [data-contrast="dark"], .aspect-\\[4\\/3\\], .aspect-\\[2\\/3\\], .aspect-\\[16\\/10\\], .bg-black, .bg-\\[\\#0a0a0a\\], .bg-\\[\\#050505\\], .theme-dark'
-          ) || el.tagName === 'IMG'
+          el.tagName === 'IMG' || 
+          el.tagName === 'VIDEO' || 
+          el.closest('img, video, [data-contrast="dark"], .bg-black, .bg-\\[\\#0a0a0a\\], .bg-\\[\\#050505\\], .theme-dark')
         );
-        wrapper.dataset.contrast = isMediaOrDark ? 'dark' : 'normal';
+        if (isMediaOrDark !== isDarkContrast) {
+          isDarkContrast = isMediaOrDark;
+          wrapper.dataset.contrast = isMediaOrDark ? 'dark' : 'normal';
+        }
       }
 
-      inspectTarget(e);
+      inspectTarget(el);
+      wakeLoop();
     };
 
     const onPointerDown = () => {
@@ -168,12 +211,14 @@ export function CustomCursor() {
       if (currentState === 'grab') {
         updateState('grabbing');
       }
+      wakeLoop();
     };
 
     const onPointerUp = (e: PointerEvent) => {
       isPressed = false;
       wrapper.dataset.pressed = 'false';
-      inspectTarget(e);
+      inspectTarget(e.target as HTMLElement | null);
+      wakeLoop();
     };
 
     const onMouseLeave = () => {
@@ -184,6 +229,7 @@ export function CustomCursor() {
     const onMouseEnter = () => {
       isVisible = true;
       wrapper.dataset.visible = 'true';
+      wakeLoop();
     };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -192,25 +238,7 @@ export function CustomCursor() {
     document.documentElement.addEventListener('mouseleave', onMouseLeave);
     document.documentElement.addEventListener('mouseenter', onMouseEnter);
 
-    // 6. Single Animation Loop
-    const animate = () => {
-      if (initialized) {
-        // Dot: 1:1 instantaneous tracking
-        dotPos.x = target.x;
-        dotPos.y = target.y;
-        dot.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0)`;
-
-        // Ring: subtle interpolation (approx 50-70ms lag) or instant if reduced motion
-        const lerpFactor = isReduced ? 1 : 0.2;
-        ringPos.x += (target.x - ringPos.x) * lerpFactor;
-        ringPos.y += (target.y - ringPos.y) * lerpFactor;
-        ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0)`;
-      }
-
-      rafId = requestAnimationFrame(animate);
-    };
-
-    rafId = requestAnimationFrame(animate);
+    wakeLoop();
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);

@@ -18,16 +18,16 @@ export function Lyrics() {
 
   const lyrics = currentSong?.lyrics;
 
+  // Synchronize active line on audio time updates (no dedicated per-frame RAF loop)
   useEffect(() => {
     if (!lyrics || lyrics.length === 0 || !audioElement) return;
 
-    let frameId: number;
+    let lastIndex = -1;
 
-    const updateLyrics = () => {
+    const checkTime = () => {
       const time = audioElement.currentTime;
       let newIndex = -1;
 
-      // Find current line based on time
       for (let i = lyrics.length - 1; i >= 0; i--) {
         if (time >= lyrics[i].time) {
           newIndex = i;
@@ -35,9 +35,11 @@ export function Lyrics() {
         }
       }
 
-      if (newIndex !== activeLineIndex) {
+      if (newIndex !== lastIndex) {
+        lastIndex = newIndex;
         setActiveLineIndex(newIndex);
-        // Scroll the active line into view smoothly
+
+        // Smoothly scroll active line to center
         const lineEl = linesRef.current[newIndex];
         const container = containerRef.current;
         if (lineEl && container) {
@@ -51,13 +53,15 @@ export function Lyrics() {
           });
         }
       }
-
-      frameId = requestAnimationFrame(updateLyrics);
     };
 
-    frameId = requestAnimationFrame(updateLyrics);
-    return () => cancelAnimationFrame(frameId);
-  }, [lyrics, audioElement, activeLineIndex]);
+    audioElement.addEventListener('timeupdate', checkTime);
+    checkTime(); // Initial check
+
+    return () => {
+      audioElement.removeEventListener('timeupdate', checkTime);
+    };
+  }, [lyrics, audioElement]);
 
   // Reset scroll and refs when song changes
   useEffect(() => {
@@ -72,15 +76,13 @@ export function Lyrics() {
   return (
     <div 
       ref={containerRef}
-      className="flex-1 w-full overflow-y-auto pr-4 space-y-4 pb-20 relative"
+      className="flex-1 w-full overflow-y-auto pr-3 space-y-3.5 pb-16 relative select-none scrollbar-hide"
       style={{
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-        maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
-        WebkitMaskImage: '-webkit-linear-gradient(top, transparent, black 10%, black 90%, transparent)'
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: '-webkit-linear-gradient(top, transparent, black 15%, black 85%, transparent)'
       }}
     >
-      <div className="pt-20" /> {/* Top spacer */}
+      <div className="pt-16" /> {/* Top spacer */}
       
       {lyrics.map((line, idx) => {
         const isActive = idx === activeLineIndex;
@@ -88,23 +90,33 @@ export function Lyrics() {
         
         return (
           <div 
-            key={idx}
-            ref={(el) => (linesRef.current[idx] = el)}
+            key={`lyric-${idx}`}
+            ref={(el) => { linesRef.current[idx] = el; }}
             className={clsx(
-              "transition-all duration-500 ease-out origin-left break-words",
+              "transition-all duration-300 ease-out origin-left break-words cursor-pointer",
               isActive 
-                ? clsx("text-2xl md:text-3xl font-semibold scale-100", isTron ? "text-cyan-400 drop-shadow-[0_0_12px_rgba(0,255,255,0.4)]" : "text-white drop-shadow-lg") 
+                ? clsx(
+                    "text-xl md:text-2xl font-semibold scale-100", 
+                    isTron 
+                      ? "text-cyan-400 drop-shadow-[0_0_12px_rgba(0,255,255,0.4)]" 
+                      : "text-white drop-shadow-md"
+                  ) 
                 : isPast 
-                  ? "text-lg md:text-xl font-medium text-white/30 scale-95"
-                  : "text-lg md:text-xl font-medium text-white/50 scale-95"
+                  ? "text-base md:text-lg font-medium text-white/30 scale-95 hover:text-white/60"
+                  : "text-base md:text-lg font-medium text-white/50 scale-95 hover:text-white/80"
             )}
+            onClick={() => {
+              if (audioElement && line.time !== undefined) {
+                audioElement.currentTime = line.time;
+              }
+            }}
           >
             {line.text}
           </div>
         );
       })}
       
-      <div className="pb-32" /> {/* Bottom spacer */}
+      <div className="pb-24" /> {/* Bottom spacer */}
     </div>
   );
 }

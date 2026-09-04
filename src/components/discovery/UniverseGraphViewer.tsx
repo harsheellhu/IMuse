@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, 
   ArrowLeft, 
-  Search, 
   Globe, 
   Eye, 
   Sparkles, 
@@ -16,9 +15,6 @@ import {
   Film, 
   Wand2,
   ChevronRight,
-  Maximize2,
-  Layers as LayersIcon,
-  Activity,
   Cpu
 } from 'lucide-react';
 import { engineApi } from '../../api/engine';
@@ -27,7 +23,7 @@ import { useStore } from '../../store/useStore';
 import { useSettingsStore, UniverseLayoutMode } from '../../store/useSettingsStore';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { useImagePalette } from '../../hooks/useImagePalette';
-import { computeUniverseLayout, UniverseNodeLayout, resolveAutoLayout } from './universeLayoutEngine';
+import { computeUniverseLayout } from './universeLayoutEngine';
 import { UniverseConnections } from './UniverseConnections';
 import clsx from 'clsx';
 
@@ -53,8 +49,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     appearance, 
     motion: motionSetting, 
     universeLayout, 
-    setSettings, 
-    shapeLanguage 
+    setSettings
   } = useSettingsStore();
 
   const startingId = initialContentId || activeViewerItem?.id || '';
@@ -75,10 +70,15 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [focusedKeyboardIndex, setFocusedKeyboardIndex] = useState<number>(-1);
 
-  // Camera, Parallax & Pan Coordinates
+  // Camera & Pan Coordinates
   const [camera, setCamera] = useState({ x: 0, y: 0, zoom: 1 });
-  const [mouseParallax, setMouseParallax] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+
+  // Zero-rerender DOM refs for mouse parallax
+  const backdropParallaxRef = useRef<HTMLDivElement>(null);
+  const canvasParallaxRef = useRef<HTMLDivElement>(null);
+  const mouseCoordsRef = useRef({ x: 0, y: 0, currentX: 0, currentY: 0 });
+  const parallaxRafRef = useRef<number | null>(null);
 
   // Viewport geometry
   const [viewport, setViewport] = useState({
@@ -87,7 +87,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     isMobile: typeof window !== 'undefined' ? window.innerWidth < 768 : false
   });
 
-  // Development Diagnostics Overlay (Toggle with Shift+D)
+  // Diagnostics Overlay (Shift+D)
   const [showDebug, setShowDebug] = useState(false);
   const [fps, setFps] = useState(60);
 
@@ -108,7 +108,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
         isMobile: window.innerWidth < 768
       });
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -138,8 +138,60 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
   const primaryColor = palette?.primary;
 
   const isTron = appearance === 'tron';
-  const isReducedMotion = motionSetting === 'reduced';
+  const isReducedMotion = motionSetting === 'reduced' || motionSetting === 'static';
   const isCinematic = motionSetting === 'cinematic';
+
+  // Smooth direct DOM parallax loop (ZERO React re-renders on mouse movement!)
+  useEffect(() => {
+    if (isReducedMotion) return;
+
+    let isRunning = false;
+
+    const updateParallax = () => {
+      const coords = mouseCoordsRef.current;
+      coords.currentX += (coords.x - coords.currentX) * 0.1;
+      coords.currentY += (coords.y - coords.currentY) * 0.1;
+
+      if (backdropParallaxRef.current) {
+        backdropParallaxRef.current.style.transform = `translate3d(${coords.currentX * -1.2}px, ${coords.currentY * -1.2}px, 0)`;
+      }
+
+      if (canvasParallaxRef.current) {
+        canvasParallaxRef.current.style.transform = `translate3d(${coords.currentX * 0.4}px, ${coords.currentY * 0.4}px, 0) scale(${camera.zoom})`;
+      }
+
+      const diff = Math.abs(coords.x - coords.currentX) + Math.abs(coords.y - coords.currentY);
+      if (diff > 0.05) {
+        parallaxRafRef.current = requestAnimationFrame(updateParallax);
+      } else {
+        isRunning = false;
+        parallaxRafRef.current = null;
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) return;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const normX = (e.clientX - centerX) / centerX;
+      const normY = (e.clientY - centerY) / centerY;
+
+      mouseCoordsRef.current.x = normX * 14;
+      mouseCoordsRef.current.y = normY * 10;
+
+      if (!isRunning) {
+        isRunning = true;
+        parallaxRafRef.current = requestAnimationFrame(updateParallax);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (parallaxRafRef.current) cancelAnimationFrame(parallaxRafRef.current);
+    };
+  }, [isReducedMotion, isDragging, camera.zoom]);
 
   // Fetch universe graph for contentId
   const fetchUniverse = useCallback(async (contentId: string) => {
@@ -155,7 +207,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
       const center = cached.nodes.find((n: any) => n.id === contentId) || cached.nodes[0];
       if (center) {
         setCenterItem(center);
-        // Ensure trail has entry
         setHistoryTrail(prev => {
           if (prev.length === 0 || prev[prev.length - 1].id !== center.id) {
             return [...prev, { id: center.id, title: center.title || center.name || 'Untitled', type: center.type || 'post' }];
@@ -232,7 +283,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     }
   }, [currentId]);
 
-  // Transition to a newly selected node with camera glide and layout recalculation
+  // Transition to a newly selected node
   const handleSelectNode = useCallback(async (targetNode: any) => {
     if (isTransitioning || !targetNode || targetNode.id === currentId) return;
 
@@ -240,10 +291,8 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     setTransitioningTargetId(targetNode.id);
     setFocusedKeyboardIndex(-1);
 
-    // Increment step for rotation animation
     setStepIndex(prev => prev + 1);
 
-    // Update history trail
     const newTrailItem: HistoryItem = {
       id: targetNode.id,
       title: targetNode.title || targetNode.name || 'Untitled',
@@ -251,16 +300,11 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     };
     setHistoryTrail(prev => [...prev, newTrailItem]);
 
-    // Animate camera toward target node slightly before centering
-    const animDuration = isReducedMotion ? 100 : (isCinematic ? 650 : 500);
+    const animDuration = isReducedMotion ? 50 : (isCinematic ? 500 : 400);
 
-    // Set new center item
     setCenterItem(targetNode);
-
-    // Fetch new universe graph for target node
     await fetchUniverse(targetNode.id);
 
-    // Release transition lock after duration
     setTimeout(() => {
       setIsTransitioning(false);
       setTransitioningTargetId(null);
@@ -280,7 +324,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
 
     fetchUniverse(targetItem.id);
 
-    const animDuration = isReducedMotion ? 100 : 450;
+    const animDuration = isReducedMotion ? 50 : 350;
     setTimeout(() => {
       setIsTransitioning(false);
     }, animDuration);
@@ -298,13 +342,12 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
 
     fetchUniverse(targetItem.id);
 
-    const animDuration = isReducedMotion ? 100 : 450;
+    const animDuration = isReducedMotion ? 50 : 350;
     setTimeout(() => {
       setIsTransitioning(false);
     }, animDuration);
   }, [isTransitioning, historyTrail, isReducedMotion, fetchUniverse]);
 
-  // Close handler: cleanly step back to previous detail viewer or close
   const handleClose = useCallback(() => {
     if (onClose) {
       onClose();
@@ -313,7 +356,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     }
   }, [onClose, closeViewer]);
 
-  // Open full details viewer for the current focal item
   const handleInspectCenterNode = useCallback(() => {
     if (!centerItem) return;
     openViewer({
@@ -344,7 +386,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle debug overlay with Shift+D
       if (e.shiftKey && (e.key === 'D' || e.key === 'd')) {
         setShowDebug(prev => !prev);
         return;
@@ -387,39 +428,12 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [historyTrail.length, isLayoutMenuOpen, orbitNodesLayout, focusedKeyboardIndex, handleHistoryBack, handleClose, handleSelectNode]);
 
-  // Mouse Parallax movement
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (isReducedMotion || isDragging) return;
-    const { clientX, clientY } = e;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    const normX = (clientX - centerX) / centerX;
-    const normY = (clientY - centerY) / centerY;
-
-    setMouseParallax({
-      x: normX * 14,
-      y: normY * 10
-    });
-  }, [isReducedMotion, isDragging]);
-
-  // Wheel navigation: subtle glide / zoom
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    if (isReducedMotion) return;
-    // Subtle camera drift on wheel
-    setCamera(prev => ({
-      ...prev,
-      zoom: Math.min(1.2, Math.max(0.85, prev.zoom - (e.deltaY * 0.0004)))
-    }));
-  }, [isReducedMotion]);
-
   // Center node details
   const centerTitle = centerItem?.title || centerItem?.name || 'Untitled';
   const centerCreator = centerItem?.creator || centerItem?.author || centerItem?.director || centerItem?.location || '';
   const centerImage = centerImageUrl;
   const centerType = centerItem?.type || 'post';
 
-  // Helper for layout icon
   const getLayoutIcon = (mode: UniverseLayoutMode) => {
     switch (mode) {
       case 'orbit': return <Orbit className="w-3.5 h-3.5" />;
@@ -440,61 +454,46 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: isReducedMotion ? 0.1 : 0.4, ease: [0.16, 1, 0.3, 1] }}
-      onMouseMove={handleMouseMove}
-      onWheel={handleWheel}
+      transition={{ duration: isReducedMotion ? 0.05 : 0.35, ease: [0.16, 1, 0.3, 1] }}
       className={clsx(
         "fixed inset-0 z-[1000] flex flex-col justify-between overflow-hidden select-none bg-black text-text-primary",
         `typography-${typography}`
       )}
       style={{
-        backgroundColor: isTron ? '#000000' : 'var(--bg-base, #070709)',
+        backgroundColor: isTron ? '#000000' : 'var(--color-background, #070709)',
         perspective: '1200px'
       }}
     >
-      {/* 1. Atmospheric Ambient Backdrop with Smooth Gradient Blend */}
+      {/* 1. Atmospheric Ambient Backdrop (direct ref transforms, zero re-renders) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Deep ambient radiant glow transitioning over 800ms */}
         <div 
-          className="absolute inset-0 opacity-25 transition-all duration-800 ease-out"
+          ref={backdropParallaxRef}
+          className="absolute inset-0 opacity-25 transition-colors duration-700 ease-out"
           style={{
-            transform: `translate3d(${mouseParallax.x * -1.2}px, ${mouseParallax.y * -1.2}px, 0)`,
             background: primaryColor 
-              ? `radial-gradient(circle 800px at 50% 50%, ${primaryColor}30, transparent 75%)` 
+              ? `radial-gradient(circle 800px at 50% 50%, ${primaryColor}35, transparent 75%)` 
               : isTron 
                 ? 'radial-gradient(circle 800px at 50% 50%, rgba(0, 240, 255, 0.14), transparent 75%)'
                 : 'radial-gradient(circle 800px at 50% 50%, rgba(255, 255, 255, 0.06), transparent 75%)'
           }}
         />
 
-        {/* Ambient Vignette & Texture */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/60 pointer-events-none" />
 
-        {/* TRON Digital Grid and Pulse Rays */}
         {isTron && (
-          <>
-            <div 
-              className="absolute inset-0 opacity-20 pointer-events-none transition-transform duration-700"
-              style={{
-                backgroundImage: 'linear-gradient(to right, rgba(0, 240, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 240, 255, 0.12) 1px, transparent 1px)',
-                backgroundSize: '48px 48px',
-                transform: `translate3d(${mouseParallax.x * -0.5}px, ${mouseParallax.y * -0.5}px, 0)`
-              }}
-            />
-            <div 
-              className="absolute inset-0 opacity-15 pointer-events-none"
-              style={{
-                background: 'radial-gradient(circle 600px at 50% 50%, rgba(0, 240, 255, 0.25), transparent 70%)'
-              }}
-            />
-          </>
+          <div 
+            className="absolute inset-0 opacity-15 pointer-events-none"
+            style={{
+              backgroundImage: 'linear-gradient(to right, rgba(0, 240, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 240, 255, 0.12) 1px, transparent 1px)',
+              backgroundSize: '48px 48px'
+            }}
+          />
         )}
       </div>
 
       {/* 2. Top Header Navigation Bar & Breadcrumbs */}
-      <header className="relative z-50 w-full px-4 md:px-8 py-3.5 flex items-center justify-between pointer-events-auto border-b border-border-subtle/30 bg-bg-base/70 backdrop-blur-xl">
+      <header className="relative z-50 w-full px-4 md:px-8 py-3.5 flex items-center justify-between pointer-events-auto border-b border-border-subtle/30 bg-bg-base/80 backdrop-blur-xl">
         <div className="flex items-center gap-3 md:gap-5 overflow-hidden">
-          {/* Logo & Category Anchor */}
           <div className="flex items-center gap-2 shrink-0">
             <Globe className={clsx("w-4 h-4", isTron ? "text-[#00f0ff] animate-pulse" : "text-accent-primary opacity-90")} />
             <span className="text-[11px] tracking-[0.25em] uppercase font-mono font-medium text-text-secondary hidden sm:inline">
@@ -535,7 +534,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 md:gap-3 shrink-0">
-          {/* Back Step Button */}
           {historyTrail.length > 1 && (
             <button
               type="button"
@@ -611,7 +609,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
             </AnimatePresence>
           </div>
 
-          {/* Close Affordance */}
           <button
             type="button"
             onClick={handleClose}
@@ -627,7 +624,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
       <main 
         className="relative flex-1 w-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing"
       >
-        {/* Loading Spinner Indicator */}
         {isLoading && !centerNodeLayout && (
           <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-3">
             <Compass className={clsx("w-8 h-8 animate-spin", isTron ? "text-[#00f0ff]" : "text-accent-primary opacity-80")} />
@@ -637,7 +633,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
           </div>
         )}
 
-        {/* Load Error Notification */}
         {loadError && !centerNodeLayout && (
           <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4 p-6 text-center max-w-sm">
             <AlertCircle className="w-10 h-10 text-accent-primary opacity-70" />
@@ -652,25 +647,9 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
           </div>
         )}
 
-        {/* Spatial Coordinate Canvas Container */}
         {centerNodeLayout && (
-          <motion.div
-            drag
-            dragConstraints={{ left: -700, right: 700, top: -450, bottom: 450 }}
-            dragElastic={0.12}
-            onDragStart={() => setIsDragging(true)}
-            onDragEnd={() => setIsDragging(false)}
-            animate={{
-              x: mouseParallax.x * 0.4,
-              y: mouseParallax.y * 0.4,
-              scale: camera.zoom
-            }}
-            transition={{
-              type: 'spring',
-              damping: 30,
-              stiffness: 200,
-              mass: 0.5
-            }}
+          <div
+            ref={canvasParallaxRef}
             className="absolute inset-0 flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing"
             data-cursor="grab"
           >
@@ -691,40 +670,18 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
               const isSelectedTarget = transitioningTargetId === node.id;
 
               return (
-                <motion.div
+                <div
                   key={`orbit-node-${node.id}`}
-                  initial={{ 
-                    opacity: 0, 
-                    scale: 0.6, 
-                    x: node.x * 0.6, 
-                    y: node.y * 0.6,
-                    rotate: 0 
-                  }}
-                  animate={{ 
-                    opacity: node.opacity, 
-                    scale: isSelectedTarget ? 1.0 : (isHovered ? node.scale * 1.08 : node.scale), 
-                    x: isSelectedTarget ? 0 : node.x, 
-                    y: isSelectedTarget ? 0 : node.y,
-                    rotate: node.rotation,
-                    zIndex: isHovered ? 45 : node.zIndex
-                  }}
-                  exit={{ 
-                    opacity: 0, 
-                    scale: 0.4, 
-                    transition: { duration: 0.3 } 
-                  }}
-                  transition={{
-                    duration: isReducedMotion ? 0.1 : 0.55,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
                   onMouseEnter={() => setHoveredNodeId(node.id)}
                   onMouseLeave={() => setHoveredNodeId(null)}
-                  className="absolute flex flex-col items-center pointer-events-auto"
+                  className="absolute flex flex-col items-center pointer-events-auto transition-transform duration-300 ease-out"
                   style={{
-                    width: viewport.isMobile ? 120 : 150
+                    width: viewport.isMobile ? 120 : 150,
+                    transform: `translate3d(${isSelectedTarget ? 0 : node.x}px, ${isSelectedTarget ? 0 : node.y}px, 0) scale(${isSelectedTarget ? 1.0 : (isHovered ? node.scale * 1.08 : node.scale)}) rotate(${node.rotation}deg)`,
+                    opacity: node.opacity,
+                    zIndex: isHovered ? 45 : node.zIndex
                   }}
                 >
-                  {/* Orbit Card Container */}
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -734,7 +691,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                     tabIndex={0}
                     aria-label={`Focus ${node.data.title || 'item'}`}
                     className={clsx(
-                      "group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-400 shadow-xl",
+                      "group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-xl",
                       viewport.isMobile ? "w-20 h-28" : "w-28 h-38 md:w-32 md:h-42",
                       isTron
                         ? clsx(
@@ -756,7 +713,8 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                         src={nodeImage}
                         alt={node.data.title || ''}
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        decoding="async"
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full bg-bg-secondary flex flex-col items-center justify-center p-2 text-center">
@@ -765,7 +723,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                       </div>
                     )}
 
-                    {/* Smooth Hover Glaze & Center Trigger Prompt */}
                     <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-1.5 p-2 text-center backdrop-blur-[2px]">
                       <Compass className={clsx("w-4 h-4 animate-spin", isTron ? "text-[#00f0ff]" : "text-white")} />
                       <span className="text-[9px] uppercase tracking-[0.2em] text-white font-mono font-medium">
@@ -774,7 +731,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                     </div>
                   </div>
 
-                  {/* Relationship Label Pill & Node Title */}
                   <div className="mt-2 text-center flex flex-col items-center max-w-[130px] pointer-events-none">
                     <span 
                       className={clsx(
@@ -792,17 +748,17 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                       {node.data.title || 'Untitled'}
                     </h4>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
 
             {/* 4. Focal Center Node (Current Universe Anchor) */}
             <motion.div
               key={`center-node-${currentId}`}
-              initial={{ scale: 0.85, opacity: 0 }}
+              initial={{ scale: 0.88, opacity: 0 }}
               animate={{ scale: 1.0, opacity: 1.0 }}
-              exit={{ scale: 0.75, opacity: 0 }}
-              transition={{ duration: isReducedMotion ? 0.1 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ scale: 0.88, opacity: 0 }}
+              transition={{ duration: isReducedMotion ? 0.05 : 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-30 flex flex-col items-center pointer-events-auto"
             >
               <div
@@ -811,7 +767,7 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                 tabIndex={0}
                 aria-label={`Inspect ${centerTitle}`}
                 className={clsx(
-                  "group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl",
+                  "group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 shadow-2xl",
                   viewport.isMobile ? "w-44 h-60" : "w-56 h-76 md:w-64 md:h-84",
                   isTron
                     ? "border-2 border-[#00f0ff] shadow-[0_0_50px_rgba(0,240,255,0.4)]"
@@ -822,7 +778,8 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                   <img
                     src={centerImage}
                     alt={centerTitle}
-                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 ) : (
                   <div className="w-full h-full bg-bg-secondary flex flex-col items-center justify-center p-4 text-center">
@@ -831,7 +788,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                   </div>
                 )}
 
-                {/* Inspect Action Hover Overlay */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 backdrop-blur-sm">
                   <Eye className="w-4 h-4 text-white" />
                   <span className="text-xs uppercase tracking-widest text-white font-medium font-mono">
@@ -840,7 +796,6 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
                 </div>
               </div>
 
-              {/* Dedicated Center Title & Metadata Safe Zone */}
               <div className="mt-4 text-center max-w-xs md:max-w-sm pointer-events-none px-2">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <span className={clsx(
@@ -864,14 +819,13 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
               </div>
             </motion.div>
 
-            {/* Empty Isolated Node Fallback Notice */}
             {orbitNodesLayout.length === 0 && !isLoading && (
               <div className="absolute bottom-16 z-20 flex items-center gap-2 px-5 py-2.5 rounded-full bg-bg-elevated/90 backdrop-blur-md border border-border-subtle text-xs text-text-secondary shadow-lg">
                 <Sparkles className="w-3.5 h-3.5 text-accent-primary" />
                 <span className="font-serif italic">This thread ends here · Backtrack or explore new focal nodes</span>
               </div>
             )}
-          </motion.div>
+          </div>
         )}
       </main>
 
@@ -893,10 +847,10 @@ export function UniverseGraphViewer({ initialContentId, onClose }: UniverseGraph
       )}
 
       {/* 6. Footer Navigation Instructions Bar */}
-      <footer className="relative z-50 w-full px-4 md:px-8 py-3 flex items-center justify-between text-[11px] font-mono text-text-secondary/70 border-t border-border-subtle/30 bg-bg-base/70 backdrop-blur-xl pointer-events-none">
+      <footer className="relative z-50 w-full px-4 md:px-8 py-3 flex items-center justify-between text-[11px] font-mono text-text-secondary/70 border-t border-border-subtle/30 bg-bg-base/80 backdrop-blur-xl pointer-events-none">
         <div className="flex items-center gap-4">
           <span className="hidden md:inline">
-            Drag canvas to pan · Select any node to travel deeper
+            Hover & select any node to travel deeper
           </span>
           <span className="md:hidden">
             Tap node to travel deeper

@@ -122,6 +122,12 @@ export interface LandingFeature {
   title: string;
   category: string;
   description?: string;
+  palette?: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+  };
   image: {
     thumbnailUrl: string;
     previewUrl: string;

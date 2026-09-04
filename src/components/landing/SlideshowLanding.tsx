@@ -30,20 +30,31 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
 
   const currentFeature = validFeatures[currentIndex];
   
-  // Preload images (current and next)
+  // Extract palette from the feature metadata (0ms instant) or fallback to async hook
+  const fallbackPalette = useImagePalette(
+    (!currentFeature?.palette && currentFeature?.image?.thumbnailUrl) ? currentFeature.image.thumbnailUrl : null
+  );
+  const activePalette = currentFeature?.palette || fallbackPalette.palette;
+
+  // Progressive Preload: Only preload the next image after initial paint on idle
   useEffect(() => {
-    if (validFeatures.length === 0) return;
+    if (validFeatures.length <= 1) return;
     
-    // We preload current, next, and previous fullUrls
     const nextIndex = (currentIndex + 1) % validFeatures.length;
-    const prevIndex = (currentIndex - 1 + validFeatures.length) % validFeatures.length;
+    const nextFeature = validFeatures[nextIndex];
     
-    [validFeatures[currentIndex], validFeatures[nextIndex], validFeatures[prevIndex]].forEach(f => {
-      if (f?.image?.fullUrl) {
+    if (nextFeature?.image?.fullUrl) {
+      const schedulePreload = window.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1000));
+      const handle = schedulePreload(() => {
         const img = new Image();
-        img.src = f.image.fullUrl;
-      }
-    });
+        img.src = nextFeature.image.fullUrl;
+      });
+      return () => {
+        if (window.cancelIdleCallback && typeof handle === 'number') {
+          window.cancelIdleCallback(handle);
+        }
+      };
+    }
   }, [currentIndex, validFeatures]);
 
   // Autoplay
@@ -154,9 +165,6 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
     ease: [0.16, 1, 0.3, 1]
   };
 
-  // Extract palette from the thumbnail for extreme performance
-  const { palette } = useImagePalette(currentFeature?.image?.thumbnailUrl || null);
-
   if (!currentFeature) return null;
 
   return (
@@ -170,8 +178,8 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
       <div 
         className="absolute inset-0 z-0 transition-colors duration-1000 opacity-30 mix-blend-screen pointer-events-none"
         style={{ 
-          background: palette 
-            ? `radial-gradient(circle at 50% 50%, ${palette.primary}60, transparent 80%)` 
+          background: activePalette 
+            ? `radial-gradient(circle at 50% 50%, ${activePalette.primary}60, transparent 80%)` 
             : 'transparent'
         }}
       />

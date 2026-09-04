@@ -1,26 +1,25 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar, MobileNav } from './Navbar';
-import { SearchOverlay } from './SearchOverlay';
 import { ImmersiveViewer } from '../viewer/ImmersiveViewer';
-import { AuthModal } from '../auth/AuthModal';
 import { useStore } from '../../store/useStore';
 import { useMusicStore } from '../../store/useMusicStore';
-import { motion, AnimatePresence } from 'motion/react';
-import { useLocation } from 'react-router-dom';
 import { AudioEngine } from '../music/AudioEngine';
 import { MiniPlayer } from '../music/MiniPlayer';
-import { FullPlayer } from '../music/FullPlayer';
 import { RouteTransition } from './RouteTransition';
+import { PerformanceHUD } from '../ui/PerformanceHUD';
+
+const SearchOverlay = React.lazy(() => import('./SearchOverlay').then(m => ({ default: m.SearchOverlay })));
+const AuthModal = React.lazy(() => import('../auth/AuthModal').then(m => ({ default: m.AuthModal })));
+const FullPlayer = React.lazy(() => import('../music/FullPlayer').then(m => ({ default: m.FullPlayer })));
 
 export function AppLayout() {
-  const { bgGradient } = useStore();
-  const { isMiniPlayerVisible } = useMusicStore();
-  const location = useLocation();
+  const { bgGradient, isSearchOpen, isAuthModalOpen } = useStore();
+  const { isMiniPlayerVisible, isMaximized } = useMusicStore();
 
   return (
     <div 
-      className="min-h-screen text-text-primary antialiased selection:bg-text-primary selection:text-bg-base transition-all duration-700 ease-in-out"
+      className="min-h-screen text-text-primary antialiased selection:bg-text-primary selection:text-bg-base transition-all duration-700 ease-in-out bg-bg-base"
       style={{ backgroundImage: bgGradient || 'none' }}
     >
       <Navbar />
@@ -30,14 +29,21 @@ export function AppLayout() {
         </RouteTransition>
       </main>
       <MobileNav />
-      <SearchOverlay />
       <ImmersiveViewer />
-      <AuthModal />
       
-      {/* Global Music Components */}
+      {/* Conditionally rendered lazy modals */}
+      <Suspense fallback={null}>
+        {isSearchOpen && <SearchOverlay />}
+        {isAuthModalOpen && <AuthModal />}
+        {isMaximized && <FullPlayer />}
+      </Suspense>
+
+      {/* Global Lightweight Audio Engine */}
       <AudioEngine />
       {isMiniPlayerVisible && <MiniPlayer />}
-      <FullPlayer />
+
+      {/* Dev Performance HUD (Shift+P) */}
+      <PerformanceHUD />
     </div>
   );
 }

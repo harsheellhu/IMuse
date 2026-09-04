@@ -4,6 +4,7 @@ import { engineApi } from '../api/engine';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { OptimizedImage } from '../components/ui/OptimizedImage';
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
@@ -36,14 +37,13 @@ export function ColorMemory() {
       <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typography-${typography}`}>
         <h2 className="text-2xl font-serif text-text-primary">No Color Memory Extracted Yet</h2>
         <p className="text-sm text-text-secondary max-w-md">Save books, films, and imagery to let iMuse map your aesthetic spectrum over time.</p>
-        <Link to="/home" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all">
+        <Link to="/home" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all text-text-primary">
           Explore Feed
         </Link>
       </div>
     );
   }
 
-  // Render a full year strip (12 months), filling in gaps if user didn't save anything that month
   const timeline = memory.timeline || [];
   const topPalettes = memory.topPalettes || [];
 
@@ -59,21 +59,21 @@ export function ColorMemory() {
   const activeColorGroup = topPalettes.find((p: any) => p.palette?.primary === activeColor) || topPalettes[0];
 
   return (
-    <div className={`min-h-screen bg-[#FDFCF8] dark:bg-[#050505] text-[#1A1A1A] dark:text-[#FDFCF8] pb-24 typography-${typography}`}>
+    <div className={`min-h-screen bg-bg-base text-text-primary pb-24 typography-${typography}`}>
       <header className="px-6 md:px-12 pt-12 pb-8 flex justify-between items-center">
-        <Link to="/profile/me" className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] hover:opacity-70 transition-opacity">
+        <Link to="/profile/me" className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] hover:opacity-70 transition-opacity text-text-primary font-medium">
           <ArrowLeft className="w-4 h-4" /> Profile
         </Link>
-        <span className="text-[10px] uppercase tracking-[0.3em] opacity-50">Taste Profile</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-text-secondary opacity-60">Taste Profile</span>
       </header>
 
       <main className="px-6 md:px-12">
-        <h1 className="text-4xl md:text-6xl font-serif font-light mb-16">Color Memory</h1>
+        <h1 className="text-4xl md:text-6xl font-serif font-light mb-16 text-text-primary">Color Memory</h1>
 
         {/* 1. Year Color Strip */}
         <section className="mb-24">
-          <h2 className="text-[10px] uppercase tracking-[0.2em] mb-6 opacity-60">This Year's Palette</h2>
-          <div className="flex h-32 md:h-48 w-full rounded-xl overflow-hidden shadow-sm">
+          <h2 className="text-[10px] uppercase tracking-[0.2em] mb-6 text-text-secondary">This Year's Palette</h2>
+          <div className="flex h-32 md:h-48 w-full rounded-xl overflow-hidden shadow-md border border-border-subtle">
             {yearStrip.map((item, i) => (
               <div 
                 key={i} 
@@ -92,20 +92,20 @@ export function ColorMemory() {
 
         {/* 2. Colors You Return To */}
         <section>
-          <h2 className="text-[10px] uppercase tracking-[0.2em] mb-8 opacity-60">Colors You Return To</h2>
+          <h2 className="text-[10px] uppercase tracking-[0.2em] mb-8 text-text-secondary">Colors You Return To</h2>
           <div className="flex flex-col lg:flex-row gap-12">
             
             {/* Color Swatches */}
-            <div className="flex flex-row lg:flex-col gap-4 overflow-x-auto pb-4 lg:pb-0">
+            <div className="flex flex-row lg:flex-col gap-4 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
               {memory.topPalettes.map((group: any, i: number) => (
                 <button
                   key={i}
                   onClick={() => setActiveColor(group.palette.primary)}
-                  className={`relative w-24 h-24 rounded-lg overflow-hidden shrink-0 transition-transform ${activeColor === group.palette.primary ? 'scale-110 shadow-lg ring-2 ring-offset-2 ring-offset-[#FDFCF8] dark:ring-offset-[#050505] ring-black dark:ring-white z-10' : 'hover:scale-105'}`}
+                  className={`relative w-24 h-24 rounded-lg overflow-hidden shrink-0 transition-transform cursor-pointer ${activeColor === group.palette.primary ? 'scale-110 shadow-lg ring-2 ring-offset-2 ring-offset-bg-base ring-text-primary z-10' : 'hover:scale-105'}`}
                   style={{ backgroundColor: group.palette.primary }}
                 >
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-black/20 transition-opacity">
-                    <span className="text-xs text-white font-medium">{group.count} Items</span>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-black/30 transition-opacity">
+                    <span className="text-xs text-white font-medium drop-shadow">{group.count} Items</span>
                   </div>
                 </button>
               ))}
@@ -120,23 +120,33 @@ export function ColorMemory() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
                     className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                   >
-                    {(activeColorGroup?.items || []).map((item: any) => (
-                      <div key={item.id} className="aspect-[3/4] rounded-sm overflow-hidden bg-black/5 dark:bg-white/5 group relative cursor-pointer">
-                        {item.image_url || item.imageUrl ? (
-                          <img src={item.image_url || item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-                            <span className="text-[9px] uppercase tracking-widest opacity-50 mb-2">{item.type}</span>
-                            <span className="font-serif text-sm line-clamp-3">{item.title}</span>
+                    {(activeColorGroup?.items || []).map((item: any) => {
+                      const img = item.image_url || item.imageUrl || item.coverImage || item.posterImage;
+                      return (
+                        <div key={item.id} className="aspect-[3/4] rounded-sm overflow-hidden bg-bg-elevated border border-border-subtle group relative cursor-pointer shadow-sm">
+                          {img ? (
+                            <OptimizedImage 
+                              src={img} 
+                              alt={item.title || ''} 
+                              optimizeOptions={{ width: 400, quality: 80, format: 'webp' }}
+                              fallbackText={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                            />
+                          ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                              <span className="text-[9px] uppercase tracking-widest text-text-muted mb-2">{item.type}</span>
+                              <span className="font-serif text-sm line-clamp-3 text-text-primary">{item.title}</span>
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity backdrop-blur-xs">
+                            <span className="text-white text-[10px] uppercase tracking-widest px-4 text-center">{item.title}</span>
                           </div>
-                        )}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity backdrop-blur-sm">
-                          <span className="text-white text-[10px] uppercase tracking-widest px-4 text-center">{item.title}</span>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     {(!activeColorGroup || !activeColorGroup.items || activeColorGroup.items.length === 0) && (
                       <div className="col-span-full py-12 text-center text-text-secondary text-sm italic font-serif">
                         No saved items match this palette tone.
