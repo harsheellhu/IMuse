@@ -14,7 +14,7 @@ export const useInitializeApp = () => {
 
     // Dev Bootstrap Diagnostic: Detect if app rendering stalls
     let stallDetector: number | null = null;
-    const isDev = Boolean((import.meta as any)?.env?.DEV ?? (process as any)?.env?.NODE_ENV === 'development');
+    const isDev = Boolean((import.meta as any)?.env?.DEV);
     if (isDev) {
       stallDetector = window.setTimeout(() => {
         const rootEl = document.getElementById('root');

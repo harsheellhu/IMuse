@@ -41,22 +41,21 @@ const MuseumPage = React.lazy(() => import('./pages/Museum').then(m => ({ defaul
 const MuseumRoomPage = React.lazy(() => import('./pages/MuseumRoom').then(m => ({ default: m.MuseumRoomPage })));
 const CulturalDNAPage = React.lazy(() => import('./pages/CulturalDNA').then(m => ({ default: m.CulturalDNAPage })));
 
-export default function App() {
+function AppContent() {
   useInitializeApp();
   const isSettingsOpen = useSettingsStore(s => s.isSettingsOpen);
   const isDiscoveryActive = useSettingsStore(s => s.discoveryTask?.isActive);
   const isCreateCollectionOpen = useStore(s => s.isCreateCollectionOpen);
 
   return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <BrowserRouter>
-          <Suspense fallback={null}>
-            <CustomCursor />
-            {isSettingsOpen && <SettingsOverlay />}
-            {isDiscoveryActive && <ImportProgress />}
-            {isCreateCollectionOpen && <CreateCollectionModal />}
-          </Suspense>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Suspense fallback={null}>
+          <CustomCursor />
+          {isSettingsOpen && <SettingsOverlay />}
+          {isDiscoveryActive && <ImportProgress />}
+          {isCreateCollectionOpen && <CreateCollectionModal />}
+        </Suspense>
 
           <Routes>
             {/* Root Landing Route renders instantly with zero blocking imports */}
@@ -98,6 +97,13 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <AppContent />
     </ErrorBoundary>
   );
 }

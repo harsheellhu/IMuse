@@ -32,7 +32,12 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const isInitialRender = useRef(true);
   const isTron = appearance === 'tron';
+
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
 
   // Safe defaults for slideshowConfig
   const config = React.useMemo(() => ({
@@ -304,7 +309,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         <div className="flex justify-between items-start w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto">
             {config.captionPosition === 'top-left' && (
-              <Caption feature={currentFeature} isTron={isTron} />
+              <Caption feature={currentFeature} isTron={isTron} isInitial={isInitialRender.current} />
             )}
           </div>
         </div>
@@ -313,7 +318,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         <div className="flex justify-between items-end w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto pl-2 pb-2">
             {config.captionPosition === 'bottom-left' && (
-              <Caption feature={currentFeature} isTron={isTron} />
+              <Caption feature={currentFeature} isTron={isTron} isInitial={isInitialRender.current} />
             )}
           </div>
 
@@ -341,7 +346,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
             </div>
 
             {config.captionPosition === 'bottom-right' && (
-              <Caption feature={currentFeature} isTron={isTron} alignRight />
+              <Caption feature={currentFeature} isTron={isTron} alignRight isInitial={isInitialRender.current} />
             )}
           </div>
         </div>
@@ -351,13 +356,13 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   );
 }
 
-function Caption({ feature, isTron, alignRight }: { feature: LandingFeature, isTron: boolean, alignRight?: boolean }) {
+function Caption({ feature, isTron, alignRight, isInitial = false }: { feature: LandingFeature, isTron: boolean, alignRight?: boolean, isInitial?: boolean }) {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={isInitial ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       key={feature.id} // Re-animate when post changes
-      transition={{ duration: 0.8, delay: 0.2 }}
+      transition={{ duration: isInitial ? 0 : 0.6 }}
       className={clsx(
         "flex flex-col gap-1 md:gap-1.5", 
         alignRight ? "items-end text-right" : "items-start text-left"

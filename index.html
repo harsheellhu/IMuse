@@ -42,25 +42,41 @@
         inset: 0;
         width: 100%;
         height: 100%;
-        background-color: var(--color-background);
+        background-color: #09090b;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding: 1.5rem;
         box-sizing: border-box;
         z-index: 1;
-        pointer-events: none;
+        overflow: hidden;
       }
       @media (min-width: 768px) {
         .imuse-shell-boot {
           padding: 3rem;
         }
       }
+      .imuse-shell-backdrop {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 65% 35%, rgba(140, 135, 125, 0.35) 0%, rgba(85, 80, 75, 0.2) 40%, #181614 100%);
+        pointer-events: none;
+      }
+      .imuse-shell-grid {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.07;
+        pointer-events: none;
+      }
       .imuse-shell-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        position: relative;
+        z-index: 2;
       }
       .imuse-shell-logo {
         font-family: "Playfair Display", Georgia, serif;
@@ -77,12 +93,74 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        text-decoration: none;
       }
-      .imuse-shell-ambient {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04), transparent 70%);
-        pointer-events: none;
+      .imuse-shell-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        position: relative;
+        z-index: 2;
+        padding-left: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .imuse-shell-caption {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        max-width: 32rem;
+      }
+      .imuse-shell-category {
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .imuse-shell-title {
+        font-size: 1.5rem;
+        font-weight: 300;
+        letter-spacing: 0.025em;
+        color: #ffffff;
+        margin: 0;
+      }
+      @media (min-width: 768px) {
+        .imuse-shell-title {
+          font-size: 1.75rem;
+        }
+      }
+      .imuse-shell-desc {
+        font-size: 0.8125rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+      }
+      .imuse-shell-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .imuse-shell-counter {
+        font-size: 0.625rem;
+        font-family: monospace;
+        letter-spacing: 0.25em;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .imuse-shell-dots {
+        display: flex;
+        gap: 0.375rem;
+        align-items: center;
+      }
+      .imuse-shell-dot {
+        width: 0.375rem;
+        height: 0.25rem;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .imuse-shell-dot.active {
+        width: 1.5rem;
+        background: #ffffff;
       }
     </style>
 
@@ -144,12 +222,29 @@
     <div id="root">
       <!-- Instant App Shell displayed until React hydrates -->
       <div class="imuse-shell-boot" id="boot-shell">
-        <div class="imuse-shell-ambient"></div>
+        <div class="imuse-shell-backdrop"></div>
+        <div class="imuse-shell-grid"></div>
         <div class="imuse-shell-header">
           <div class="imuse-shell-logo">IMuse</div>
-          <div class="imuse-shell-action">
+          <a href="/home" class="imuse-shell-action">
             <span>Enter IMuse</span>
             <span>→</span>
+          </a>
+        </div>
+        <div class="imuse-shell-footer">
+          <div class="imuse-shell-caption">
+            <div class="imuse-shell-category">Architecture</div>
+            <h2 class="imuse-shell-title">The Brutalist Monolith</h2>
+            <p class="imuse-shell-desc">A study in concrete textures and dramatic light casting.</p>
+          </div>
+          <div class="imuse-shell-indicator">
+            <span class="imuse-shell-counter">01 / 10</span>
+            <div class="imuse-shell-dots">
+              <span class="imuse-shell-dot active"></span>
+              <span class="imuse-shell-dot"></span>
+              <span class="imuse-shell-dot"></span>
+              <span class="imuse-shell-dot"></span>
+            </div>
           </div>
         </div>
       </div>

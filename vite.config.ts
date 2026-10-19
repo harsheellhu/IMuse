@@ -5,11 +5,25 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    define: {
+      'process.env': {},
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        'motion/react',
+        'zustand',
+        'clsx',
+        'tailwind-merge',
+        'lucide-react'
+      ]
     },
     build: {
       rollupOptions: {
