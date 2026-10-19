@@ -7,21 +7,35 @@ import clsx from 'clsx';
 import { Post } from '../types';
 import { PostCard } from '../components/feed/PostCard';
 
+import { RouteSkeleton } from '../components/ui/RouteSkeleton';
+
 export function Home() {
   const { posts } = useStore();
   const { homeLayout, feedDensity } = useSettingsStore();
+  const [isLoading, setIsLoading] = React.useState(posts.length === 0);
 
   React.useEffect(() => {
     if (posts.length === 0) {
+      setIsLoading(true);
       import('../api/content').then(({ contentApi }) => {
         contentApi.getAll('post', 50).then((data) => {
           useStore.setState({ posts: data as any });
-        }).catch(console.error);
+        }).catch(console.error).finally(() => {
+          setIsLoading(false);
+        });
+      }).catch(() => {
+        setIsLoading(false);
       });
+    } else {
+      setIsLoading(false);
     }
   }, [posts.length]);
 
   const displayPosts = posts.slice(0, 50); // Show up to 50 for the feed
+
+  if (isLoading && displayPosts.length === 0) {
+    return <RouteSkeleton />;
+  }
 
   return (
     <div className={clsx(

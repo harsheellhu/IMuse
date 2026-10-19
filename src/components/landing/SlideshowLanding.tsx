@@ -6,18 +6,50 @@ import { useImagePalette } from '../../hooks/useImagePalette';
 import { LandingFeature } from '../../types';
 import clsx from 'clsx';
 
+// Helper to safely convert RGB or Hex color to RGBA with specific opacity
+function getGradientColor(color: string | undefined, opacity: number): string {
+  if (!color) return `rgba(255, 255, 255, ${opacity})`;
+  if (color.startsWith('rgb(')) {
+    return color.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+  }
+  if (color.startsWith('rgba(')) {
+    return color.replace(/,\s*[\d.]+\)$/, `, ${opacity})`);
+  }
+  if (color.startsWith('#')) {
+    const hex = color.slice(1);
+    const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16);
+    const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16);
+    const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  }
+  return color;
+}
+
 export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   const { slideshowConfig, appearance } = useSettingsStore();
   const { isAuthenticated, setAuthModalOpen } = useStore();
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const isTron = appearance === 'tron';
+
+  // Safe defaults for slideshowConfig
+  const config = React.useMemo(() => ({
+    mode: 'curated' as const,
+    autoplay: 'slow' as const,
+    transition: 'fade' as const,
+    captionPosition: 'bottom-left' as const,
+    ...(slideshowConfig || {})
+  }), [slideshowConfig]);
 
   // Filter features
   const validFeatures = React.useMemo(() => {
-    let p = features.filter(f => f.image?.fullUrl);
-    if (slideshowConfig.mode === 'shuffle') {
+    let p = (features || []).filter(f => f && f.image?.fullUrl);
+    if (p.length === 0 && features && features.length > 0) {
+      p = features;
+    }
+    if (config.mode === 'shuffle') {
       const shuffled = [...p];
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -26,9 +58,14 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
       return shuffled;
     }
     return p;
-  }, [features, slideshowConfig.mode]);
+  }, [features, config.mode]);
 
-  const currentFeature = validFeatures[currentIndex];
+  const currentFeature = validFeatures[currentIndex] || features[0];
+
+  // Reset imageLoaded on index change
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [currentIndex]);
   
   // Extract palette from the feature metadata (0ms instant) or fallback to async hook
   const fallbackPalette = useImagePalette(
@@ -59,11 +96,11 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
 
   // Autoplay
   useEffect(() => {
-    if (slideshowConfig.autoplay === 'off' || validFeatures.length <= 1) return;
+    if (config.autoplay === 'off' || validFeatures.length <= 1) return;
     
     let delay = 7000; // slow
-    if (slideshowConfig.autoplay === 'fast') delay = 4000;
-    if (slideshowConfig.autoplay === 'cinematic') delay = 12000;
+    if (config.autoplay === 'fast') delay = 4000;
+    if (config.autoplay === 'cinematic') delay = 12000;
 
     const timer = setInterval(() => {
       setDirection(1);
@@ -71,7 +108,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
     }, delay);
 
     return () => clearInterval(timer);
-  }, [slideshowConfig.autoplay, validFeatures.length, currentIndex]); // Reset timer on index change
+  }, [config.autoplay, validFeatures.length, currentIndex]);
 
   const goNext = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -125,7 +162,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
 
   // Variants based on transition
   const getVariants = () => {
-    switch (slideshowConfig.transition) {
+    switch (config.transition) {
       case 'slide':
         return {
           initial: (dir: number) => ({ opacity: 0, x: dir > 0 ? 200 : -200 }),
@@ -145,11 +182,6 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
           exit: { opacity: 0, filter: 'blur(20px)' }
         };
       case 'crossfade':
-        return {
-          initial: { opacity: 0 },
-          animate: { opacity: 1 },
-          exit: { opacity: 0 }
-        };
       case 'fade':
       default:
         return {
@@ -161,7 +193,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   };
 
   const transitionConfig = {
-    duration: slideshowConfig.transition === 'dissolve' ? 1.5 : slideshowConfig.transition === 'fade' ? 0.8 : 1,
+    duration: config.transition === 'dissolve' ? 1.5 : config.transition === 'fade' ? 0.8 : 1,
     ease: [0.16, 1, 0.3, 1]
   };
 
@@ -174,13 +206,13 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Ambient Layer */}
+      {/* Ambient Layer with Guaranteed Valid CSS */}
       <div 
-        className="absolute inset-0 z-0 transition-colors duration-1000 opacity-30 mix-blend-screen pointer-events-none"
+        className="absolute inset-0 z-0 transition-all duration-1000 opacity-50 mix-blend-screen pointer-events-none"
         style={{ 
           background: activePalette 
-            ? `radial-gradient(circle at 50% 50%, ${activePalette.primary}60, transparent 80%)` 
-            : 'transparent'
+            ? `radial-gradient(circle at 50% 50%, ${getGradientColor(activePalette.primary, 0.45)} 0%, ${getGradientColor(activePalette.secondary, 0.2)} 50%, transparent 80%)` 
+            : 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 80%)'
         }}
       />
 
@@ -196,33 +228,59 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
           transition={transitionConfig}
           className="absolute inset-0 w-full h-full cursor-default group bg-bg-base"
         >
-          <picture>
-            {currentFeature.image.mobileUrl && (
-              <source media="(max-width: 768px)" srcSet={currentFeature.image.mobileUrl} />
-            )}
-            {currentFeature.image.previewUrl && (
-              <source media="(max-width: 1280px)" srcSet={currentFeature.image.previewUrl} />
-            )}
-            <img 
-              src={currentFeature.image.fullUrl} 
-              alt={currentFeature.image.alt} 
-              decoding="async"
-              className={clsx(
-                "w-full h-full object-cover select-none",
-                slideshowConfig.autoplay === 'cinematic' && "animate-[cinematic-pan_20s_linear_infinite_alternate]"
-              )}
-              style={{ 
-                objectPosition: 'center', 
-                willChange: 'transform, opacity' 
+          {/* Instant Rich Generative Art Backdrop (Visible immediately before/offline) */}
+          <div 
+            className="absolute inset-0 w-full h-full"
+            style={{
+              background: activePalette
+                ? `radial-gradient(ellipse at 65% 35%, ${getGradientColor(activePalette.primary, 0.35)} 0%, ${getGradientColor(activePalette.secondary, 0.2)} 40%, ${activePalette.background || '#09090b'} 100%)`
+                : 'radial-gradient(ellipse at 50% 50%, #1e1b18 0%, #09090b 100%)'
+            }}
+          >
+            {/* Subtle architectural grid pattern */}
+            <div 
+              className="absolute inset-0 opacity-[0.07] pointer-events-none"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px)',
+                backgroundSize: '40px 40px'
               }}
             />
-          </picture>
+          </div>
+
+          {currentFeature.image?.fullUrl && (
+            <picture>
+              {currentFeature.image.mobileUrl && (
+                <source media="(max-width: 768px)" srcSet={currentFeature.image.mobileUrl} />
+              )}
+              {currentFeature.image.previewUrl && (
+                <source media="(max-width: 1280px)" srcSet={currentFeature.image.previewUrl} />
+              )}
+              <img 
+                src={currentFeature.image.fullUrl} 
+                alt={currentFeature.image.alt || currentFeature.title} 
+                decoding="async"
+                onLoad={() => setImageLoaded(true)}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+                className={clsx(
+                  "w-full h-full object-cover select-none transition-opacity duration-700",
+                  imageLoaded ? "opacity-100" : "opacity-0",
+                  config.autoplay === 'cinematic' && "animate-[cinematic-pan_20s_linear_infinite_alternate]"
+                )}
+                style={{ 
+                  objectPosition: 'center', 
+                  willChange: 'transform, opacity' 
+                }}
+              />
+            </picture>
+          )}
           
           {/* Subtle gradient for text readability */}
           <div className={clsx(
             "absolute pointer-events-none transition-opacity duration-1000",
-            slideshowConfig.captionPosition.includes('bottom') ? "inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/60 to-transparent" : "inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/50 to-transparent",
-            isTron ? "opacity-90" : "opacity-60"
+            config.captionPosition.includes('bottom') ? "inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/75 to-transparent" : "inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/60 to-transparent",
+            isTron ? "opacity-90" : "opacity-70"
           )} />
         </motion.div>
       </AnimatePresence>
@@ -245,7 +303,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         {/* Top Area - Empty, handled by LandingPage overlay */}
         <div className="flex justify-between items-start w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto">
-            {slideshowConfig.captionPosition === 'top-left' && (
+            {config.captionPosition === 'top-left' && (
               <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
@@ -254,17 +312,35 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         {/* Bottom Area */}
         <div className="flex justify-between items-end w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto pl-2 pb-2">
-            {slideshowConfig.captionPosition === 'bottom-left' && (
+            {config.captionPosition === 'bottom-left' && (
               <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
 
-          {/* Spacer if caption is not bottom-left/right */}
-          {slideshowConfig.captionPosition === 'top-left' && <div />}
+          {/* Slide Indicator Dots & Counter */}
+          <div className="flex items-center gap-3 pointer-events-auto pr-2 pb-2">
+            <div className="text-[10px] tracking-[0.25em] uppercase text-white/50 font-mono">
+              {String(currentIndex + 1).padStart(2, '0')} / {String(validFeatures.length).padStart(2, '0')}
+            </div>
+            <div className="flex items-center gap-1.5">
+              {validFeatures.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDirection(i > currentIndex ? 1 : -1);
+                    setCurrentIndex(i);
+                  }}
+                  className={clsx(
+                    "h-1 rounded-full transition-all duration-300 cursor-pointer",
+                    i === currentIndex ? "w-6 bg-white" : "w-1.5 bg-white/30 hover:bg-white/60"
+                  )}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
 
-          {/* Bottom Right Area */}
-          <div className="flex items-end gap-4 md:gap-6 pointer-events-auto pr-2 pb-2">
-            {slideshowConfig.captionPosition === 'bottom-right' && (
+            {config.captionPosition === 'bottom-right' && (
               <Caption feature={currentFeature} isTron={isTron} alignRight />
             )}
           </div>

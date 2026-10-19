@@ -10,6 +10,8 @@ import { ThemeProvider } from './components/ThemeProvider';
 import { useInitializeApp } from './hooks/useInitializeApp';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { RouteSkeleton } from './components/ui/RouteSkeleton';
+import { useSettingsStore } from './store/useSettingsStore';
+import { useStore } from './store/useStore';
 
 // Core Layout & Modals (Lazy-loaded to keep landing route feather-light)
 const AppLayout = React.lazy(() => import('./components/layout/AppLayout').then(m => ({ default: m.AppLayout })));
@@ -41,6 +43,9 @@ const CulturalDNAPage = React.lazy(() => import('./pages/CulturalDNA').then(m =>
 
 export default function App() {
   useInitializeApp();
+  const isSettingsOpen = useSettingsStore(s => s.isSettingsOpen);
+  const isDiscoveryActive = useSettingsStore(s => s.discoveryTask?.isActive);
+  const isCreateCollectionOpen = useStore(s => s.isCreateCollectionOpen);
 
   return (
     <ErrorBoundary>
@@ -48,9 +53,9 @@ export default function App() {
         <BrowserRouter>
           <Suspense fallback={null}>
             <CustomCursor />
-            <SettingsOverlay />
-            <ImportProgress />
-            <CreateCollectionModal />
+            {isSettingsOpen && <SettingsOverlay />}
+            {isDiscoveryActive && <ImportProgress />}
+            {isCreateCollectionOpen && <CreateCollectionModal />}
           </Suspense>
 
           <Routes>

@@ -88,6 +88,40 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+
+const server = app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.warn(`⚠ Port ${PORT} in use — attempting to free it...`);
+    const { execSync } = require('child_process');
+    try {
+      // Find and kill the process holding the port (Windows)
+      const result = execSync(`netstat -ano | findstr :${PORT}`, { encoding: 'utf-8' });
+      const lines = result.trim().split('\n');
+      const pids = new Set();
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/);
+        const pid = parts[parts.length - 1];
+        if (pid && pid !== '0' && !isNaN(pid)) pids.add(pid);
+      }
+      for (const pid of pids) {
+        try { execSync(`taskkill /F /PID ${pid}`, { encoding: 'utf-8' }); } catch(e) {}
+      }
+      // Retry after a brief delay
+      setTimeout(() => {
+        app.listen(PORT, () => {
+          console.log(`Backend server running on http://localhost:${PORT} (recovered)`);
+        });
+      }, 1000);
+    } catch (e) {
+      console.error(`Could not free port ${PORT}. Please manually kill the process using it.`);
+      process.exit(1);
+    }
+  } else {
+    console.error('Server error:', err);
+    process.exit(1);
+  }
 });
