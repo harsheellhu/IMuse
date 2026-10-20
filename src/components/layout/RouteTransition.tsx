@@ -35,11 +35,16 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
   const { motion: motionMode } = useSettingsStore();
   const [direction, setDirection] = useState<Direction>('neutral');
   const prevPathRef = useRef<string>(location.pathname);
+  const isLaunchRef = useRef(false);
 
   // Compute direction synchronously on route change
   if (prevPathRef.current !== location.pathname) {
     const prevBase = getBaseRoute(prevPathRef.current);
     const currBase = getBaseRoute(location.pathname);
+
+    if (prevBase === '/' && currBase === '/home') {
+      isLaunchRef.current = true;
+    }
 
     const prevIndex = CANONICAL_ROUTES.indexOf(prevBase);
     const currIndex = CANONICAL_ROUTES.indexOf(currBase);
@@ -64,6 +69,10 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
 
   // Adjust transition based on motion mode
   const getTransitionSettings = (mode: MotionMode) => {
+    if (isLaunchRef.current) {
+      return { duration: 0.55, ease: [0.16, 1, 0.3, 1] };
+    }
+
     switch (mode) {
       case 'static':
       case 'reduced':
@@ -87,6 +96,14 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         exit: { opacity: 0 },
+      };
+    }
+
+    if (isLaunchRef.current) {
+      return {
+        initial: { opacity: 0, scale: 0.96, y: 14 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.98 },
       };
     }
 
@@ -114,8 +131,17 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
     };
   };
 
+  useEffect(() => {
+    if (isLaunchRef.current) {
+      const timer = setTimeout(() => {
+        isLaunchRef.current = false;
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
+
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="popLayout" initial={false}>
       <motion.div
         key={location.pathname}
         variants={getVariants()}
@@ -124,7 +150,7 @@ export function RouteTransition({ children }: { children: React.ReactNode }) {
         exit="exit"
         transition={getTransitionSettings(motionMode)}
         className="w-full"
-        style={{ gridArea: '1 / 1' }}
+        style={{ gridArea: '1 / 1', willChange: 'opacity, transform' }}
       >
         {children}
       </motion.div>

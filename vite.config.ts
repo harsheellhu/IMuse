@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    plugins: [tailwindcss(), react()],
     define: {
       'process.env': {},
     },
@@ -16,13 +17,20 @@ export default defineConfig(() => {
     optimizeDeps: {
       include: [
         'react',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
         'react-dom',
+        'react-dom/client',
         'react-router-dom',
         'motion/react',
         'zustand',
+        'zustand/middleware',
         'clsx',
         'tailwind-merge',
-        'lucide-react'
+        'lucide-react',
+        'idb',
+        'react-masonry-css',
+        'color-thief-react'
       ]
     },
     build: {

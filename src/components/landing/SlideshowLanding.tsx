@@ -25,19 +25,20 @@ function getGradientColor(color: string | undefined, opacity: number): string {
   return color;
 }
 
-export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
+export function SlideshowLanding({ 
+  features,
+  isLaunching = false 
+}: { 
+  features: LandingFeature[];
+  isLaunching?: boolean;
+}) {
   const { slideshowConfig, appearance } = useSettingsStore();
   const { isAuthenticated, setAuthModalOpen } = useStore();
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const isInitialRender = useRef(true);
   const isTron = appearance === 'tron';
-
-  useEffect(() => {
-    isInitialRender.current = false;
-  }, []);
 
   // Safe defaults for slideshowConfig
   const config = React.useMemo(() => ({
@@ -205,7 +206,13 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
   if (!currentFeature) return null;
 
   return (
-    <div 
+    <motion.div 
+      animate={{
+        scale: isLaunching ? 1.12 : 1,
+        opacity: isLaunching ? 0.35 : 1,
+        filter: isLaunching ? 'blur(6px)' : 'blur(0px)',
+      }}
+      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-bg-base"
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
@@ -222,7 +229,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
       />
 
       {/* Main Image Slideshow */}
-      <AnimatePresence initial={false} custom={direction}>
+      <AnimatePresence mode="popLayout" custom={direction}>
         <motion.div
           key={currentFeature.id}
           custom={direction}
@@ -291,8 +298,14 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
       </AnimatePresence>
 
       {/* UI Overlay */}
-      <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-12 z-20">
-        
+      <motion.div 
+        animate={{ 
+          opacity: isLaunching ? 0 : 1,
+          y: isLaunching ? 16 : 0,
+        }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-12 z-20"
+      >
         {/* Invisible Click Zones for Desktop Navigation */}
         <div 
           onClick={goPrev} 
@@ -309,7 +322,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         <div className="flex justify-between items-start w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto">
             {config.captionPosition === 'top-left' && (
-              <Caption feature={currentFeature} isTron={isTron} isInitial={isInitialRender.current} />
+              <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
         </div>
@@ -318,7 +331,7 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
         <div className="flex justify-between items-end w-full relative z-20 pointer-events-none">
           <div className="w-2/3 max-w-xl pointer-events-auto pl-2 pb-2">
             {config.captionPosition === 'bottom-left' && (
-              <Caption feature={currentFeature} isTron={isTron} isInitial={isInitialRender.current} />
+              <Caption feature={currentFeature} isTron={isTron} />
             )}
           </div>
 
@@ -346,23 +359,24 @@ export function SlideshowLanding({ features }: { features: LandingFeature[] }) {
             </div>
 
             {config.captionPosition === 'bottom-right' && (
-              <Caption feature={currentFeature} isTron={isTron} alignRight isInitial={isInitialRender.current} />
+              <Caption feature={currentFeature} isTron={isTron} alignRight />
             )}
           </div>
         </div>
 
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
-function Caption({ feature, isTron, alignRight, isInitial = false }: { feature: LandingFeature, isTron: boolean, alignRight?: boolean, isInitial?: boolean }) {
+function Caption({ feature, isTron, alignRight }: { feature: LandingFeature; isTron: boolean; alignRight?: boolean }) {
   return (
     <motion.div 
-      initial={isInitial ? false : { opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
       key={feature.id} // Re-animate when post changes
-      transition={{ duration: isInitial ? 0 : 0.6 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={clsx(
         "flex flex-col gap-1 md:gap-1.5", 
         alignRight ? "items-end text-right" : "items-start text-left"

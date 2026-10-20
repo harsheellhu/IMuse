@@ -96,7 +96,7 @@ export function Navbar() {
 
   return (
     <motion.nav 
-      className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between transition-all duration-500"
+      className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between"
       style={{
         backgroundColor: useTransform(bgOpacity, v => 
           `color-mix(in srgb, var(--color-background) ${Math.round(v * 100)}%, transparent)`

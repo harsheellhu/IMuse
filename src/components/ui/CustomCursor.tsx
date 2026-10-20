@@ -38,6 +38,7 @@ export function CustomCursor() {
     let isPressed = false;
     let currentState: CursorState = 'default';
     let isDarkContrast = false;
+    let lastTarget: HTMLElement | null = null;
     let rafId: number | null = null;
     let isRunning = false;
     let initialized = false;
@@ -187,21 +188,26 @@ export function CustomCursor() {
         wrapper.dataset.visible = 'true';
       }
 
-      // Fast adaptive contrast detection
       const el = e.target as HTMLElement | null;
-      if (el) {
-        const isMediaOrDark = Boolean(
-          el.tagName === 'IMG' || 
-          el.tagName === 'VIDEO' || 
-          el.closest('img, video, [data-contrast="dark"], .bg-black, .bg-\\[\\#0a0a0a\\], .bg-\\[\\#050505\\], .theme-dark')
-        );
-        if (isMediaOrDark !== isDarkContrast) {
-          isDarkContrast = isMediaOrDark;
-          wrapper.dataset.contrast = isMediaOrDark ? 'dark' : 'normal';
+      if (el !== lastTarget) {
+        lastTarget = el;
+
+        // Fast adaptive contrast detection
+        if (el) {
+          const isMediaOrDark = Boolean(
+            el.tagName === 'IMG' || 
+            el.tagName === 'VIDEO' || 
+            el.closest('img, video, [data-contrast="dark"], .bg-black, .bg-\\[\\#0a0a0a\\], .bg-\\[\\#050505\\], .theme-dark')
+          );
+          if (isMediaOrDark !== isDarkContrast) {
+            isDarkContrast = isMediaOrDark;
+            wrapper.dataset.contrast = isMediaOrDark ? 'dark' : 'normal';
+          }
         }
+
+        inspectTarget(el);
       }
 
-      inspectTarget(el);
       wakeLoop();
     };
 
@@ -217,12 +223,14 @@ export function CustomCursor() {
     const onPointerUp = (e: PointerEvent) => {
       isPressed = false;
       wrapper.dataset.pressed = 'false';
+      lastTarget = null;
       inspectTarget(e.target as HTMLElement | null);
       wakeLoop();
     };
 
     const onMouseLeave = () => {
       isVisible = false;
+      lastTarget = null;
       wrapper.dataset.visible = 'false';
     };
 

@@ -58,7 +58,11 @@ export const useInitializeApp = () => {
       }
     };
 
-    initialize();
+    const scheduleInit = (typeof window !== 'undefined' && 'requestIdleCallback' in window)
+      ? (window as any).requestIdleCallback
+      : ((cb: () => void) => setTimeout(cb, 100));
+
+    scheduleInit(initialize);
   }, []);
 
   return isInitializing;
