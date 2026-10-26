@@ -25,16 +25,75 @@ export interface Post {
   createdAt: string;
 }
 
+export type CollectionType = 'manual' | 'smart' | 'hybrid';
+export type CollectionMatchOperator = 'all' | 'any';
+export type CollectionLayout = 'grid' | 'masonry' | 'editorial' | 'moodboard';
+
+export interface SmartRule {
+  id?: string;
+  field: 'type' | 'category' | 'tag' | 'text' | 'creator' | 'year' | 'rating' | 'saved' | 'color';
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'starts_with' | 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal' | 'between' | 'is_saved' | 'is_not_saved' | 'is_not_empty';
+  value?: any;
+  secondValue?: any;
+}
+
 export interface Collection {
   id: string;
   title: string;
   description: string;
   coverImage: string;
-  creatorId: string;
+  creatorId?: string;
   itemCount: number;
-  followers: number;
+  followers?: number;
   isPrivate: boolean;
-  tags: string[];
+  tags?: string[];
+  type?: CollectionType;
+  matchOperator?: CollectionMatchOperator;
+  rules?: SmartRule[];
+  pinnedIds?: string[];
+  excludedIds?: string[];
+  manualOrder?: string[];
+  layout?: CollectionLayout;
+  createdAt?: string;
+  updatedAt?: string;
+  items?: any[];
+}
+
+export type TrailConnectionType = 
+  | 'inspired_by'
+  | 'created_by'
+  | 'adaptation_of'
+  | 'set_in'
+  | 'related_to'
+  | 'similar_atmosphere'
+  | 'personal_association'
+  | 'leads_to'
+  | 'custom';
+
+export interface TrailStep {
+  id: string;
+  trailId?: string;
+  contentId: string;
+  stepOrder: number;
+  annotation: string;
+  connectionType: TrailConnectionType;
+  connectionText?: string;
+  createdAt?: string;
+  artifact?: any;
+}
+
+export interface Trail {
+  id: string;
+  userId?: string;
+  title: string;
+  description: string;
+  coverImage?: string;
+  theme?: string;
+  status: 'draft' | 'completed';
+  stepCount?: number;
+  steps?: TrailStep[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Book {

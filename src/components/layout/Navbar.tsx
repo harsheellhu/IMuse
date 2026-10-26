@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin, Music } from 'lucide-react';
+import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin, Music, Sparkles } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import clsx from 'clsx';
@@ -169,7 +169,8 @@ export function Navbar() {
                   { icon: MapPin, label: 'Add place' },
                   { icon: Link2, label: 'Add link' },
                   { icon: Music, label: 'Add song' },
-                  { icon: Plus, label: 'Create collection', divider: true }
+                  { icon: Sparkles, label: 'Create collection', divider: true },
+                  { icon: Compass, label: 'Create cultural trail' }
                 ].map((item, i) => (
                   <React.Fragment key={item.label}>
                     {item.divider && <div className="h-px bg-border-subtle/50 my-1 mx-3" />}
@@ -177,9 +178,9 @@ export function Navbar() {
                       onClick={() => {
                         setCreateMenuOpen(false);
                         if (item.label === 'Create collection') {
-                          useStore.getState().interceptAction(() => {
-                            useStore.getState().setCreateCollectionOpen(true);
-                          });
+                          useStore.getState().openSmartBuilder(null);
+                        } else if (item.label === 'Create cultural trail') {
+                          useStore.getState().openTrailEditor(null);
                         } else if (item.label === 'Add song') {
                           fileInputRef.current?.click();
                         } else {

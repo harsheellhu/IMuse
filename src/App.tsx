@@ -18,6 +18,9 @@ const AppLayout = React.lazy(() => import('./components/layout/AppLayout').then(
 const SettingsOverlay = React.lazy(() => import('./components/settings/SettingsOverlay').then(m => ({ default: m.SettingsOverlay })));
 const ImportProgress = React.lazy(() => import('./components/settings/ImportProgress').then(m => ({ default: m.ImportProgress })));
 const CreateCollectionModal = React.lazy(() => import('./components/ui/CreateCollectionModal').then(m => ({ default: m.CreateCollectionModal })));
+const SmartRuleBuilderModal = React.lazy(() => import('./components/collections/SmartRuleBuilderModal').then(m => ({ default: m.SmartRuleBuilderModal })));
+const TrailEditor = React.lazy(() => import('./components/trails/TrailEditor').then(m => ({ default: m.TrailEditor })));
+const TrailViewer = React.lazy(() => import('./components/trails/TrailViewer').then(m => ({ default: m.TrailViewer })));
 const CustomCursor = React.lazy(() => import('./components/ui/CustomCursor').then(m => ({ default: m.CustomCursor })));
 
 // Lazy Load secondary routes
@@ -46,6 +49,15 @@ function AppContent() {
   const isSettingsOpen = useSettingsStore(s => s.isSettingsOpen);
   const isDiscoveryActive = useSettingsStore(s => s.discoveryTask?.isActive);
   const isCreateCollectionOpen = useStore(s => s.isCreateCollectionOpen);
+  const isSmartBuilderOpen = useStore(s => s.isSmartBuilderOpen);
+  const closeSmartBuilder = useStore(s => s.closeSmartBuilder);
+  const editingCollection = useStore(s => s.editingCollection);
+  const isTrailEditorOpen = useStore(s => s.isTrailEditorOpen);
+  const closeTrailEditor = useStore(s => s.closeTrailEditor);
+  const trailDraft = useStore(s => s.trailDraft);
+  const isTrailViewerOpen = useStore(s => s.isTrailViewerOpen);
+  const closeTrailViewer = useStore(s => s.closeTrailViewer);
+  const activeTrail = useStore(s => s.activeTrail);
 
   return (
     <ThemeProvider>
@@ -55,6 +67,27 @@ function AppContent() {
           {isSettingsOpen && <SettingsOverlay />}
           {isDiscoveryActive && <ImportProgress />}
           {isCreateCollectionOpen && <CreateCollectionModal />}
+          {isSmartBuilderOpen && (
+            <SmartRuleBuilderModal 
+              isOpen={isSmartBuilderOpen} 
+              onClose={closeSmartBuilder} 
+              initialCollection={editingCollection} 
+            />
+          )}
+          {isTrailEditorOpen && (
+            <TrailEditor 
+              isOpen={isTrailEditorOpen} 
+              onClose={closeTrailEditor} 
+              trail={trailDraft} 
+            />
+          )}
+          {isTrailViewerOpen && (
+            <TrailViewer 
+              isOpen={isTrailViewerOpen} 
+              onClose={closeTrailViewer} 
+              trail={activeTrail} 
+            />
+          )}
         </Suspense>
 
           <Routes>
@@ -77,6 +110,8 @@ function AppContent() {
               <Route path="places" element={<Suspense fallback={<RouteSkeleton />}><Places /></Suspense>} />
               <Route path="shops" element={<Suspense fallback={<RouteSkeleton />}><Shops /></Suspense>} />
               <Route path="collections" element={<Suspense fallback={<RouteSkeleton />}><Collections /></Suspense>} />
+              <Route path="trails" element={<Suspense fallback={<RouteSkeleton />}><Collections /></Suspense>} />
+              <Route path="trails/:id" element={<Suspense fallback={<RouteSkeleton />}><Collections /></Suspense>} />
               <Route path="library" element={<Suspense fallback={<RouteSkeleton />}><Library /></Suspense>} />
               <Route path="music" element={<Suspense fallback={<RouteSkeleton />}><Music /></Suspense>} />
               <Route path="experiences" element={<Suspense fallback={<RouteSkeleton />}><Profile /></Suspense>} />

@@ -1,8 +1,9 @@
 import { create } from 'zustand';
-import { User, Post, Collection, Book, Film, TvShow, Place } from '../types';
+import { User, Post, Collection, Book, Film, TvShow, Place, Trail, TrailStep } from '../types';
 import { authApi } from '../api/auth';
 import { contentApi } from '../api/content';
 import { collectionsApi } from '../api/collections';
+import { trailsApi } from '../api/trails';
 
 const DEFAULT_USER: User = {
   id: 'u-demo',
@@ -42,6 +43,7 @@ interface StoreState {
   users: User[];
   posts: Post[];
   collections: Collection[];
+  trails: Trail[];
   books: Book[];
   films: Film[];
   tvShows: TvShow[];
@@ -55,11 +57,36 @@ interface StoreState {
   addPost: (post: Post) => void;
   
   // Collection CRUD
-  createCollection: (title: string, description: string, isPrivate: boolean) => void;
-  deleteCollection: (id: string) => void;
-  updateCollection: (id: string, updates: Partial<Collection>) => void;
+  loadCollections: () => Promise<void>;
+  createCollection: (title: string, description?: string, isPrivate?: boolean, extra?: Partial<Collection>) => Promise<Collection | void>;
+  deleteCollection: (id: string) => Promise<void>;
+  updateCollection: (id: string, updates: Partial<Collection>) => Promise<void>;
+  duplicateCollection: (id: string) => Promise<Collection | void>;
+  pinCollectionItem: (collectionId: string, contentId: string) => Promise<void>;
+  excludeCollectionItem: (collectionId: string, contentId: string) => Promise<void>;
   addItemsToCollection: (collectionId: string, itemIds: string[]) => void;
   removeItemsFromCollection: (collectionId: string, itemIds: string[]) => void;
+
+  // Smart Collection Builder Modal
+  isSmartBuilderOpen: boolean;
+  editingCollection: Collection | null;
+  openSmartBuilder: (collection?: Collection | null) => void;
+  closeSmartBuilder: () => void;
+
+  // Cultural Trails State & Actions
+  activeTrail: Trail | null;
+  trailDraft: Partial<Trail> | null;
+  isTrailViewerOpen: boolean;
+  isTrailEditorOpen: boolean;
+  loadTrails: () => Promise<void>;
+  openTrailViewer: (trail: Trail | string) => Promise<void>;
+  closeTrailViewer: () => void;
+  openTrailEditor: (trail?: Trail | Partial<Trail> | null) => void;
+  closeTrailEditor: () => void;
+  saveTrail: (trailData: Partial<Trail>) => Promise<Trail | void>;
+  duplicateTrail: (id: string) => Promise<void>;
+  deleteTrail: (id: string) => Promise<void>;
+  addStepToTrail: (trailId: string, step: { contentId: string; annotation?: string; connectionType?: string; connectionText?: string }) => Promise<void>;
 
   // Viewer State (Not Persisted)
   activeViewerItem: ActiveViewerItem | null;
@@ -108,15 +135,15 @@ export const useStore = create<StoreState>((set, get) => ({
   users: [DEFAULT_USER],
   posts: [],
   collections: [],
+  trails: [],
   books: [],
   films: [],
   tvShows: [],
   places: [],
-  
+
   // Save System
   savedPostIds: [],
   toggleSavePost: async (postId) => {
-    // Optimistic update
     set((state) => {
       const saved = state.savedPostIds;
       if (saved.includes(postId)) {
@@ -125,8 +152,6 @@ export const useStore = create<StoreState>((set, get) => ({
         return { savedPostIds: [...saved, postId] };
       }
     });
-    
-    // API call
     try {
       const state = get();
       if (state.savedPostIds.includes(postId)) {
@@ -138,23 +163,70 @@ export const useStore = create<StoreState>((set, get) => ({
       console.error(err);
     }
   },
-  
+
   // Post Management
   addPost: (post) => set((state) => ({
     posts: [post, ...state.posts]
   })),
 
-  // Collection CRUD
-  createCollection: async (title, description, isPrivate) => {
+  // Smart Builder & Trail Modals
+  isSmartBuilderOpen: false,
+  editingCollection: null,
+  openSmartBuilder: (col = null) => set({ isSmartBuilderOpen: true, editingCollection: col }),
+  closeSmartBuilder: () => set({ isSmartBuilderOpen: false, editingCollection: null }),
+
+  activeTrail: null,
+  trailDraft: null,
+  isTrailViewerOpen: false,
+  isTrailEditorOpen: false,
+
+  // Load Collections
+  loadCollections: async () => {
     try {
-      const newCol = await collectionsApi.create({ title, description, is_private: isPrivate });
+      const data = await collectionsApi.getAll();
+      set({ collections: Array.isArray(data) ? data : [] });
+    } catch (e) {
+      console.error('Failed to load collections:', e);
+    }
+  },
+
+  // Collection CRUD
+  createCollection: async (title, description = '', isPrivate = false, extra = {}) => {
+    try {
+      const newCol = await collectionsApi.create({
+        title,
+        description,
+        is_private: isPrivate,
+        ...extra
+      });
       set(state => ({
         collections: [newCol, ...state.collections]
       }));
+      return newCol;
     } catch (e) {
       console.error('Failed to create collection', e);
+      // Local fallback for offline mode
+      const fallbackCol: Collection = {
+        id: `c-local-${Date.now()}`,
+        title,
+        description,
+        isPrivate,
+        coverImage: extra.coverImage || 'https://images.unsplash.com/photo-1513694203232-719a280e022f',
+        type: extra.type || 'manual',
+        matchOperator: extra.matchOperator || 'all',
+        rules: extra.rules || [],
+        pinnedIds: extra.pinnedIds || [],
+        excludedIds: extra.excludedIds || [],
+        manualOrder: extra.manualOrder || [],
+        layout: extra.layout || 'grid',
+        itemCount: 0,
+        createdAt: new Date().toISOString()
+      };
+      set(state => ({ collections: [fallbackCol, ...state.collections] }));
+      return fallbackCol;
     }
   },
+
   deleteCollection: async (id) => {
     try {
       await collectionsApi.delete(id);
@@ -163,18 +235,95 @@ export const useStore = create<StoreState>((set, get) => ({
       }));
     } catch (e) {
       console.error('Failed to delete collection', e);
+      set(state => ({ collections: state.collections.filter(c => c.id !== id) }));
     }
   },
+
   updateCollection: async (id, updates) => {
+    // Optimistic update
+    set(state => ({
+      collections: state.collections.map(c => c.id === id ? { ...c, ...updates } : c)
+    }));
+
     try {
-      await collectionsApi.update(id, updates);
+      const updated = await collectionsApi.update(id, updates);
       set(state => ({
-        collections: state.collections.map(c => c.id === id ? { ...c, ...updates } : c)
+        collections: state.collections.map(c => c.id === id ? { ...c, ...updated } : c)
       }));
     } catch (e) {
-      console.error('Failed to update collection', e);
+      console.error('Failed to update collection on server', e);
     }
   },
+
+  duplicateCollection: async (id) => {
+    try {
+      const dup = await collectionsApi.duplicate(id);
+      set(state => ({
+        collections: [dup, ...state.collections]
+      }));
+      return dup;
+    } catch (e) {
+      console.error('Failed to duplicate collection:', e);
+      const original = get().collections.find(c => c.id === id);
+      if (original) {
+        const fallbackDup: Collection = {
+          ...original,
+          id: `c-copy-${Date.now()}`,
+          title: `${original.title} (Copy)`,
+          createdAt: new Date().toISOString()
+        };
+        set(state => ({ collections: [fallbackDup, ...state.collections] }));
+        return fallbackDup;
+      }
+    }
+  },
+
+  pinCollectionItem: async (collectionId, contentId) => {
+    // Optimistic
+    set(state => ({
+      collections: state.collections.map(c => {
+        if (c.id !== collectionId) return c;
+        const pinned = Array.isArray(c.pinnedIds) ? c.pinnedIds : [];
+        const excluded = Array.isArray(c.excludedIds) ? c.excludedIds : [];
+        return {
+          ...c,
+          pinnedIds: pinned.includes(contentId) ? pinned : [...pinned, contentId],
+          excludedIds: excluded.filter(id => id !== contentId),
+          itemCount: c.itemCount + (pinned.includes(contentId) ? 0 : 1)
+        };
+      })
+    }));
+
+    try {
+      await collectionsApi.pinItem(collectionId, contentId);
+    } catch (e) {
+      console.error('Failed to pin item to collection:', e);
+    }
+  },
+
+  excludeCollectionItem: async (collectionId, contentId) => {
+    // Optimistic
+    set(state => ({
+      collections: state.collections.map(c => {
+        if (c.id !== collectionId) return c;
+        const pinned = Array.isArray(c.pinnedIds) ? c.pinnedIds : [];
+        const excluded = Array.isArray(c.excludedIds) ? c.excludedIds : [];
+        return {
+          ...c,
+          pinnedIds: pinned.filter(id => id !== contentId),
+          excludedIds: excluded.includes(contentId) ? excluded : [...excluded, contentId],
+          itemCount: Math.max(0, c.itemCount - 1)
+        };
+      })
+    }));
+
+    try {
+      await collectionsApi.excludeItem(collectionId, contentId);
+    } catch (e) {
+      console.error('Failed to exclude item from collection:', e);
+    }
+  },
+
   addItemsToCollection: async (collectionId, itemIds) => {
     for (const itemId of itemIds) {
       await collectionsApi.addItem(collectionId, itemId).catch(console.error);
@@ -183,6 +332,7 @@ export const useStore = create<StoreState>((set, get) => ({
       collections: state.collections.map(c => c.id === collectionId ? { ...c, itemCount: (c.itemCount || 0) + itemIds.length } : c)
     }));
   },
+
   removeItemsFromCollection: async (collectionId, itemIds) => {
     for (const itemId of itemIds) {
       await collectionsApi.removeItem(collectionId, itemId).catch(console.error);
@@ -190,6 +340,161 @@ export const useStore = create<StoreState>((set, get) => ({
     set(state => ({
       collections: state.collections.map(c => c.id === collectionId ? { ...c, itemCount: Math.max(0, (c.itemCount || 0) - itemIds.length) } : c)
     }));
+  },
+
+  // Cultural Trails Actions
+  loadTrails: async () => {
+    try {
+      const trails = await trailsApi.getAll();
+      set({ trails: Array.isArray(trails) ? trails : [] });
+    } catch (e) {
+      console.error('Failed to load trails:', e);
+    }
+  },
+
+  openTrailViewer: async (trailOrId) => {
+    if (typeof trailOrId === 'string') {
+      try {
+        const trail = await trailsApi.getById(trailOrId);
+        set({ activeTrail: trail, isTrailViewerOpen: true });
+      } catch (e) {
+        console.error('Failed to load trail for viewing:', e);
+      }
+    } else {
+      set({ activeTrail: trailOrId, isTrailViewerOpen: true });
+      // Fetch full details if steps not loaded
+      if (!trailOrId.steps || trailOrId.steps.length === 0) {
+        trailsApi.getById(trailOrId.id)
+          .then(full => set({ activeTrail: full }))
+          .catch(console.error);
+      }
+    }
+  },
+
+  closeTrailViewer: () => set({ isTrailViewerOpen: false }),
+
+  openTrailEditor: (trail = null) => {
+    if (trail) {
+      if (!trail.steps || trail.steps.length === 0) {
+        trailsApi.getById(trail.id).then(full => {
+          set({ trailDraft: full, isTrailEditorOpen: true });
+        }).catch(() => {
+          set({ trailDraft: trail, isTrailEditorOpen: true });
+        });
+      } else {
+        set({ trailDraft: { ...trail }, isTrailEditorOpen: true });
+      }
+    } else {
+      set({
+        trailDraft: {
+          title: '',
+          description: '',
+          theme: 'cinematic',
+          status: 'draft',
+          steps: []
+        },
+        isTrailEditorOpen: true
+      });
+    }
+  },
+
+  closeTrailEditor: () => set({ isTrailEditorOpen: false, trailDraft: null }),
+
+  saveTrail: async (trailData) => {
+    const isNew = !trailData.id || trailData.id.startsWith('draft-');
+    try {
+      if (isNew) {
+        const created = await trailsApi.create({
+          title: trailData.title || 'Untitled Trail',
+          description: trailData.description,
+          coverImage: trailData.coverImage,
+          theme: trailData.theme,
+          status: trailData.status || 'draft',
+          steps: trailData.steps || []
+        });
+        set(state => ({
+          trails: [created, ...state.trails],
+          isTrailEditorOpen: false,
+          trailDraft: null
+        }));
+        return created;
+      } else {
+        await trailsApi.update(trailData.id!, {
+          title: trailData.title,
+          description: trailData.description,
+          coverImage: trailData.coverImage,
+          theme: trailData.theme,
+          status: trailData.status,
+          steps: trailData.steps
+        });
+        const updated = await trailsApi.getById(trailData.id!);
+        set(state => ({
+          trails: state.trails.map(t => t.id === trailData.id ? { ...t, ...updated } : t),
+          activeTrail: state.activeTrail?.id === trailData.id ? updated : state.activeTrail,
+          isTrailEditorOpen: false,
+          trailDraft: null
+        }));
+        return updated;
+      }
+    } catch (e) {
+      console.error('Failed to save trail:', e);
+      // Local fallback
+      const localTrail: Trail = {
+        id: trailData.id || `trail-local-${Date.now()}`,
+        title: trailData.title || 'Untitled Trail',
+        description: trailData.description || '',
+        coverImage: trailData.coverImage || trailData.steps?.[0]?.artifact?.imageUrl,
+        theme: trailData.theme || 'cinematic',
+        status: trailData.status || 'draft',
+        stepCount: trailData.steps?.length || 0,
+        steps: trailData.steps as TrailStep[],
+        updatedAt: new Date().toISOString()
+      };
+      set(state => ({
+        trails: [localTrail, ...state.trails.filter(t => t.id !== localTrail.id)],
+        isTrailEditorOpen: false,
+        trailDraft: null
+      }));
+      return localTrail;
+    }
+  },
+
+  duplicateTrail: async (id) => {
+    try {
+      await trailsApi.duplicate(id);
+      const all = await trailsApi.getAll();
+      set({ trails: all });
+    } catch (e) {
+      console.error('Failed to duplicate trail:', e);
+    }
+  },
+
+  deleteTrail: async (id) => {
+    try {
+      await trailsApi.delete(id);
+      set(state => ({
+        trails: state.trails.filter(t => t.id !== id),
+        activeTrail: state.activeTrail?.id === id ? null : state.activeTrail,
+        isTrailViewerOpen: state.activeTrail?.id === id ? false : state.isTrailViewerOpen
+      }));
+    } catch (e) {
+      console.error('Failed to delete trail:', e);
+      set(state => ({ trails: state.trails.filter(t => t.id !== id) }));
+    }
+  },
+
+  addStepToTrail: async (trailId, step) => {
+    try {
+      await trailsApi.addStep(trailId, step);
+      // Update trail in state
+      const updated = await trailsApi.getById(trailId);
+      set(state => ({
+        trails: state.trails.map(t => t.id === trailId ? { ...t, stepCount: (t.stepCount || 0) + 1 } : t),
+        activeTrail: state.activeTrail?.id === trailId ? updated : state.activeTrail
+      }));
+    } catch (e) {
+      console.error('Failed to add step to trail:', e);
+    }
   },
 
   // Viewer State (Single Canonical Foreground Layer)

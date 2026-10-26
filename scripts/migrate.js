@@ -208,7 +208,36 @@ db.exec(`
   );
 `);
 
-// 14. Performance Indices
+// 14. Cultural Trails
+db.exec(`
+  CREATE TABLE IF NOT EXISTS trails (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    cover_image TEXT,
+    theme TEXT,
+    status TEXT DEFAULT 'draft',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS trail_steps (
+    id TEXT PRIMARY KEY,
+    trail_id TEXT NOT NULL,
+    content_id TEXT NOT NULL,
+    step_order INTEGER NOT NULL,
+    annotation TEXT,
+    connection_type TEXT DEFAULT 'leads_to',
+    connection_text TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (trail_id) REFERENCES trails(id) ON DELETE CASCADE,
+    FOREIGN KEY (content_id) REFERENCES content(id) ON DELETE CASCADE
+  );
+`);
+
+// 15. Performance Indices
 db.exec(`
   CREATE INDEX IF NOT EXISTS idx_content_type ON content(type);
   CREATE INDEX IF NOT EXISTS idx_content_category ON content(category);
@@ -216,6 +245,9 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_saved_items_user ON saved_items(user_id);
   CREATE INDEX IF NOT EXISTS idx_collections_user ON collections(user_id);
   CREATE INDEX IF NOT EXISTS idx_recent_views_user ON recent_views(user_id);
+  CREATE INDEX IF NOT EXISTS idx_trail_steps_trail ON trail_steps(trail_id, step_order);
+  CREATE INDEX IF NOT EXISTS idx_trails_user ON trails(user_id);
+  CREATE INDEX IF NOT EXISTS idx_collections_type ON collections(type);
 `);
 
 console.log('Database migrations completed successfully.');

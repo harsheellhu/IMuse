@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, type ReactNode, type ErrorInfo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft, Download } from 'lucide-react';
+import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft, Download, Compass, Layers } from 'lucide-react';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
@@ -310,7 +310,7 @@ export function PostDetailViewer() {
 }
 
 function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () => void }) {
-  const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen, expandToUniverse } = useStore();
+  const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen, expandToUniverse, openTrailEditor } = useStore();
   const [isExperienceModalOpen, setExperienceModalOpen] = React.useState(false);
   const [isDownloadModalOpen, setDownloadModalOpen] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
@@ -569,6 +569,40 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                 >
                   <Globe className="w-3.5 h-3.5" />
                   <span>Expand This</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                    openTrailEditor({
+                      title: `Trail through ${title}`,
+                      description: `A cultural journey starting with ${title}.`,
+                      steps: [
+                        {
+                          id: `ts-${Date.now()}`,
+                          contentId: data?.id,
+                          stepOrder: 0,
+                          annotation: `Beginning from ${title}.`,
+                          connectionType: 'leads_to',
+                          connectionText: 'Inaugural step',
+                          artifact: {
+                            id: data?.id,
+                            title,
+                            imageUrl,
+                            type,
+                            category: categoryOrMeta,
+                            creator: creatorInfo
+                          }
+                        }
+                      ]
+                    });
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-accent-primary hover:opacity-85 transition-opacity cursor-pointer py-2 border border-accent-primary/30 hover:border-accent-primary px-3 rounded-full"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Start Trail</span>
                 </button>
 
                 <button
