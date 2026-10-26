@@ -104,15 +104,28 @@ export function LandingPage() {
             onClick={handleLaunchApp}
             onMouseEnter={handleWarmHome}
             onTouchStart={handleWarmHome}
-            className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white/90 hover:text-white transition-all group mix-blend-normal drop-shadow-md cursor-pointer hover:scale-105 active:scale-95"
-            title="Launch iMUSE (or press Enter)"
+            className="flex items-center gap-2.5 px-4.5 py-2 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md border border-white/20 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white hover:text-white transition-all duration-300 group mix-blend-normal drop-shadow-md cursor-pointer hover:scale-105 active:scale-95 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_0_24px_rgba(255,255,255,0.25)]"
+            title="Launch iMUSE (or press Enter / Space)"
             aria-label="Enter iMUSE"
           >
-            <Sparkles className="w-3.5 h-3.5 text-white/70 group-hover:text-white transition-colors" />
-            <span>Enter IMuse</span>
-            <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+            <Sparkles className="w-3.5 h-3.5 text-white/70 group-hover:text-white group-hover:rotate-12 transition-transform duration-300" />
+            <span className="font-medium">Enter IMuse</span>
+            <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
           </button>
         </div>
+      </motion.div>
+
+      {/* Bottom Center Interaction Cue */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: isLaunching ? 0 : 0.45,
+          y: isLaunching ? 10 : 0
+        }}
+        transition={{ duration: 0.8, delay: 0.8 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none hidden md:flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase font-mono text-white/50 select-none"
+      >
+        <span>Press Space or Scroll to Navigate</span>
       </motion.div>
 
       {/* Cinematic Warp Iris Portal (Activates on Launch) */}
