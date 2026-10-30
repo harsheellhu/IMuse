@@ -10,9 +10,12 @@
   
   --color-background: var(--color-background, var(--bg-base));
   --color-background-elevated: var(--color-background-elevated, var(--bg-elevated));
+  --color-background-subtle: var(--color-background-subtle, var(--color-background));
   --color-surface: var(--color-surface, var(--bg-secondary));
   --color-surface-hover: var(--color-surface-hover, var(--bg-secondary-hover));
   --color-surface-active: var(--color-surface-active, var(--bg-secondary-active));
+  --color-surface-secondary: var(--color-surface-secondary, var(--color-surface));
+  --color-surface-tertiary: var(--color-surface-tertiary, var(--color-surface-hover));
 
   --color-text: var(--color-text, var(--text-primary));
   --color-text-primary: var(--color-text, var(--text-primary));
@@ -24,6 +27,7 @@
   --color-border: var(--color-border, var(--border-subtle));
   --color-border-subtle: var(--color-border-subtle, var(--border-subtle));
   --color-border-strong: var(--color-border-strong, var(--border-strong));
+  --color-divider: var(--color-divider, var(--border-subtle));
 
   --color-accent: var(--color-accent, var(--accent-primary));
   --color-accent-primary: var(--color-accent, var(--accent-primary));
@@ -31,12 +35,28 @@
   --color-accent-active: var(--color-accent-active, var(--accent-primary));
   --color-accent-soft: var(--color-accent-soft, var(--accent-soft));
   --color-accent-contrast: var(--color-accent-contrast, var(--accent-contrast));
+  --color-accent-foreground: var(--color-accent-contrast, var(--accent-contrast));
+
+  --color-control-bg: var(--color-control-bg, var(--color-surface));
+  --color-control-border: var(--color-control-border, var(--color-border));
+  --color-control-hover: var(--color-control-hover, var(--color-surface-hover));
 
   --color-focus: var(--color-focus, var(--accent-primary));
   --color-selection: var(--color-selection, var(--accent-soft));
+  --color-disabled: var(--color-disabled, rgba(128, 128, 128, 0.4));
 
   --color-overlay: var(--color-overlay, var(--overlay));
+  --color-backdrop: var(--color-backdrop, var(--overlay));
   --color-shadow: var(--color-shadow, var(--shadow-color));
+
+  --color-canvas-grid: var(--canvas-grid, var(--color-border-subtle));
+  --color-canvas-node-border: var(--canvas-node-border, var(--color-border));
+  --color-canvas-edge: var(--canvas-edge, var(--color-border-subtle));
+  --color-artwork-bg: var(--artwork-bg, var(--color-surface));
+  --color-metadata-surface: var(--metadata-surface, var(--color-surface));
+
+  --color-scrollbar-thumb: var(--scrollbar-thumb, var(--color-text-subtle));
+  --color-scrollbar-track: var(--scrollbar-track, transparent);
 
   --color-error: var(--color-error, #EF4444);
   --color-warning: var(--color-warning, #F59E0B);
@@ -606,10 +626,17 @@ body.texture-technical-grid::after {
 }
 
 /* Light theme default on clean surfaces: dark center with crisp white halo & shadow */
-:root:not(.dark):not(.theme-obsidian):not(.theme-midnight):not(.theme-tron) .imuse-cursor-dot {
+:root.light .imuse-cursor-dot,
+:root:not(.dark) .imuse-cursor-dot {
   background-color: #111111;
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+:root.dark .imuse-cursor-dot {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.65);
 }
 
 /* Adaptive contrast: when hovering over dark content / images / media in any theme */

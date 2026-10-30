@@ -86,7 +86,7 @@ export function MuseumRoomPage() {
 
   if (isLoading) {
     return (
-      <div className={`min-h-screen bg-bg-base flex items-center justify-center typography-${typography}`}>
+      <div className={`min-h-screen bg-bg-base flex items-center justify-center typo-${typography}`}>
         <span className="text-[10px] tracking-[0.3em] uppercase text-text-secondary animate-pulse">Preparing Room...</span>
       </div>
     );
@@ -94,7 +94,7 @@ export function MuseumRoomPage() {
 
   if (!room) {
     return (
-      <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typography-${typography}`}>
+      <div className={`min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4 px-6 text-center typo-${typography}`}>
         <h2 className="text-2xl font-serif text-text-primary">Room Not Found</h2>
         <p className="text-sm text-text-secondary max-w-md">This exhibition room is currently unavailable or being reorganized.</p>
         <Link to="/museum" className="px-6 py-2 rounded-full border border-border-subtle text-xs uppercase tracking-widest hover:border-text-primary transition-all">
@@ -109,7 +109,7 @@ export function MuseumRoomPage() {
   const nextRoom = currentIdx < allRooms.length - 1 ? allRooms[currentIdx + 1] : null;
 
   return (
-    <div className={`fixed inset-0 bg-bg-base text-text-primary overflow-hidden typography-${typography}`}>
+    <div className={`fixed inset-0 bg-bg-base text-text-primary overflow-hidden typo-${typography}`}>
       
       {/* Top Header / Controls */}
       <AnimatePresence mode="wait">

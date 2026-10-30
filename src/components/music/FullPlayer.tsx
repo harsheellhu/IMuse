@@ -31,8 +31,8 @@ export function FullPlayer() {
         exit={{ opacity: 0, y: '100%' }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className={clsx(
-          "fixed inset-0 z-[100] flex flex-col overflow-hidden",
-          isTron ? "bg-black/70 backdrop-blur-3xl" : "bg-[#0a0a0a]/80 backdrop-blur-3xl"
+          "fixed inset-0 z-[100] flex flex-col overflow-hidden text-text-primary",
+          isTron ? "bg-black/85 backdrop-blur-3xl" : "bg-background/92 backdrop-blur-3xl"
         )}
       >
         {/* Ambient Background */}
@@ -70,20 +70,20 @@ export function FullPlayer() {
         />
         
         {/* Center shadow protection for the record so it doesn't get washed out */}
-        <div className="absolute inset-y-0 left-0 w-full lg:w-[60%] bg-radial from-transparent via-black/20 to-black/40 pointer-events-none mix-blend-multiply" />
+        <div className="absolute inset-y-0 left-0 w-full lg:w-[60%] bg-radial from-transparent via-background/20 to-background/50 pointer-events-none" />
 
         {/* Header - Condensed to save vertical space */}
         <header className="relative z-10 px-6 py-4 md:px-8 md:py-6 flex items-center justify-between flex-shrink-0">
           <button 
             onClick={() => setMaximized(false)}
-            className="w-10 h-10 rounded-full flex items-center justify-center bg-bg-secondary/50 backdrop-blur-md hover:bg-bg-secondary transition-colors"
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-surface/70 backdrop-blur-md hover:bg-surface text-text-primary transition-colors cursor-pointer border border-border-subtle shadow-xs"
           >
             <Minimize2 className="w-5 h-5 text-text-primary" />
           </button>
           
           <div className="flex flex-col items-center">
             <span className="text-[10px] uppercase tracking-widest text-text-muted font-bold">Now Playing</span>
-            <span className={clsx("text-xs font-medium", isTron && "text-cyan-400 font-mono")}>
+            <span className={clsx("text-xs font-medium", isTron ? "text-cyan-400 font-mono" : "text-text-primary")}>
               From Library
             </span>
           </div>
@@ -105,21 +105,21 @@ export function FullPlayer() {
             {/* Info */}
             <div className="flex flex-col gap-1.5 w-full text-center lg:text-left flex-shrink-0 mt-auto lg:mt-0 min-w-0">
               <h2 className={clsx(
-                "font-serif font-medium w-full tracking-tight leading-none break-words",
-                isTron ? "text-cyan-400 drop-shadow-[0_0_15px_rgba(0,255,255,0.4)]" : "text-white drop-shadow-lg"
+                "font-serif font-medium w-full tracking-tight leading-none break-words text-text-primary",
+                isTron && "text-cyan-400 drop-shadow-[0_0_15px_rgba(0,255,255,0.4)]"
               )} style={{ fontSize: 'clamp(2rem, 3.5vw, 4.5rem)', textWrap: 'balance' }}>
                 {currentSong.title}
               </h2>
               <p className={clsx(
                 "text-lg md:text-xl font-light tracking-wide truncate",
-                isTron ? "text-cyan-200" : "text-white/70"
+                isTron ? "text-cyan-200" : "text-text-secondary"
               )}>
                 {currentSong.artist}
               </p>
               
               {/* Optional minimal metadata row */}
               {(currentSong.album || currentSong.genre) && (
-                <div className="flex items-center justify-center lg:justify-start gap-3 mt-1.5 text-xs uppercase tracking-[0.2em] text-white/40">
+                <div className="flex items-center justify-center lg:justify-start gap-3 mt-1.5 text-xs uppercase tracking-[0.2em] text-text-muted">
                   {currentSong.album && <span>{currentSong.album}</span>}
                   {currentSong.album && currentSong.genre && <span>•</span>}
                   {currentSong.genre && <span>{currentSong.genre}</span>}

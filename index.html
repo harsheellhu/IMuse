@@ -188,16 +188,49 @@
             }
           }
 
-          var lightThemes = ['paper', 'ivory', 'sand', 'concrete', 'ash'];
+          var lightThemeMap = {
+            'swiss-international': { bg: '#FFFFFF', text: '#111111' },
+            'art-book': { bg: '#F8F5EE', text: '#1A1816' },
+            'modernist': { bg: '#F4F5F6', text: '#12151A' },
+            'neo-romantic': { bg: '#FDF6F6', text: '#2A1B22' },
+            'analog-archive': { bg: '#EBE4D5', text: '#2E2721' },
+            'botanical': { bg: '#F4F4EB', text: '#1D231C' },
+            'terracotta': { bg: '#F5ECE1', text: '#2B1D14' },
+            'alpine': { bg: '#F0F4F8', text: '#101826' },
+            'desert-dusk': { bg: '#F7EFE9', text: '#281B24' },
+            'prismatic': { bg: '#F7F7FA', text: '#181820' },
+            'paper': { bg: '#F4EEDD', text: '#2C2A26' },
+            'ivory': { bg: '#FFFFF0', text: '#4A4A4A' },
+            'sand': { bg: '#F5F2EB', text: '#2C2824' },
+            'concrete': { bg: '#EFEFEF', text: '#2B2B2B' },
+            'ash': { bg: '#ECEBE8', text: '#383A35' },
+            'monochrome': { bg: '#FFFFFF', text: '#000000' },
+            'default': { bg: '#FDFCFB', text: '#111111' }
+          };
+
           var isDark = true;
-          
+          var customBg = null;
+          var customText = null;
+
           if (appearance === 'default') {
             isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          } else if (lightThemes.indexOf(appearance) !== -1) {
+            if (!isDark) {
+              customBg = lightThemeMap.default.bg;
+              customText = lightThemeMap.default.text;
+            }
+          } else if (lightThemeMap[appearance]) {
             isDark = false;
+            customBg = lightThemeMap[appearance].bg;
+            customText = lightThemeMap[appearance].text;
           } else if (customPalettes && customPalettes.length) {
             var custom = customPalettes.find(function(p) { return p.id === appearance; });
-            if (custom) isDark = !!custom.isDark;
+            if (custom) {
+              isDark = !!custom.isDark;
+              if (custom.tokens) {
+                customBg = custom.tokens.background;
+                customText = custom.tokens.text;
+              }
+            }
           }
 
           var root = document.documentElement;
@@ -208,11 +241,13 @@
           root.classList.add('density-' + density);
           root.classList.add('nav-' + nav);
 
-          if (!isDark) {
-            root.style.setProperty('--color-background', '#faf9f6');
-            root.style.setProperty('--color-text', '#1c1917');
-            root.style.setProperty('--bg-base', '#faf9f6');
-            root.style.setProperty('--text-primary', '#1c1917');
+          if (customBg) {
+            root.style.setProperty('--color-background', customBg);
+            root.style.setProperty('--bg-base', customBg);
+          }
+          if (customText) {
+            root.style.setProperty('--color-text', customText);
+            root.style.setProperty('--text-primary', customText);
           }
         } catch (e) {}
       })();

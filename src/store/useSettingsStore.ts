@@ -137,12 +137,33 @@ export const useSettingsStore = create<SettingsState>()(
         preferencesApi.update(newSettings).catch(console.error);
       },
 
-      setAppearance: (themeId: string) => {
+      setAppearance: (themeId: string, applyArtDirection: boolean = true) => {
         const state = get();
         state.addRecentPalette(themeId);
-        set({ appearance: themeId });
-        applyTheme(themeId, state.customPalettes);
-        preferencesApi.update({ appearance: themeId }).catch(console.error);
+
+        let targetTheme: any = BUILTIN_THEMES[themeId];
+        if (!targetTheme) {
+          targetTheme = state.customPalettes.find((p) => p.id === themeId);
+        }
+
+        const updates: Partial<SettingsState> = { appearance: themeId };
+
+        if (applyArtDirection && targetTheme) {
+          if (targetTheme.defaultTypography) updates.typography = targetTheme.defaultTypography;
+          if (targetTheme.defaultShape) updates.shapeLanguage = targetTheme.defaultShape;
+          if (targetTheme.defaultDensity) updates.feedDensity = targetTheme.defaultDensity;
+          if (targetTheme.defaultTexture) updates.texture = targetTheme.defaultTexture;
+
+          if (targetTheme.typography) updates.typography = targetTheme.typography;
+          if (targetTheme.shapeLanguage) updates.shapeLanguage = targetTheme.shapeLanguage;
+          if (targetTheme.density) updates.feedDensity = targetTheme.density;
+          if (targetTheme.texture) updates.texture = targetTheme.texture;
+          if (targetTheme.animationIntensity) updates.motion = targetTheme.animationIntensity;
+        }
+
+        set(updates);
+        applyTheme(targetTheme || themeId, state.customPalettes);
+        preferencesApi.update(updates).catch(console.error);
       },
 
       createCustomPalette: (paletteData) => {
@@ -154,15 +175,25 @@ export const useSettingsStore = create<SettingsState>()(
           updatedAt: Date.now(),
         };
 
-        set((state) => ({
-          customPalettes: [...state.customPalettes, newPalette],
+        const stateUpdates: Partial<SettingsState> = {
+          customPalettes: [...get().customPalettes, newPalette],
           appearance: id,
+        };
+        if (newPalette.typography) stateUpdates.typography = newPalette.typography as any;
+        if (newPalette.shapeLanguage) stateUpdates.shapeLanguage = newPalette.shapeLanguage as any;
+        if (newPalette.density) stateUpdates.feedDensity = newPalette.density as any;
+        if (newPalette.texture) stateUpdates.texture = newPalette.texture as any;
+        if (newPalette.animationIntensity) stateUpdates.motion = newPalette.animationIntensity as any;
+
+        set((state) => ({
+          ...state,
+          ...stateUpdates,
         }));
 
         const state = get();
         state.addRecentPalette(id);
         applyTheme(newPalette, state.customPalettes);
-        preferencesApi.update({ appearance: id, customPalettes: state.customPalettes } as any).catch(console.error);
+        preferencesApi.update({ appearance: id, customPalettes: state.customPalettes, ...stateUpdates } as any).catch(console.error);
 
         return newPalette;
       },
@@ -178,7 +209,16 @@ export const useSettingsStore = create<SettingsState>()(
         const state = get();
         if (state.appearance === id) {
           const current = state.customPalettes.find((p) => p.id === id);
-          if (current) applyTheme(current, state.customPalettes);
+          if (current) {
+            applyTheme(current, state.customPalettes);
+            const extraUpdates: Partial<SettingsState> = {};
+            if (updates.typography) extraUpdates.typography = updates.typography as any;
+            if (updates.shapeLanguage) extraUpdates.shapeLanguage = updates.shapeLanguage as any;
+            if (updates.density) extraUpdates.feedDensity = updates.density as any;
+            if (updates.texture) extraUpdates.texture = updates.texture as any;
+            if (updates.animationIntensity) extraUpdates.motion = updates.animationIntensity as any;
+            if (Object.keys(extraUpdates).length > 0) set(extraUpdates);
+          }
         }
         preferencesApi.update({ customPalettes: state.customPalettes } as any).catch(console.error);
       },
@@ -207,18 +247,45 @@ export const useSettingsStore = create<SettingsState>()(
         let baseTokens = BUILTIN_THEMES.default.tokens;
         let isDark = false;
         let sourceName = 'Custom';
+        let typo: any;
+        let shape: any;
+        let density: any;
+        let texture: any;
+        let radiusBase: any;
+        let borderWidth: any;
+        let glassIntensity: any;
+        let shadowIntensity: any;
+        let glowIntensity: any;
+        let animationIntensity: any;
 
         if (BUILTIN_THEMES[themeId]) {
           const theme = BUILTIN_THEMES[themeId];
           baseTokens = { ...theme.tokens };
           isDark = theme.isDark;
           sourceName = theme.name;
+          typo = theme.defaultTypography;
+          shape = theme.defaultShape;
+          density = theme.defaultDensity;
+          texture = theme.defaultTexture;
+          radiusBase = theme.tokens.radiusBase;
+          borderWidth = theme.tokens.borderWidth;
+          glowIntensity = theme.glowIntensity;
         } else {
           const custom = state.customPalettes.find((p) => p.id === themeId);
           if (custom) {
             baseTokens = { ...custom.tokens };
             isDark = custom.isDark;
             sourceName = custom.name;
+            typo = custom.typography;
+            shape = custom.shapeLanguage;
+            density = custom.density;
+            texture = custom.texture;
+            radiusBase = custom.radiusBase || custom.tokens.radiusBase;
+            borderWidth = custom.borderWidth || custom.tokens.borderWidth;
+            glassIntensity = custom.glassIntensity;
+            shadowIntensity = custom.shadowIntensity;
+            glowIntensity = custom.glowIntensity;
+            animationIntensity = custom.animationIntensity;
           }
         }
 
@@ -229,19 +296,36 @@ export const useSettingsStore = create<SettingsState>()(
           baseThemeId: themeId,
           isDark,
           tokens: { ...baseTokens },
+          typography: typo,
+          shapeLanguage: shape,
+          density,
+          texture,
+          radiusBase,
+          borderWidth,
+          glassIntensity,
+          shadowIntensity,
+          glowIntensity,
+          animationIntensity,
           createdAt: Date.now(),
           updatedAt: Date.now(),
         };
 
-        set((s) => ({
-          customPalettes: [...s.customPalettes, duplicated],
+        const stateUpdates: Partial<SettingsState> = {
+          customPalettes: [...state.customPalettes, duplicated],
           appearance: id,
-        }));
+        };
+        if (typo) stateUpdates.typography = typo;
+        if (shape) stateUpdates.shapeLanguage = shape;
+        if (density) stateUpdates.feedDensity = density;
+        if (texture) stateUpdates.texture = texture;
+        if (animationIntensity) stateUpdates.motion = animationIntensity;
+
+        set(stateUpdates);
 
         const updatedState = get();
         updatedState.addRecentPalette(id);
         applyTheme(duplicated, updatedState.customPalettes);
-        preferencesApi.update({ appearance: id, customPalettes: updatedState.customPalettes } as any).catch(console.error);
+        preferencesApi.update({ appearance: id, customPalettes: updatedState.customPalettes, ...stateUpdates } as any).catch(console.error);
 
         return duplicated;
       },

@@ -182,20 +182,20 @@ export function ExploreWorld() {
 
   return (
     <div className="fixed inset-0 pt-20 z-0 bg-bg-base overflow-hidden selection:bg-transparent">
-      {/* Background Deep Space Coordinate Grid & Nebula Glow */}
+      {/* Background Spatial Coordinate Grid & Ambient Glow */}
       <div 
         className="absolute inset-0 pointer-events-none transition-opacity duration-1000"
         style={{
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(30, 27, 24, 0.6) 0%, rgba(9, 9, 11, 0.95) 75%, #09090b 100%)'
+          background: 'radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--color-surface) 60%, transparent) 0%, var(--color-background) 100%)'
         }}
       >
         {/* Subtle Spatial Coordinate Grid */}
         <motion.div 
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.25] pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px)
+              linear-gradient(to right, var(--canvas-grid, var(--color-border-subtle)) 1px, transparent 1px),
+              linear-gradient(to bottom, var(--canvas-grid, var(--color-border-subtle)) 1px, transparent 1px)
             `,
             backgroundSize: `${60 * zoom}px ${60 * zoom}px`,
             backgroundPosition: bgPosition,
