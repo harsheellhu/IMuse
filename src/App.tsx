@@ -40,6 +40,7 @@ const PatternThreadViewer = React.lazy(() => import('./pages/PatternThreadViewer
 const CulturalReplay = React.lazy(() => import('./pages/CulturalReplay').then(m => ({ default: m.CulturalReplay })));
 const SerendipityMode = React.lazy(() => import('./pages/SerendipityMode').then(m => ({ default: m.SerendipityMode })));
 const ColorMemory = React.lazy(() => import('./pages/ColorMemory').then(m => ({ default: m.ColorMemory })));
+const Discovery = React.lazy(() => import('./pages/Discovery').then(m => ({ default: m.Discovery })));
 const MuseumPage = React.lazy(() => import('./pages/Museum').then(m => ({ default: m.MuseumPage })));
 const MuseumRoomPage = React.lazy(() => import('./pages/MuseumRoom').then(m => ({ default: m.MuseumRoomPage })));
 const CulturalDNAPage = React.lazy(() => import('./pages/CulturalDNA').then(m => ({ default: m.CulturalDNAPage })));
@@ -123,6 +124,7 @@ function AppContent() {
               <Route path="settings" element={<Suspense fallback={<RouteSkeleton />}><Home /></Suspense>} />
               <Route path="serendipity" element={<Suspense fallback={<RouteSkeleton />}><SerendipityMode /></Suspense>} />
               <Route path="color-memory" element={<Suspense fallback={<RouteSkeleton />}><ColorMemory /></Suspense>} />
+              <Route path="discovery" element={<Suspense fallback={<RouteSkeleton />}><Discovery /></Suspense>} />
               <Route path="museum" element={<Suspense fallback={<RouteSkeleton />}><MuseumPage /></Suspense>} />
               <Route path="museum/:roomId" element={<Suspense fallback={<RouteSkeleton />}><MuseumRoomPage /></Suspense>} />
               <Route path="dna" element={<Suspense fallback={<RouteSkeleton />}><CulturalDNAPage /></Suspense>} />

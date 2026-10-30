@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { engineApi } from '../api/engine';
 import { useSettingsStore } from '../store/useSettingsStore';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Sparkles, Palette } from 'lucide-react';
 import { OptimizedImage } from '../components/ui/OptimizedImage';
+import { useStore } from '../store/useStore';
+import { extractArtifactColors } from '../utils/colorSearch';
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 export function ColorMemory() {
+  const navigate = useNavigate();
+  const openViewer = useStore(s => s.openViewer);
   const [memory, setMemory] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeColor, setActiveColor] = useState<string | null>(null);
@@ -113,6 +117,32 @@ export function ColorMemory() {
 
             {/* Selected Color Content */}
             <div className="flex-1 min-h-[400px]">
+              {activeColorGroup && (
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border-subtle/50">
+                  <div className="flex items-center gap-3">
+                    <span 
+                      className="w-4 h-4 rounded-full border border-border-subtle shadow-xs" 
+                      style={{ backgroundColor: activeColor || activeColorGroup.palette?.primary }} 
+                    />
+                    <span className="text-xs uppercase tracking-widest text-text-secondary font-mono">
+                      {activeColor || activeColorGroup.palette?.primary} · {activeColorGroup.count || activeColorGroup.items?.length || 0} artifacts
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      const colors = extractArtifactColors(activeColorGroup.palette);
+                      const targetColors = colors.length > 0 ? colors : [activeColor || activeColorGroup.palette?.primary];
+                      navigate(`/discovery?mode=color&colors=${encodeURIComponent(targetColors.join(','))}`);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-primary/10 hover:bg-accent-primary/20 text-accent-primary border border-accent-primary/20 text-xs tracking-wider transition-colors cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Search Similar in Discovery Studio ↗</span>
+                  </button>
+                </div>
+              )}
+
               <AnimatePresence mode="wait">
                 {activeColorGroup && (
                   <motion.div
@@ -126,7 +156,11 @@ export function ColorMemory() {
                     {(activeColorGroup?.items || []).map((item: any) => {
                       const img = item.image_url || item.imageUrl || item.coverImage || item.posterImage;
                       return (
-                        <div key={item.id} className="aspect-[3/4] rounded-sm overflow-hidden bg-bg-elevated border border-border-subtle group relative cursor-pointer shadow-sm">
+                        <div 
+                          key={item.id} 
+                          onClick={() => openViewer({ id: item.id, type: (item.type || 'post') as any, data: item })}
+                          className="aspect-[3/4] rounded-sm overflow-hidden bg-bg-elevated border border-border-subtle group relative cursor-pointer shadow-sm hover:border-text-primary/40 transition-colors"
+                        >
                           {img ? (
                             <OptimizedImage 
                               src={img} 

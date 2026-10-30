@@ -199,16 +199,30 @@ export function SerendipityMode() {
           ))}
         </div>
         
-        {history.length > 1 && (
-          <button 
-            onClick={handleSaveThread}
-            disabled={isSaving}
-            className="pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors text-[9px] uppercase tracking-[0.2em]"
-          >
-            <Save className="w-3 h-3" />
-            {isSaving ? 'Saving...' : 'Save Thread'}
-          </button>
-        )}
+        <div className="flex items-center gap-3 pointer-events-auto">
+          {target && (
+            <button
+              onClick={() => {
+                const query = target.title || (target.tags && target.tags.join(' ')) || '';
+                navigate(`/discovery?atmosphere=${encodeURIComponent(query)}`);
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors text-[9px] uppercase tracking-[0.2em] text-white cursor-pointer"
+            >
+              <Sparkles className="w-3 h-3 text-[#4ADE80]" />
+              <span>Explore Mood in Studio</span>
+            </button>
+          )}
+          {history.length > 1 && (
+            <button 
+              onClick={handleSaveThread}
+              disabled={isSaving}
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors text-[9px] uppercase tracking-[0.2em] cursor-pointer"
+            >
+              <Save className="w-3 h-3" />
+              {isSaving ? 'Saving...' : 'Save Thread'}
+            </button>
+          )}
+        </div>
       </div>
 
     </div>

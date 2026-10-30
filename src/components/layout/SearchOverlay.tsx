@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, Loader2 } from 'lucide-react';
+import { Search, X, Loader2, Sparkles, Palette, ArrowRight } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -165,9 +165,53 @@ export function SearchOverlay() {
               </button>
             </div>
 
+            {/* Quick Link to Discovery Studio when query is empty */}
+            {!searchQuery.trim() && (
+              <div className="w-full bg-bg-elevated rounded-b-2xl shadow-2xl border border-t-0 border-border-subtle p-4 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    setSearchOpen(false);
+                    navigate('/discovery');
+                  }}
+                  className="flex items-center justify-between p-3.5 rounded-xl bg-bg-secondary hover:bg-bg-secondary-hover border border-border-subtle transition-all text-left cursor-pointer group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-accent-primary/10 text-accent-primary flex items-center justify-center">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-text-primary group-hover:text-accent-primary transition-colors">
+                        Atmosphere & Color Studio
+                      </p>
+                      <p className="text-xs text-text-secondary">
+                        Search by feelings, moods, lighting, or perceptual color palettes
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-text-primary group-hover:translate-x-0.5 transition-all" />
+                </button>
+              </div>
+            )}
+
             {/* Results Dropdown */}
             {searchQuery.trim() && (
               <div className="w-full bg-bg-elevated rounded-b-2xl shadow-2xl border border-t-0 border-border-subtle overflow-hidden flex flex-col">
+                {/* Search via Discovery Studio Option */}
+                <button
+                  onClick={() => {
+                    setSearchOpen(false);
+                    navigate(`/discovery?q=${encodeURIComponent(searchQuery)}`);
+                  }}
+                  className="flex items-center justify-between px-4 py-3 bg-accent-primary/5 hover:bg-accent-primary/10 border-b border-border-subtle text-left transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 text-xs font-medium text-accent-primary">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Search atmosphere & feelings for "{searchQuery}"</span>
+                  </div>
+                  <span className="text-[11px] text-accent-primary uppercase tracking-wider font-semibold">
+                    Studio ↗
+                  </span>
+                </button>
                 {!isSearching && results.length > 0 ? (
                   results.map((result, i) => (
                     <button

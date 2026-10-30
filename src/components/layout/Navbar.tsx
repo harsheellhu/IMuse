@@ -32,6 +32,7 @@ export function Navbar() {
 
   const navItems = [
     { label: 'Home', path: '/home' },
+    { label: 'Discovery', path: '/discovery' },
     { label: 'Explore World', path: '/explore' },
     { label: 'Books', path: '/books' },
     { label: 'Films', path: '/films' },

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect, type ReactNode, type ErrorInfo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft, Download, Compass, Layers } from 'lucide-react';
+import { X, Bookmark, Share2, Star, PlusCircle, Globe, MapPin, AlertCircle, RefreshCw, ArrowLeft, Download, Compass, Layers, Sparkles, Palette } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useStore, ActiveViewerItem } from '../../store/useStore';
 import { Post, Book, Film, Collection, TvShow, Place } from '../../types';
 import { useImagePalette } from '../../hooks/useImagePalette';
@@ -310,6 +311,7 @@ export function PostDetailViewer() {
 }
 
 function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () => void }) {
+  const navigate = useNavigate();
   const { toggleSavePost, savedPostIds, isAuthenticated, setAuthModalOpen, expandToUniverse, openTrailEditor } = useStore();
   const [isExperienceModalOpen, setExperienceModalOpen] = React.useState(false);
   const [isDownloadModalOpen, setDownloadModalOpen] = React.useState(false);
@@ -604,6 +606,36 @@ function ViewerContent({ item, onClose }: { item: ActiveViewerItem; onClose: () 
                   <Compass className="w-3.5 h-3.5" />
                   <span>Start Trail</span>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                    const query = (data?.tags && data.tags.length > 0) ? data.tags.slice(0, 2).join(' ') : title;
+                    navigate(`/discovery?atmosphere=${encodeURIComponent(query)}`);
+                  }}
+                  className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2 border border-text-primary/20 hover:border-text-primary px-3 rounded-full"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-accent-primary" />
+                  <span>Explore Atmosphere</span>
+                </button>
+
+                {palette && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onClose();
+                      const colors = [palette.primary, palette.secondary, palette.accent].filter(Boolean);
+                      navigate(`/discovery?mode=color&colors=${encodeURIComponent(colors.join(','))}`);
+                    }}
+                    className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase text-text-primary hover:opacity-75 transition-opacity cursor-pointer py-2 border border-text-primary/20 hover:border-text-primary px-3 rounded-full"
+                  >
+                    <Palette className="w-3.5 h-3.5 text-accent-primary" />
+                    <span>Explore Palette</span>
+                  </button>
+                )}
 
                 <button
                   type="button"

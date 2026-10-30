@@ -2,7 +2,8 @@ import React from 'react';
 import { useStore } from '../store/useStore';
 import { PostCard } from '../components/feed/PostCard';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bookmark, Lock } from 'lucide-react';
+import { Bookmark, Lock, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 export function Library() {
@@ -44,9 +45,18 @@ export function Library() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
-      <header className="mb-16">
-        <h1 className="text-4xl md:text-5xl font-serif font-light tracking-tight text-text-primary mb-4">Your Library</h1>
-        <p className="text-text-secondary font-light">A personal archive of everything you've saved and curated.</p>
+      <header className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-serif font-light tracking-tight text-text-primary mb-4">Your Library</h1>
+          <p className="text-text-secondary font-light">A personal archive of everything you've saved and curated.</p>
+        </div>
+        <Link
+          to="/discovery?scope=library"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-bg-secondary hover:bg-bg-secondary-hover border border-border-subtle text-xs text-text-primary tracking-wide transition-colors self-start md:self-auto cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-accent-primary" />
+          <span>Search Atmosphere & Palette</span>
+        </Link>
       </header>
 
       <div className="mb-10 flex gap-8 border-b border-border-subtle/50">

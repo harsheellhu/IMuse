@@ -3,7 +3,9 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate } from '
 import { useStore, ActiveViewerItem } from '../store/useStore';
 import clsx from 'clsx';
 import { Post, Book, Film, Collection, TvShow, Place } from '../types';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { evaluateArtifactAtmosphere } from '../utils/atmosphereSearch';
+import { matchPalette, extractArtifactColors } from '../utils/colorSearch';
 import { 
   Sparkles, 
   Compass, 
@@ -50,6 +52,9 @@ const CATEGORY_FILTERS: { type: WorldItemType | 'all'; label: string; icon: Reac
 
 export function ExploreWorld() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlAtmo = searchParams.get('q') || searchParams.get('atmosphere') || '';
+  const urlColors = searchParams.get('colors') ? searchParams.get('colors')!.split(',').filter(Boolean) : [];
   const { posts, books, films, collections, activeViewerItem, openViewer } = useStore();
   const [worldItems, setWorldItems] = useState<WorldItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,6 +69,45 @@ export function ExploreWorld() {
     [canvasX, canvasY],
     ([x, y]: [number, number]) => `${x}px ${y}px`
   );
+
+  // Atmosphere and Color filtering without rebuilding coordinates
+  const atmosphereMatchingIds = useMemo<Set<string> | null>(() => {
+    if (!urlAtmo && urlColors.length === 0) return null;
+    const matches = new Set<string>();
+    for (const item of worldItems) {
+      let atmoMatch = !urlAtmo;
+      let colorMatch = urlColors.length === 0;
+
+      if (urlAtmo) {
+        const atmoRes = evaluateArtifactAtmosphere(urlAtmo, {
+          id: item.id,
+          type: item.type,
+          title: (item.data as any).title || (item.data as any).name,
+          description: (item.data as any).description || (item.data as any).synopsis,
+          tags: (item.data as any).tags || (item.data as any).categories || (item.data as any).genres,
+          category: (item.data as any).category,
+          creator: (item.data as any).creator || (item.data as any).author || (item.data as any).director,
+          metadata: (item.data as any).metadata
+        });
+        atmoMatch = atmoRes.isMatch || atmoRes.score >= 0.25;
+      }
+
+      if (urlColors.length > 0) {
+        const colors = extractArtifactColors((item.data as any).metadata?.palette || (item.data as any).palette);
+        if (colors.length > 0) {
+          const colorRes = matchPalette(urlColors, colors, 'any', 0.28);
+          colorMatch = colorRes.isMatch;
+        } else {
+          colorMatch = false;
+        }
+      }
+
+      if (atmoMatch && colorMatch) {
+        matches.add(item.id);
+      }
+    }
+    return matches;
+  }, [worldItems, urlAtmo, urlColors]);
 
   // 1. Unified, atomic batch load to eliminate multi-phase layout shifts
   useEffect(() => {
@@ -232,7 +276,32 @@ export function ExploreWorld() {
             </button>
           );
         })}
+        <div className="h-4 w-px bg-border-subtle mx-1" />
+        <Link
+          to="/discovery"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium tracking-wider uppercase transition-all duration-300 whitespace-nowrap bg-accent-primary/10 text-accent-primary border border-accent-primary/20 hover:bg-accent-primary/20"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Atmosphere & Color</span>
+        </Link>
       </motion.div>
+
+      {/* Active Atmosphere / Color Canvas Filter Badge */}
+      {(urlAtmo || urlColors.length > 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-36 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/30 backdrop-blur-md text-xs shadow-md"
+        >
+          <span>Highlighting: {urlAtmo ? `"${urlAtmo}"` : ''} {urlColors.join(' ')}</span>
+          <button
+            onClick={() => setSearchParams({})}
+            className="hover:opacity-75 cursor-pointer ml-1 p-0.5 rounded-full hover:bg-accent-primary/20 text-xs font-bold"
+          >
+            ✕
+          </button>
+        </motion.div>
+      )}
 
       {/* Top Left HUD Info Badge */}
       <motion.div 
@@ -329,7 +398,8 @@ export function ExploreWorld() {
         onDragEnd={() => { setTimeout(() => { isDraggingRef.current = false; }, 60); }}
       >
         {worldItems.map((item, index) => {
-          const isFilterMatch = activeFilter === 'all' || item.type === activeFilter;
+          const isAtmoMatch = atmosphereMatchingIds === null || atmosphereMatchingIds.has(item.id);
+          const isFilterMatch = (activeFilter === 'all' || item.type === activeFilter) && isAtmoMatch;
           const isSelected = activeViewerItem?.id === item.id;
           const isDimmed = !isFilterMatch || (activeViewerItem !== null && !isSelected);
 

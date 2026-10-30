@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useSettingsStore } from '../store/useSettingsStore';
 import clsx from 'clsx';
@@ -43,6 +44,26 @@ export function Home() {
       `density-${feedDensity}` // Ensure density variables are picked up if applied globally or locally
     )}>
       
+      {/* Concise Discovery Entry Point */}
+      <div className="max-w-[1600px] mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-bg-elevated/70 border border-border-subtle/60 backdrop-blur-md shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-accent-primary/10 text-accent-primary flex items-center justify-center shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-xs font-medium text-text-primary">Atmosphere & Color Discovery</span>
+            <p className="text-[11px] text-text-secondary">Search by mood, feeling, or perceptual color harmony across your cultural universe.</p>
+          </div>
+        </div>
+        <Link
+          to="/discovery"
+          className="px-4 py-2 rounded-xl bg-bg-secondary hover:bg-bg-secondary-hover border border-border-subtle text-xs font-medium text-text-primary transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+        >
+          <span>Open Studio</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
       {/* Dynamic Layout Engine */}
       <div className={clsx(
         "w-full max-w-[1600px] mx-auto pb-20",
