@@ -4,13 +4,20 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { SlideshowLanding } from '../components/landing/SlideshowLanding';
+import { useLaunchTransitionStore } from '../store/useLaunchTransitionStore';
+import { LandingFeature } from '../types';
+import clsx from 'clsx';
 import { landingFeatures } from '../utils/landingData';
 import { useStore } from '../store/useStore';
 
 export function LandingPage() {
-  const { skipLandingPage } = useSettingsStore();
+  const { skipLandingPage, motion: motionMode } = useSettingsStore();
   const navigate = useNavigate();
   const [isLaunching, setIsLaunching] = useState(false);
+  const [currentFeature, setCurrentFeature] = useState<LandingFeature>(landingFeatures[0]);
+  const isTransitioning = useLaunchTransitionStore(s => s.isTransitioning);
+  const startLaunch = useLaunchTransitionStore(s => s.startLaunch);
+  const isReducedMotion = motionMode === 'reduced' || motionMode === 'static';
 
   useEffect(() => {
     // Idle pre-warm AppLayout, Home, and Content feed in background
@@ -44,16 +51,22 @@ export function LandingPage() {
 
   const handleLaunchApp = useCallback((e?: React.MouseEvent) => {
     e?.preventDefault();
-    if (isLaunching) return;
+    if (isLaunching || isTransitioning) return;
     setIsLaunching(true);
 
     handleWarmHome();
 
-    // Smooth warp transition into the personal cultural universe
-    setTimeout(() => {
-      navigate('/home');
-    }, 450);
-  }, [isLaunching, navigate]);
+    const artworkUrl = currentFeature?.image?.fullUrl || currentFeature?.image?.thumbnailUrl || '';
+    const artworkTitle = currentFeature?.title || 'Personal Cultural Universe';
+    const category = currentFeature?.category || 'Visual';
+    const palette = currentFeature?.palette;
+
+    startLaunch(
+      { url: artworkUrl, title: artworkTitle, category, palette },
+      navigate,
+      isReducedMotion
+    );
+  }, [isLaunching, isTransitioning, currentFeature, startLaunch, navigate, isReducedMotion]);
 
   // Keyboard shortcut: Press Enter or Space to Launch
   useEffect(() => {
@@ -79,7 +92,7 @@ export function LandingPage() {
         The SlideshowLanding component handles the immersive background, captions, 
         and the ambient background coloring. We pass our curated landing dataset.
       */}
-      <SlideshowLanding features={landingFeatures} isLaunching={isLaunching} />
+      <SlideshowLanding features={landingFeatures} isLaunching={isLaunching} onFeatureChange={setCurrentFeature} />
 
       {/* 
         Restrained, minimal Navigation overlay for the Landing Page.
@@ -104,7 +117,12 @@ export function LandingPage() {
             onClick={handleLaunchApp}
             onMouseEnter={handleWarmHome}
             onTouchStart={handleWarmHome}
-            className="flex items-center gap-2.5 px-4.5 py-2 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md border border-white/20 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white hover:text-white transition-all duration-300 group mix-blend-normal drop-shadow-md cursor-pointer hover:scale-105 active:scale-95 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_0_24px_rgba(255,255,255,0.25)]"
+            className={clsx(
+              "flex items-center gap-2.5 px-4.5 py-2 rounded-full backdrop-blur-md border border-white/20 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white transition-all duration-300 group mix-blend-normal drop-shadow-md cursor-pointer shadow-[0_4px_24px_rgba(0,0,0,0.4)]",
+              isLaunching 
+                ? "scale-94 bg-white/40 border-white/60 shadow-[0_0_35px_rgba(255,255,255,0.6)] pointer-events-none" 
+                : "bg-white/10 hover:bg-white/20 active:bg-white/30 hover:scale-105 active:scale-95 hover:shadow-[0_0_24px_rgba(255,255,255,0.25)]"
+            )}
             title="Launch iMUSE (or press Enter / Space)"
             aria-label="Enter iMUSE"
           >

@@ -28,10 +28,12 @@ function getGradientColor(color: string | undefined, opacity: number): string {
 
 export function SlideshowLanding({ 
   features,
-  isLaunching = false 
+  isLaunching = false,
+  onFeatureChange
 }: { 
   features: LandingFeature[];
   isLaunching?: boolean;
+  onFeatureChange?: (feature: LandingFeature) => void;
 }) {
   const { slideshowConfig, appearance } = useSettingsStore();
   const { isAuthenticated, setAuthModalOpen } = useStore();
@@ -69,6 +71,12 @@ export function SlideshowLanding({
   }, [features, config.mode]);
 
   const currentFeature = validFeatures[currentIndex] || features[0];
+
+  useEffect(() => {
+    if (currentFeature && onFeatureChange) {
+      onFeatureChange(currentFeature);
+    }
+  }, [currentFeature, onFeatureChange]);
 
   const handleImageLoad = useCallback((url?: string) => {
     if (url) cachedUrls.current.add(url);

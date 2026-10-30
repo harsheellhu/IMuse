@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Search, Plus, User, Compass, Moon, Sun, Laptop, Palette, Paintbrush, SlidersHorizontal, Image, Link2, Book, Film, Tv, MapPin, Music, Sparkles } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { useLaunchTransitionStore } from '../../store/useLaunchTransitionStore';
 import clsx from 'clsx';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +25,9 @@ export function Navbar() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const { scrollY } = useScroll();
+  const isTransitioning = useLaunchTransitionStore(s => s.isTransitioning);
+  const launchPhase = useLaunchTransitionStore(s => s.phase);
+  const isLogoMorphing = isTransitioning && (launchPhase === 'launching' || launchPhase === 'expanding');
   
   // Make navbar background appear on scroll
   const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.85]);
@@ -106,7 +110,15 @@ export function Navbar() {
       }}
     >
       <div className="flex items-center gap-12">
-        <Link to="/" className="text-xl font-serif font-medium tracking-tight text-text-primary">IMuse</Link>
+        <Link 
+            to="/" 
+            className={clsx(
+              "text-xl font-serif font-medium tracking-tight text-text-primary transition-opacity duration-300",
+              isLogoMorphing ? "opacity-0" : "opacity-100"
+            )}
+          >
+            IMuse
+          </Link>
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));

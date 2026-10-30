@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { useLaunchTransitionStore } from '../store/useLaunchTransitionStore';
 import clsx from 'clsx';
 import { Post } from '../types';
 import { PostCard } from '../components/feed/PostCard';
@@ -13,6 +14,9 @@ import { RouteSkeleton } from '../components/ui/RouteSkeleton';
 export function Home() {
   const { posts } = useStore();
   const { homeLayout, feedDensity } = useSettingsStore();
+  const isTransitioning = useLaunchTransitionStore(s => s.isTransitioning);
+  const launchPhase = useLaunchTransitionStore(s => s.phase);
+  const isLaunchStagger = isTransitioning && (launchPhase === 'revealing' || launchPhase === 'expanding');
   const [isLoading, setIsLoading] = React.useState(posts.length === 0);
 
   React.useEffect(() => {
@@ -81,7 +85,7 @@ export function Home() {
             ? (i % 5 === 0 ? 'md:col-span-8' : i % 5 === 1 ? 'md:col-span-4' : 'md:col-span-4')
             : '';
 
-          return (
+          const card = (
             <PostCard 
               key={post.id} 
               post={post as any} 
@@ -94,6 +98,26 @@ export function Home() {
               )}
             />
           );
+
+          if (isLaunchStagger) {
+            return (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.45,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: Math.min(i * 0.035, 0.35)
+                }}
+                className={clsx(homeLayout === 'editorial' ? colSpan : undefined)}
+              >
+                {card}
+              </motion.div>
+            );
+          }
+
+          return card;
         })}
       </div>
     </div>

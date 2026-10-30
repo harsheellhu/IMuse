@@ -6,6 +6,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
+import { CinematicLaunchTransition } from './components/landing/CinematicLaunchTransition';
 import { ThemeProvider } from './components/ThemeProvider';
 import { useInitializeApp } from './hooks/useInitializeApp';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -63,6 +64,7 @@ function AppContent() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <CinematicLaunchTransition />
         <Suspense fallback={null}>
           <CustomCursor />
           {isSettingsOpen && <SettingsOverlay />}
