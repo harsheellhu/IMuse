@@ -12,6 +12,7 @@
     "start": "node server/index.js",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
+    "test": "tsx src/utils/__tests__/discoveryEngine.test.ts",
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/seed.js"
   },
