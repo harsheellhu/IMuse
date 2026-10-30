@@ -75,6 +75,17 @@ iMuse is a local-first, privacy-respecting cultural archive, discovery platform,
   - Dedicated `/discovery` Studio route with tunable balance slider and batch collection/trail export.
   - Deep integration across Navbar, SearchOverlay, ColorMemory, DetailViewer, ExploreWorld, and Home.
 
+### Milestone 8: Cinematic Landing-to-Home Fluid Transition (Oct 30, 2026)
+- **Commit:** `8510dcf`
+- **Implemented:**
+  - 5-Phase fluid morph between `/` (Landing Page) and `/home` (Cultural Feed) eliminating abrupt white/black page flips.
+  - Persistent `<CinematicLaunchTransition />` portal mounted at the `BrowserRouter` root level that remains mounted during route changes.
+  - Shared-element brand logo morph gliding from landing position (`top: 48px/24px`) to Navbar position (`top: 20px`) with coordinated opacity and zero duplicate visual flicker.
+  - Atmospheric radial bloom generating ambient chromatic halos based on the active landing artwork palette.
+  - Quintic-out deceleration curve `[0.16, 1, 0.3, 1]` for natural camera acceleration and smooth settling.
+  - Multi-input triggers (Space, Enter, click) with button compression, brightness flare, and rapid re-trigger prevention.
+  - Staggered discovery feed reveal on `/home` with reduced-motion accessibility mode and clean unmount.
+
 ---
 
 ## 3. Technical Problems Encountered & Solutions
@@ -95,15 +106,19 @@ iMuse is a local-first, privacy-respecting cultural archive, discovery platform,
 - **Symptom:** Inline `node -e` scripts with nested quotation marks failed in PowerShell with syntax errors.
 - **Solution:** Established isolated `.ts` test scripts run via `npx tsx`, which execute cleanly without escaping conflicts.
 
+### Problem 5: Seamless Shared-Element Logo Alignment Across Route Boundaries
+- **Symptom:** Calling `navigate('/home')` instantly unmounts `LandingPage` before `Home` finishes mounting, causing an abrupt disappearance of the landing logo and background before the home page appears.
+- **Solution:** Mounted `<CinematicLaunchTransition />` at the `BrowserRouter` root level in `App.tsx` outside of the page router `<Routes>`. Coordinated logo visibility across the boundary with `useLaunchTransitionStore.isLogoMorphing` so the Navbar brand component stays hidden until the flying portal logo lands at its exact target coordinates (`y: -28px` desktop / `-4px` mobile), then smoothly crossfades into the static navbar brand with zero flicker.
+
 ---
 
 ## 4. Verification & Testing History
 
-- **Linting & Type Safety:** `npm run lint` (`tsc --noEmit`) passes with 0 errors across all 84 project files.
+- **Linting & Type Safety:** `npm run lint` (`tsc --noEmit`) passes with 0 errors across all 86 project files.
 - **Discovery Engine Test Suite:** `npm test` (`src/utils/__tests__/discoveryEngine.test.ts`) verifies:
   1. Hex validation and normalization.
   2. OKLab perceptual distance accuracy.
   3. Palette matching modes (ANY, ALL, Harmony).
   4. Atmosphere synonym and concept extraction.
   5. Multi-field weighted catalog ranking.
-- **Production Build:** `npm run build` cleanly outputs all chunks in under 15 seconds.
+- **Production Build:** `npm run build` cleanly outputs all chunks in under 5 seconds.
